@@ -1,0 +1,78 @@
+// stdafx.h : include file for standard system include files,
+// or project specific include files that are used frequently, but
+// are changed infrequently
+//
+
+#pragma once
+
+
+#define _WIN32_WINNT 0x0403 
+
+//#define _CRT_SECURE_NO_DEPRECATE 
+#define _SCL_SECURE_NO_DEPRECATE 
+//#define _CRT_NONSTDC_NO_DEPRECATE
+
+//Класс читает строки из входного файла и отсылает их назад обёрнутыми в скобки
+template<class T>
+class TConnectionServer: public NWLib::AsyncIOConnection::TConnectionBasic<T>
+{
+   typedef NWLib::ObjectLevelLockable<TConnectionServer> TMutex;
+   static const size_t BufSize = 10;
+   static const char szStringDelim[];
+   static const size_t StringDelimSize;
+   static const int MaxTimeIdle = 10;
+
+   typedef std::string TBuffer;
+
+private:
+   char m_ReadBufTmp[BufSize];
+   char m_WriteBufTmp[BufSize];
+   TBuffer m_ReadBuf;
+   TBuffer m_WriteBuf;
+   TMutex m_WriteBufMutex; //Защита буфера записи
+   bool m_DataSending;     //Ожидается ли отправка данных
+   int m_IdleTime;         //Время простоя
+   bool m_EndReceive;      //Приём даных закончен
+
+
+
+public:
+   TConnectionServer(): m_DataSending(false), m_IdleTime(0), m_EndReceive(false) 
+   { 
+      std::cout << "TConnectionServer()" << std::endl;
+      //StopWaitConnection();
+   }
+   ~TConnectionServer(){ std::cout << "~TConnectionServer()" << std::endl; }
+
+
+   void OnDisconnect()
+   {
+      std::cout << "OnDisconnect()" << std::endl;
+   }
+
+   void OnConnect()
+   {
+      std::cout << "OnConnect()" << std::endl;
+      
+      {
+         //Ставим в очередь на отправку
+         TMutex::Lock Guard(m_WriteBufMutex);
+         m_WriteBuf.append("Welcome to simple server");
+         m_WriteBuf.append(szStringDelim);
+     }
+
+      SendData();
+      TryReceive( m_ReadBufTmp, BufSize ); 
+   }
+
+
+#include "winsock2.h"
+#include <iostream>
+#include <tchar.h>
+#include <windows.h>
+
+#include "../../FirstHeader.h"
+
+
+// TODO: reference additional headers your program requires here
+//Строка не содержит \r\n
