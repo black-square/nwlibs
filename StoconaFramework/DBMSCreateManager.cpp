@@ -1,4 +1,4 @@
-//Автор: Шестеркин Дмитрий(NW) 2005
+п»ї//РђРІС‚РѕСЂ: РЁРµСЃС‚РµСЂРєРёРЅ Р”РјРёС‚СЂРёР№(NW) 2005
 
 #define NWLIB_STOCONA_FRAMEWORK
 
@@ -24,7 +24,7 @@ CDBMSCreateManager::TPointer CDBMSCreateManager::OpenDataBase(
    TMutex::Lock Guard(m_Mutex);
 
    DEBUG_MSG_LOG4( 
-      "Открываем DB LoadManager: " << pLoadManager << 
+      "РћС‚РєСЂС‹РІР°РµРј DB LoadManager: " << pLoadManager << 
       " FullPathToIniFile: " << Convert( FullPathToIniFile, std::string() ) << 
       " FullPathToDbmsBases: " << Convert( FullPathToDbmsBases, std::string() ) <<
       " DBName: " << Convert( DBName, std::string() ) 
@@ -33,11 +33,11 @@ CDBMSCreateManager::TPointer CDBMSCreateManager::OpenDataBase(
    TMapKey Key(FullPathToDbmsBases);   
    TObjectsMap::iterator I = m_ObjectsMap.find(Key);
 
-   //Получаем если необходимо IDBManager
+   //РџРѕР»СѓС‡Р°РµРј РµСЃР»Рё РЅРµРѕР±С…РѕРґРёРјРѕ IDBManager
    if( I == m_ObjectsMap.end() )
    {
-      DEBUG_MSG_LOG2( "Создаём DBMS::IDBManager процесс: "  << GetCurrentProcessId() << 
-         " поток: " << GetCurrentThreadId() << 
+      DEBUG_MSG_LOG2( "РЎРѕР·РґР°С‘Рј DBMS::IDBManager РїСЂРѕС†РµСЃСЃ: "  << GetCurrentProcessId() << 
+         " РїРѕС‚РѕРє: " << GetCurrentThreadId() << 
          " FullPathToIniFile: " << Convert( FullPathToIniFile, std::string() ) <<
          " FullPathToDbmsBases: " << Convert( FullPathToDbmsBases, std::string() ) 
       );
@@ -48,11 +48,11 @@ CDBMSCreateManager::TPointer CDBMSCreateManager::OpenDataBase(
       auto_ptr_ex<IDBManager, auto_ptr_ex_release_strategy> pNewObj( pDBManager );
 
       if( pNewObj == 0 )
-         SS_THROW( L"Ошибка при получении IID_DBManager" );
+         SS_THROW( L"РћС€РёР±РєР° РїСЂРё РїРѕР»СѓС‡РµРЅРёРё IID_DBManager" );
 
       
       if( pNewObj->Init(FullPathToIniFile.c_str(), FullPathToDbmsBases.c_str()) != S_OK )
-         SS_THROW( L"Ошибка при инициализации IDBManager" );
+         SS_THROW( L"РћС€РёР±РєР° РїСЂРё РёРЅРёС†РёР°Р»РёР·Р°С†РёРё IDBManager" );
 
       std::pair<TObjectsMap::iterator, bool> RezPair = m_ObjectsMap.insert( TObjectsMap::value_type(Key, pNewObj.get()) );
       pNewObj.release();
@@ -61,15 +61,15 @@ CDBMSCreateManager::TPointer CDBMSCreateManager::OpenDataBase(
       I = RezPair.first;
    }
 
-   //Получаем IDataBase
+   //РџРѕР»СѓС‡Р°РµРј IDataBase
    if( I->second.GetDBManager()->MoveToDataBase(DBName.c_str()) != S_OK )
-      SS_THROW( L"Ошибка при попытке перейти к БД" );
+      SS_THROW( L"РћС€РёР±РєР° РїСЂРё РїРѕРїС‹С‚РєРµ РїРµСЂРµР№С‚Рё Рє Р‘Р”" );
 
    IDataBase *pDataBase = I->second.GetDBManager()->OpenDataBase();
    APL_ASSERT_PTR( pDataBase );
-   I->second.IncRef(); //У IDBManager стало на одну ссылку больше
+   I->second.IncRef(); //РЈ IDBManager СЃС‚Р°Р»Рѕ РЅР° РѕРґРЅСѓ СЃСЃС‹Р»РєСѓ Р±РѕР»СЊС€Рµ
 
-   m_IDataBase2ObjectsMapIter.insert(TIDataBase2ObjectsMapIter::value_type(pDataBase, I)).first->second.IncRef(); //Полученных БД, так же стало на одну больше (или появилась новая)
+   m_IDataBase2ObjectsMapIter.insert(TIDataBase2ObjectsMapIter::value_type(pDataBase, I)).first->second.IncRef(); //РџРѕР»СѓС‡РµРЅРЅС‹С… Р‘Р”, С‚Р°Рє Р¶Рµ СЃС‚Р°Р»Рѕ РЅР° РѕРґРЅСѓ Р±РѕР»СЊС€Рµ (РёР»Рё РїРѕСЏРІРёР»Р°СЃСЊ РЅРѕРІР°СЏ)
 
    return pDataBase;
 }
@@ -84,29 +84,29 @@ void CDBMSCreateManager::CloseDataBase(TPointer pDB)
    TIDataBase2ObjectsMapIter::iterator IAux = m_IDataBase2ObjectsMapIter.find(pDB);
 
    if( IAux == m_IDataBase2ObjectsMapIter.end() )
-      SS_THROW( L"Указатель на DB не содержит корректных данных" );
+      SS_THROW( L"РЈРєР°Р·Р°С‚РµР»СЊ РЅР° DB РЅРµ СЃРѕРґРµСЂР¶РёС‚ РєРѕСЂСЂРµРєС‚РЅС‹С… РґР°РЅРЅС‹С…" );
    
    TObjectsMap::iterator IMain = IAux->second.GetIter();
    
    DEBUG_MSG_LOG4( 
-      "Закрываем DB Name: " << Convert( pDB->GetName(), std::string() )  << 
+      "Р—Р°РєСЂС‹РІР°РµРј DB Name: " << Convert( pDB->GetName(), std::string() )  << 
       " FullPathToDbmsBases: " << Convert( IMain->first, std::string() ) 
    ); 
 
    pDB->Close();
 
-   //Удаляем если необходимо элемент в списке m_IDataBase2ObjectsMapIter
+   //РЈРґР°Р»СЏРµРј РµСЃР»Рё РЅРµРѕР±С…РѕРґРёРјРѕ СЌР»РµРјРµРЅС‚ РІ СЃРїРёСЃРєРµ m_IDataBase2ObjectsMapIter
    IAux->second.DecRef();
 
    if( IAux->second.RefCount() == 0 )
       m_IDataBase2ObjectsMapIter.erase(IAux);
 
-   //Удаляем если необходимо элемент в списке m_ObjectsMap
+   //РЈРґР°Р»СЏРµРј РµСЃР»Рё РЅРµРѕР±С…РѕРґРёРјРѕ СЌР»РµРјРµРЅС‚ РІ СЃРїРёСЃРєРµ m_ObjectsMap
    IMain->second.DecRef();
 
    if( IMain->second.RefCount() == 0 )
    {
-      //Не должно быть ссылкок на данный IDBManager
+      //РќРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ СЃСЃС‹Р»РєРѕРє РЅР° РґР°РЅРЅС‹Р№ IDBManager
       APL_ASSERT( 
          std::find_if( m_IDataBase2ObjectsMapIter.begin(), m_IDataBase2ObjectsMapIter.end(),
             bind2nd(
@@ -120,8 +120,8 @@ void CDBMSCreateManager::CloseDataBase(TPointer pDB)
          ) == m_IDataBase2ObjectsMapIter.end()  
       );
 
-      DEBUG_MSG_LOG2( "Удаляем DBMS::IDBManager процесс: "  << GetCurrentProcessId() << 
-         " поток: " << GetCurrentThreadId() << 
+      DEBUG_MSG_LOG2( "РЈРґР°Р»СЏРµРј DBMS::IDBManager РїСЂРѕС†РµСЃСЃ: "  << GetCurrentProcessId() << 
+         " РїРѕС‚РѕРє: " << GetCurrentThreadId() << 
          " FullPathToDbmsBases: " << Convert( IMain->first, std::string() )
       );
 
@@ -133,21 +133,21 @@ void CDBMSCreateManager::CloseDataBase(TPointer pDB)
 
 CDBMSCreateManager::~CDBMSCreateManager()
 {
-   TMutex::Lock Guard(m_Mutex); //В принципе не нужен
+   TMutex::Lock Guard(m_Mutex); //Р’ РїСЂРёРЅС†РёРїРµ РЅРµ РЅСѓР¶РµРЅ
 
-   //Сообщаем о том что есть открытые базы, хотя их быть не должно быть
+   //РЎРѕРѕР±С‰Р°РµРј Рѕ С‚РѕРј С‡С‚Рѕ РµСЃС‚СЊ РѕС‚РєСЂС‹С‚С‹Рµ Р±Р°Р·С‹, С…РѕС‚СЏ РёС… Р±С‹С‚СЊ РЅРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ
    for( TObjectsMap::iterator I = m_ObjectsMap.begin(); I != m_ObjectsMap.end(); ++I )
    {
       std::wstringstream OutStr;
       std::wstring Str;
 
-      OutStr << L"Не все базы данных были закрыты, по пути: " << I->first << L". Пытаемся закрыть автоматически...";
+      OutStr << L"РќРµ РІСЃРµ Р±Р°Р·С‹ РґР°РЅРЅС‹С… Р±С‹Р»Рё Р·Р°РєСЂС‹С‚С‹, РїРѕ РїСѓС‚Рё: " << I->first << L". РџС‹С‚Р°РµРјСЃСЏ Р·Р°РєСЂС‹С‚СЊ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё...";
       Str = OutStr.str();
       DEBUG_MSG_LOG2( Convert( Str, std::string() ) );
       SAVE_LOG( (wchar_t *)Str.c_str() );
    }
 
-   //Попытаемся закрыть всё что было открыто
+   //РџРѕРїС‹С‚Р°РµРјСЃСЏ Р·Р°РєСЂС‹С‚СЊ РІСЃС‘ С‡С‚Рѕ Р±С‹Р»Рѕ РѕС‚РєСЂС‹С‚Рѕ
    TIDataBase2ObjectsMapIter::iterator IAux = m_IDataBase2ObjectsMapIter.begin();
    TIDataBase2ObjectsMapIter::iterator ICur;
    size_t CurRefCount;
@@ -158,7 +158,7 @@ CDBMSCreateManager::~CDBMSCreateManager()
       
       CurRefCount = ICur->second.RefCount();
       
-      DEBUG_MSG_LOG2( "Закрываем принудительно БД: " << Convert( ICur->first->GetName(), std::string() ) << ", " << (unsigned int)CurRefCount << " раз" );
+      DEBUG_MSG_LOG2( "Р—Р°РєСЂС‹РІР°РµРј РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ Р‘Р”: " << Convert( ICur->first->GetName(), std::string() ) << ", " << (unsigned int)CurRefCount << " СЂР°Р·" );
 
       while( CurRefCount-- )
          CloseDataBase( ICur->first );

@@ -1,4 +1,4 @@
-//Автор: Шестеркин Дмитрий(NW) 2005
+п»ї//РђРІС‚РѕСЂ: РЁРµСЃС‚РµСЂРєРёРЅ Р”РјРёС‚СЂРёР№(NW) 2005
 
 #ifndef LikePointer_HPP
 #define LikePointer_HPP
@@ -12,28 +12,28 @@
 namespace NWLib {
 
 /*
-   Модуль содержит ряд классов поведение которых напоминает поведение указателей
-   (перегружены опрераторы * и ->), в том числе и итераторы.
-   А так же различные классы реализующие парадигму владения объектом. 
+   РњРѕРґСѓР»СЊ СЃРѕРґРµСЂР¶РёС‚ СЂСЏРґ РєР»Р°СЃСЃРѕРІ РїРѕРІРµРґРµРЅРёРµ РєРѕС‚РѕСЂС‹С… РЅР°РїРѕРјРёРЅР°РµС‚ РїРѕРІРµРґРµРЅРёРµ СѓРєР°Р·Р°С‚РµР»РµР№
+   (РїРµСЂРµРіСЂСѓР¶РµРЅС‹ РѕРїСЂРµСЂР°С‚РѕСЂС‹ * Рё ->), РІ С‚РѕРј С‡РёСЃР»Рµ Рё РёС‚РµСЂР°С‚РѕСЂС‹.
+   Рђ С‚Р°Рє Р¶Рµ СЂР°Р·Р»РёС‡РЅС‹Рµ РєР»Р°СЃСЃС‹ СЂРµР°Р»РёР·СѓСЋС‰РёРµ РїР°СЂР°РґРёРіРјСѓ РІР»Р°РґРµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј. 
 */
 
 ///////////////////////////////////////////////////////////////////////////////
-// Расширенная реализация auto_ptr, тем что позволяет вместо оператора delete 
-// использовать произвольную функцию, определяемую стратегией 
-// реализация основана на:
+// Р Р°СЃС€РёСЂРµРЅРЅР°СЏ СЂРµР°Р»РёР·Р°С†РёСЏ auto_ptr, С‚РµРј С‡С‚Рѕ РїРѕР·РІРѕР»СЏРµС‚ РІРјРµСЃС‚Рѕ РѕРїРµСЂР°С‚РѕСЂР° delete 
+// РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РїСЂРѕРёР·РІРѕР»СЊРЅСѓСЋ С„СѓРЅРєС†РёСЋ, РѕРїСЂРµРґРµР»СЏРµРјСѓСЋ СЃС‚СЂР°С‚РµРіРёРµР№ 
+// СЂРµР°Р»РёР·Р°С†РёСЏ РѕСЃРЅРѕРІР°РЅР° РЅР°:
 // The C++ Standard Library - A Tutorial and Reference
 // by Nicolai M. Josuttis, Addison-Wesley, 1999
-// Наследуем стратегию для того чтобы позволить провести компилятору "оптимизацию
-// пустого базового класса"
+// РќР°СЃР»РµРґСѓРµРј СЃС‚СЂР°С‚РµРіРёСЋ РґР»СЏ С‚РѕРіРѕ С‡С‚РѕР±С‹ РїРѕР·РІРѕР»РёС‚СЊ РїСЂРѕРІРµСЃС‚Рё РєРѕРјРїРёР»СЏС‚РѕСЂСѓ "РѕРїС‚РёРјРёР·Р°С†РёСЋ
+// РїСѓСЃС‚РѕРіРѕ Р±Р°Р·РѕРІРѕРіРѕ РєР»Р°СЃСЃР°"
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-// Стратегии удаления. Требования:
-//    Стратегии должны корректно обрабатывать попытку удаления нулевого указателя
-//    Стратегии должны конструироваться и присваиваться стратегиям с другим шаблонным типом
+// РЎС‚СЂР°С‚РµРіРёРё СѓРґР°Р»РµРЅРёСЏ. РўСЂРµР±РѕРІР°РЅРёСЏ:
+//    РЎС‚СЂР°С‚РµРіРёРё РґРѕР»Р¶РЅС‹ РєРѕСЂСЂРµРєС‚РЅРѕ РѕР±СЂР°Р±Р°С‚С‹РІР°С‚СЊ РїРѕРїС‹С‚РєСѓ СѓРґР°Р»РµРЅРёСЏ РЅСѓР»РµРІРѕРіРѕ СѓРєР°Р·Р°С‚РµР»СЏ
+//    РЎС‚СЂР°С‚РµРіРёРё РґРѕР»Р¶РЅС‹ РєРѕРЅСЃС‚СЂСѓРёСЂРѕРІР°С‚СЊСЃСЏ Рё РїСЂРёСЃРІР°РёРІР°С‚СЊСЃСЏ СЃС‚СЂР°С‚РµРіРёСЏРј СЃ РґСЂСѓРіРёРј С€Р°Р±Р»РѕРЅРЅС‹Рј С‚РёРїРѕРј
 ///////////////////////////////////////////////////////////////////////////////
 
-//Вспомогательный класс, базовый для всех стратегий
+//Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Р№ РєР»Р°СЃСЃ, Р±Р°Р·РѕРІС‹Р№ РґР»СЏ РІСЃРµС… СЃС‚СЂР°С‚РµРіРёР№
 template<class ValueT, class PointerT = ValueT *, class ReferenceT = ValueT &>
 struct auto_ptr_ex_strategy_base
 {
@@ -42,7 +42,7 @@ struct auto_ptr_ex_strategy_base
    typedef ReferenceT reference;
 };
 
-//Стратегия удаления при помощи оператора delete
+//РЎС‚СЂР°С‚РµРіРёСЏ СѓРґР°Р»РµРЅРёСЏ РїСЂРё РїРѕРјРѕС‰Рё РѕРїРµСЂР°С‚РѕСЂР° delete
 template< class T >
 struct auto_ptr_ex_delete_strategy: public auto_ptr_ex_strategy_base<T> 
 {
@@ -58,7 +58,7 @@ struct auto_ptr_ex_delete_strategy: public auto_ptr_ex_strategy_base<T>
 };
 ///////////////////////////////////////////////////////////////////////////////
 
-//Стратегия удаления при помощи метода Release
+//РЎС‚СЂР°С‚РµРіРёСЏ СѓРґР°Р»РµРЅРёСЏ РїСЂРё РїРѕРјРѕС‰Рё РјРµС‚РѕРґР° Release
 template< class T >
 struct auto_ptr_ex_release_strategy: public auto_ptr_ex_strategy_base<T>
 {
@@ -74,7 +74,7 @@ struct auto_ptr_ex_release_strategy: public auto_ptr_ex_strategy_base<T>
 };
 ///////////////////////////////////////////////////////////////////////////////
 
-//Пустая стратегия, удаления не происходит
+//РџСѓСЃС‚Р°СЏ СЃС‚СЂР°С‚РµРіРёСЏ, СѓРґР°Р»РµРЅРёСЏ РЅРµ РїСЂРѕРёСЃС…РѕРґРёС‚
 template< class T >
 struct auto_ptr_ex_empty_strategy: public auto_ptr_ex_strategy_base<T> 
 {
@@ -86,7 +86,7 @@ struct auto_ptr_ex_empty_strategy: public auto_ptr_ex_strategy_base<T>
    template< class Y >
    auto_ptr_ex_empty_strategy &operator=( const auto_ptr_ex_empty_strategy<Y> & ) { return *this; }
 
-   void operator()( pointer pT ) const { /*ничего не делаем*/}
+   void operator()( pointer pT ) const { /*РЅРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј*/}
 };
 
 
@@ -113,7 +113,7 @@ public:
    typedef typename DeleteStrategy<T>::pointer pointer;
    typedef typename DeleteStrategy<T>::reference reference;
    typedef typename DeleteStrategy<T>::value_type value_type;
-   typedef value_type element_type; //Синоним value_type, для совместимости
+   typedef value_type element_type; //РЎРёРЅРѕРЅРёРј value_type, РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё
   
 private:
    pointer ap;    // refers to the actual owned object (if any)
@@ -128,9 +128,9 @@ public:
 
    // constructor
    
-   //Нельзя писать конструктор который принимает TDeleteStrategy, т.к. это позволит 
-   //конструировать auto_ptr_ex из константного auto_ptr_ex минуя auto_ptr_ref_ex
-   //Если наследовать DeleteStrategy закрыто то ситуация не изменится
+   //РќРµР»СЊР·СЏ РїРёСЃР°С‚СЊ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєРѕС‚РѕСЂС‹Р№ РїСЂРёРЅРёРјР°РµС‚ TDeleteStrategy, С‚.Рє. СЌС‚Рѕ РїРѕР·РІРѕР»РёС‚ 
+   //РєРѕРЅСЃС‚СЂСѓРёСЂРѕРІР°С‚СЊ auto_ptr_ex РёР· РєРѕРЅСЃС‚Р°РЅС‚РЅРѕРіРѕ auto_ptr_ex РјРёРЅСѓСЏ auto_ptr_ref_ex
+   //Р•СЃР»Рё РЅР°СЃР»РµРґРѕРІР°С‚СЊ DeleteStrategy Р·Р°РєСЂС‹С‚Рѕ С‚Рѕ СЃРёС‚СѓР°С†РёСЏ РЅРµ РёР·РјРµРЅРёС‚СЃСЏ
    //explicit auto_ptr_ex( const TDeleteStrategy &DS ) throw()
    //   : ap(0), TDeleteStrategy(DS) {}
 
@@ -147,7 +147,7 @@ public:
    : ap(rhs.release()), TDeleteStrategy(rhs) {
    }
    
-   //Конструируем из std::auto_ptr
+   //РљРѕРЅСЃС‚СЂСѓРёСЂСѓРµРј РёР· std::auto_ptr
    template<class Y>
    auto_ptr_ex (std::auto_ptr<Y>& rhs) throw()
    : ap(rhs.release()), TDeleteStrategy(auto_ptr_ex_delete_strategy<T>()) {
@@ -168,7 +168,7 @@ public:
       return *this;
    }
 
-   //Присваиваем std::auto_ptr
+   //РџСЂРёСЃРІР°РёРІР°РµРј std::auto_ptr
    template<class Y>
    auto_ptr_ex& operator= (std::auto_ptr<Y>& rhs) throw() {
       reset(rhs.release());
@@ -238,19 +238,19 @@ public:
    }
 
 public:
-   //Позволет проверять указатель на равенство/неравенство нулю и приводить к типу bool
+   //РџРѕР·РІРѕР»РµС‚ РїСЂРѕРІРµСЂСЏС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЂР°РІРµРЅСЃС‚РІРѕ/РЅРµСЂР°РІРµРЅСЃС‚РІРѕ РЅСѓР»СЋ Рё РїСЂРёРІРѕРґРёС‚СЊ Рє С‚РёРїСѓ bool
    operator TUndefinedBoolType() const{ return ap != 0? &OperatorHelper::i : 0; }
    
-   //Нельзя определить auto_ptr_ex( TUndefinedBoolType ), т.к. возникает неоднозначность 
-   //с auto_ptr_ex(auto_ptr_ref_ex<T, DeleteStrategy> rhs)
+   //РќРµР»СЊР·СЏ РѕРїСЂРµРґРµР»РёС‚СЊ auto_ptr_ex( TUndefinedBoolType ), С‚.Рє. РІРѕР·РЅРёРєР°РµС‚ РЅРµРѕРґРЅРѕР·РЅР°С‡РЅРѕСЃС‚СЊ 
+   //СЃ auto_ptr_ex(auto_ptr_ref_ex<T, DeleteStrategy> rhs)
 
-   //Если не определять то будет использоваться автоматическое преобразование к TUndefinedBoolType
-   //и встроенные операторы
+   //Р•СЃР»Рё РЅРµ РѕРїСЂРµРґРµР»СЏС‚СЊ С‚Рѕ Р±СѓРґРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ Рє TUndefinedBoolType
+   //Рё РІСЃС‚СЂРѕРµРЅРЅС‹Рµ РѕРїРµСЂР°С‚РѕСЂС‹
    friend bool operator==( const auto_ptr_ex &P1, const auto_ptr_ex &P2 ){ return P1.ap == P2.ap; }
    friend bool operator!=( const auto_ptr_ex &P1, const auto_ptr_ex &P2 ){ return P1.ap != P2.ap; }
 
-   //Если не опредилять по при проверке P1 == 0, 0 == P1, P1 != 0, 0 != P1 возникнет 
-   //неоднозначность если конструктор будет не explicit
+   //Р•СЃР»Рё РЅРµ РѕРїСЂРµРґРёР»СЏС‚СЊ РїРѕ РїСЂРё РїСЂРѕРІРµСЂРєРµ P1 == 0, 0 == P1, P1 != 0, 0 != P1 РІРѕР·РЅРёРєРЅРµС‚ 
+   //РЅРµРѕРґРЅРѕР·РЅР°С‡РЅРѕСЃС‚СЊ РµСЃР»Рё РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Р±СѓРґРµС‚ РЅРµ explicit
    friend bool operator==( const auto_ptr_ex &P1, TUndefinedBoolType P2 ){ return P1.ap == 0; }
    friend bool operator==( TUndefinedBoolType P2, const auto_ptr_ex &P1 ){ return P1.ap == 0; }
    friend bool operator!=( const auto_ptr_ex &P1, TUndefinedBoolType P2 ){ return P1.ap != 0; }
@@ -258,19 +258,19 @@ public:
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// Интеллектуальный указатель обладающей семантикой клонирования. Т.е. при 
-// присвоении и конструировании создаётся дубликат объетка и указатель на него
-// переходит во владение класса
-// Благодаря этому такие указатели можно хранить в контейнерах STL
+// РРЅС‚РµР»Р»РµРєС‚СѓР°Р»СЊРЅС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ РѕР±Р»Р°РґР°СЋС‰РµР№ СЃРµРјР°РЅС‚РёРєРѕР№ РєР»РѕРЅРёСЂРѕРІР°РЅРёСЏ. Рў.Рµ. РїСЂРё 
+// РїСЂРёСЃРІРѕРµРЅРёРё Рё РєРѕРЅСЃС‚СЂСѓРёСЂРѕРІР°РЅРёРё СЃРѕР·РґР°С‘С‚СЃСЏ РґСѓР±Р»РёРєР°С‚ РѕР±СЉРµС‚РєР° Рё СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅРµРіРѕ
+// РїРµСЂРµС…РѕРґРёС‚ РІРѕ РІР»Р°РґРµРЅРёРµ РєР»Р°СЃСЃР°
+// Р‘Р»Р°РіРѕРґР°СЂСЏ СЌС‚РѕРјСѓ С‚Р°РєРёРµ СѓРєР°Р·Р°С‚РµР»Рё РјРѕР¶РЅРѕ С…СЂР°РЅРёС‚СЊ РІ РєРѕРЅС‚РµР№РЅРµСЂР°С… STL
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-// Стратегии клонирования. Требования:
-//    Стратегии должны корректно обрабатывать попытку клонирования нулевого указателя (возвращать 0)
-//    Стратегии должны конструироваться и присваиваться стратегиям с другим шаблонным типом
+// РЎС‚СЂР°С‚РµРіРёРё РєР»РѕРЅРёСЂРѕРІР°РЅРёСЏ. РўСЂРµР±РѕРІР°РЅРёСЏ:
+//    РЎС‚СЂР°С‚РµРіРёРё РґРѕР»Р¶РЅС‹ РєРѕСЂСЂРµРєС‚РЅРѕ РѕР±СЂР°Р±Р°С‚С‹РІР°С‚СЊ РїРѕРїС‹С‚РєСѓ РєР»РѕРЅРёСЂРѕРІР°РЅРёСЏ РЅСѓР»РµРІРѕРіРѕ СѓРєР°Р·Р°С‚РµР»СЏ (РІРѕР·РІСЂР°С‰Р°С‚СЊ 0)
+//    РЎС‚СЂР°С‚РµРіРёРё РґРѕР»Р¶РЅС‹ РєРѕРЅСЃС‚СЂСѓРёСЂРѕРІР°С‚СЊСЃСЏ Рё РїСЂРёСЃРІР°РёРІР°С‚СЊСЃСЏ СЃС‚СЂР°С‚РµРіРёСЏРј СЃ РґСЂСѓРіРёРј С€Р°Р±Р»РѕРЅРЅС‹Рј С‚РёРїРѕРј
 ///////////////////////////////////////////////////////////////////////////////
 
-//Стратегия конирования при помощи метода Clone, который возвращает укаатель на клонируемый объект
+//РЎС‚СЂР°С‚РµРіРёСЏ РєРѕРЅРёСЂРѕРІР°РЅРёСЏ РїСЂРё РїРѕРјРѕС‰Рё РјРµС‚РѕРґР° Clone, РєРѕС‚РѕСЂС‹Р№ РІРѕР·РІСЂР°С‰Р°РµС‚ СѓРєР°Р°С‚РµР»СЊ РЅР° РєР»РѕРЅРёСЂСѓРµРјС‹Р№ РѕР±СЉРµРєС‚
 template< class T >
 struct clone_ptr_ex_strategy_clone_member: public auto_ptr_ex_strategy_base<T>
 {
@@ -286,7 +286,7 @@ struct clone_ptr_ex_strategy_clone_member: public auto_ptr_ex_strategy_base<T>
 };
 ///////////////////////////////////////////////////////////////////////////////
 
-//Стратегия конирования при помощи метода Clone, который возвращает auto_ptr
+//РЎС‚СЂР°С‚РµРіРёСЏ РєРѕРЅРёСЂРѕРІР°РЅРёСЏ РїСЂРё РїРѕРјРѕС‰Рё РјРµС‚РѕРґР° Clone, РєРѕС‚РѕСЂС‹Р№ РІРѕР·РІСЂР°С‰Р°РµС‚ auto_ptr
 template< class T >
 struct clone_ptr_ex_strategy_clone_member_auto_ptr: public auto_ptr_ex_strategy_base<T> 
 {
@@ -314,7 +314,7 @@ public:
    typedef typename DeleteStrategy<T>::pointer pointer;
    typedef typename DeleteStrategy<T>::reference reference;
    typedef typename DeleteStrategy<T>::value_type value_type;
-   typedef value_type element_type; //Синоним value_type, для совместимости
+   typedef value_type element_type; //РЎРёРЅРѕРЅРёРј value_type, РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё
 
 private:
    pointer ap;    // refers to the actual owned object (if any)
@@ -339,13 +339,13 @@ public:
    : ap(TCloneStrategy::operator()(rhs.ap)), TCloneStrategy(rhs), TDeleteStrategy(rhs) {
    }
    
-   //Конструируем из std::auto_ptr
+   //РљРѕРЅСЃС‚СЂСѓРёСЂСѓРµРј РёР· std::auto_ptr
    template<class Y>
    clone_ptr_ex (const std::auto_ptr<Y>& rhs) throw()
    : ap(TCloneStrategy::operator()(rhs.get())), TDeleteStrategy(auto_ptr_ex_delete_strategy<T>()) {
    }
 
-   //Конструируем из std::auto_ptr_ex
+   //РљРѕРЅСЃС‚СЂСѓРёСЂСѓРµРј РёР· std::auto_ptr_ex
    template<class Y>
    clone_ptr_ex (const auto_ptr_ex<Y, DeleteStrategy>& rhs) throw()
    : ap(TCloneStrategy::operator()(rhs.get())), TDeleteStrategy(rhs.GetDeleteStrategy()) {
@@ -369,7 +369,7 @@ public:
       return *this;
    }
 
-   //Присваиваем std::auto_ptr
+   //РџСЂРёСЃРІР°РёРІР°РµРј std::auto_ptr
    template<class Y>
    clone_ptr_ex& operator= (const std::auto_ptr<Y>& rhs) throw() {
       reset(static_cast<TCloneStrategy&>(*this)(rhs.get()));
@@ -377,7 +377,7 @@ public:
       return *this;
    }
    
-   //Присваиваем std::auto_ptr_ex
+   //РџСЂРёСЃРІР°РёРІР°РµРј std::auto_ptr_ex
    template<class Y>
    clone_ptr_ex& operator= (const auto_ptr_ex<Y, DeleteStrategy>& rhs) throw() {
       reset(static_cast<TCloneStrategy&>(*this)(rhs.get()));
@@ -437,16 +437,16 @@ public:
    }
 
 public:
-   //Позволет проверять указатель на равенство/неравенство нулю и приводить к типу bool
+   //РџРѕР·РІРѕР»РµС‚ РїСЂРѕРІРµСЂСЏС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЂР°РІРµРЅСЃС‚РІРѕ/РЅРµСЂР°РІРµРЅСЃС‚РІРѕ РЅСѓР»СЋ Рё РїСЂРёРІРѕРґРёС‚СЊ Рє С‚РёРїСѓ bool
    operator TUndefinedBoolType() const{ return ap != 0? &OperatorHelper::i : 0; }
 
-   //Если не определять то будет использоваться автоматическое преобразование к TUndefinedBoolType
-   //и встроенные операторы
+   //Р•СЃР»Рё РЅРµ РѕРїСЂРµРґРµР»СЏС‚СЊ С‚Рѕ Р±СѓРґРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ Рє TUndefinedBoolType
+   //Рё РІСЃС‚СЂРѕРµРЅРЅС‹Рµ РѕРїРµСЂР°С‚РѕСЂС‹
    friend bool operator==( const clone_ptr_ex &P1, const clone_ptr_ex &P2 ){ return P1.ap == P2.ap; }
    friend bool operator!=( const clone_ptr_ex &P1, const clone_ptr_ex &P2 ){ return P1.ap != P2.ap; }
 
-   //Если не опредилять по при проверке P1 == 0, 0 == P1, P1 != 0, 0 != P1 возникнет 
-   //неоднозначность если конструктор будет не explicit
+   //Р•СЃР»Рё РЅРµ РѕРїСЂРµРґРёР»СЏС‚СЊ РїРѕ РїСЂРё РїСЂРѕРІРµСЂРєРµ P1 == 0, 0 == P1, P1 != 0, 0 != P1 РІРѕР·РЅРёРєРЅРµС‚ 
+   //РЅРµРѕРґРЅРѕР·РЅР°С‡РЅРѕСЃС‚СЊ РµСЃР»Рё РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Р±СѓРґРµС‚ РЅРµ explicit
    friend bool operator==( const clone_ptr_ex &P1, TUndefinedBoolType P2 ){ return P1.ap == 0; }
    friend bool operator==( TUndefinedBoolType P2, const clone_ptr_ex &P1 ){ return P1.ap == 0; }
    friend bool operator!=( const clone_ptr_ex &P1, TUndefinedBoolType P2 ){ return P1.ap != 0; }

@@ -1,9 +1,9 @@
-#ifndef HTTPServerConnectionStateFuction_HPP
+п»ї#ifndef HTTPServerConnectionStateFuction_HPP
 #define HTTPServerConnectionStateFuction_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
-// Определение методов класса THTTPServer::TConnection которые относятся к 
-// различным режимам работы автомата, используемого в логике работы сервера
+// РћРїСЂРµРґРµР»РµРЅРёРµ РјРµС‚РѕРґРѕРІ РєР»Р°СЃСЃР° THTTPServer::TConnection РєРѕС‚РѕСЂС‹Рµ РѕС‚РЅРѕСЃСЏС‚СЃСЏ Рє 
+// СЂР°Р·Р»РёС‡РЅС‹Рј СЂРµР¶РёРјР°Рј СЂР°Р±РѕС‚С‹ Р°РІС‚РѕРјР°С‚Р°, РёСЃРїРѕР»СЊР·СѓРµРјРѕРіРѕ РІ Р»РѕРіРёРєРµ СЂР°Р±РѕС‚С‹ СЃРµСЂРІРµСЂР°
 ///////////////////////////////////////////////////////////////////////////////
 namespace NWLib
 {
@@ -33,52 +33,52 @@ template<class FuncImplT>
 typename THTTPServer<ConnectionT, GlobalDataT>::TConnection<FuncImplT>::TStringParseResult 
 THTTPServer<ConnectionT, GlobalDataT>::TConnection<FuncImplT>::ParseFirstHeaderString( const char *pBegin, const char *pEnd )
 {
-   const char *pBeginMethod; //Начало метода запроса
-   const char *pEndMethod;   //Конец метода запроса
-   const char *pBeginURL;    //Начало URL запроса
-   const char *pEndURL;      //Конец URL запроса
+   const char *pBeginMethod; //РќР°С‡Р°Р»Рѕ РјРµС‚РѕРґР° Р·Р°РїСЂРѕСЃР°
+   const char *pEndMethod;   //РљРѕРЅРµС† РјРµС‚РѕРґР° Р·Р°РїСЂРѕСЃР°
+   const char *pBeginURL;    //РќР°С‡Р°Р»Рѕ URL Р·Р°РїСЂРѕСЃР°
+   const char *pEndURL;      //РљРѕРЅРµС† URL Р·Р°РїСЂРѕСЃР°
 
    m_ReceiveHeader.Clear();
 
-   //Находим имя метода
-#if 0 //Перед названием метода пробелы стоять не могут
-   //Пропускаем пробелы
+   //РќР°С…РѕРґРёРј РёРјСЏ РјРµС‚РѕРґР°
+#if 0 //РџРµСЂРµРґ РЅР°Р·РІР°РЅРёРµРј РјРµС‚РѕРґР° РїСЂРѕР±РµР»С‹ СЃС‚РѕСЏС‚СЊ РЅРµ РјРѕРіСѓС‚
+   //РџСЂРѕРїСѓСЃРєР°РµРј РїСЂРѕР±РµР»С‹
    while( pBegin != pEnd && IsSpace(*pBegin) ) ++pBegin;
    if( pBegin == pEnd ) { SendErrorInHeader(); return SPRStopReading; }
 #endif
 
    pBeginMethod = pBegin++;
 
-   //Ищем пробел
+   //РС‰РµРј РїСЂРѕР±РµР»
    while( pBegin != pEnd && !IsSpace(*pBegin) ) ++pBegin;
    if( pBegin == pEnd ) { SendErrorInHeader(); return SPRStopReading; }
 
    pEndMethod = pBegin++;
 
-   //Находим URL
-   //Пропускаем пробелы
+   //РќР°С…РѕРґРёРј URL
+   //РџСЂРѕРїСѓСЃРєР°РµРј РїСЂРѕР±РµР»С‹
    while( pBegin != pEnd && IsSpace(*pBegin) ) ++pBegin;
    if( pBegin == pEnd ) { SendErrorInHeader(); return SPRStopReading; }
 
    pBeginURL = pBegin++;
 
-   //Ищем пробел
+   //РС‰РµРј РїСЂРѕР±РµР»
    while( pBegin != pEnd && !IsSpace(*pBegin) ) ++pBegin;
    if( pBegin == pEnd ) { SendErrorInHeader(); return SPRStopReading; }
 
    pEndURL = pBegin++;
 
-   //Версию HTTP обрабатывать не будем
+   //Р’РµСЂСЃРёСЋ HTTP РѕР±СЂР°Р±Р°С‚С‹РІР°С‚СЊ РЅРµ Р±СѓРґРµРј
 
    OnStartHeaderLine( pBeginMethod, pEndMethod, pBeginURL, pEndURL );
 
-   //Мы корректно распознали первую строку заголовка
-   //Узнаём что это за метод
+   //РњС‹ РєРѕСЂСЂРµРєС‚РЅРѕ СЂР°СЃРїРѕР·РЅР°Р»Рё РїРµСЂРІСѓСЋ СЃС‚СЂРѕРєСѓ Р·Р°РіРѕР»РѕРІРєР°
+   //РЈР·РЅР°С‘Рј С‡С‚Рѕ СЌС‚Рѕ Р·Р° РјРµС‚РѕРґ
 
-   //Название метода на состояние
+   //РќР°Р·РІР°РЅРёРµ РјРµС‚РѕРґР° РЅР° СЃРѕСЃС‚РѕСЏРЅРёРµ
    struct TMethodName2StringParseMode
    {
-      const char * const MethodName;   //Как написано в RFC 2068 метод чувствителен к регистру
+      const char * const MethodName;   //РљР°Рє РЅР°РїРёСЃР°РЅРѕ РІ RFC 2068 РјРµС‚РѕРґ С‡СѓРІСЃС‚РІРёС‚РµР»РµРЅ Рє СЂРµРіРёСЃС‚СЂСѓ
       const TStringParseMode StringParseMode;   
    }; 
 
@@ -105,10 +105,10 @@ THTTPServer<ConnectionT, GlobalDataT>::TConnection<FuncImplT>::ParseFirstHeaderS
       return SPRStopReading;
    }
 
-   //Всё удачно
+   //Р’СЃС‘ СѓРґР°С‡РЅРѕ
    m_ReceiveHeader.SetUrl( std::string(pBeginURL, pEndURL) );
 
-   m_CurStringParseMode = MN2SPM[i].StringParseMode; //Переходим к распознанию остальных строк заголовка 
+   m_CurStringParseMode = MN2SPM[i].StringParseMode; //РџРµСЂРµС…РѕРґРёРј Рє СЂР°СЃРїРѕР·РЅР°РЅРёСЋ РѕСЃС‚Р°Р»СЊРЅС‹С… СЃС‚СЂРѕРє Р·Р°РіРѕР»РѕРІРєР° 
 
    return SPRContinue;
 }
@@ -121,10 +121,10 @@ THTTPServer<ConnectionT, GlobalDataT>::TConnection<FuncImplT>::ParseGetHeaderStr
 {
    if( pBegin == pEnd )
    {
-      //Мы нашли конец заголовка   
+      //РњС‹ РЅР°С€Р»Рё РєРѕРЅРµС† Р·Р°РіРѕР»РѕРІРєР°   
       TBase::OnCompleateGetRequest(m_ReceiveHeader);
 
-      //Здесь пользователь обязан отправить какие-либо данные
+      //Р—РґРµСЃСЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РѕР±СЏР·Р°РЅ РѕС‚РїСЂР°РІРёС‚СЊ РєР°РєРёРµ-Р»РёР±Рѕ РґР°РЅРЅС‹Рµ
       return SPRStopReading;
    }
 
@@ -145,14 +145,14 @@ THTTPServer<ConnectionT, GlobalDataT>::TConnection<FuncImplT>::ParsePostHeaderSt
 {
    if( pBegin == pEnd )
    {
-      //Мы нашли конец заголовка     
-      if( m_ReceiveHeader.GetContentLength() == HTTP::TRequestHeader::ErrorContentLength() )  //Обязательно должно быть указано поле content-length
+      //РњС‹ РЅР°С€Р»Рё РєРѕРЅРµС† Р·Р°РіРѕР»РѕРІРєР°     
+      if( m_ReceiveHeader.GetContentLength() == HTTP::TRequestHeader::ErrorContentLength() )  //РћР±СЏР·Р°С‚РµР»СЊРЅРѕ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ СѓРєР°Р·Р°РЅРѕ РїРѕР»Рµ content-length
       {
          SendLengthRequired();
          return SPRStopReading;
       }
 
-      //Спрашиваем пользователя будет ли он принимать тело запроса
+      //РЎРїСЂР°С€РёРІР°РµРј РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ Р±СѓРґРµС‚ Р»Рё РѕРЅ РїСЂРёРЅРёРјР°С‚СЊ С‚РµР»Рѕ Р·Р°РїСЂРѕСЃР°
       HTTP::TErrorCode EC = TBase::OnBeginPostBodyReceive( m_ReceiveHeader );
 
       if( EC != HTTP::ECOk )
@@ -163,16 +163,16 @@ THTTPServer<ConnectionT, GlobalDataT>::TConnection<FuncImplT>::ParsePostHeaderSt
 
       m_NeadToReceive = m_ReceiveHeader.GetContentLength();
 
-      //Изменяем состояние приёма
+      //РР·РјРµРЅСЏРµРј СЃРѕСЃС‚РѕСЏРЅРёРµ РїСЂРёС‘РјР°
       m_CurReceiveMode = RMReadBody;
 
-      //Состояние изменилось, а буфер может быть не пустым (а может и пустым), 
-      //пока не надо принимать данные
+      //РЎРѕСЃС‚РѕСЏРЅРёРµ РёР·РјРµРЅРёР»РѕСЃСЊ, Р° Р±СѓС„РµСЂ РјРѕР¶РµС‚ Р±С‹С‚СЊ РЅРµ РїСѓСЃС‚С‹Рј (Р° РјРѕР¶РµС‚ Рё РїСѓСЃС‚С‹Рј), 
+      //РїРѕРєР° РЅРµ РЅР°РґРѕ РїСЂРёРЅРёРјР°С‚СЊ РґР°РЅРЅС‹Рµ
       if( (this->*OnReceiveFunc[m_CurReceiveMode])() )
          return SPRChangeState;
 
-      //Смогли полностью получить запрашевыемые данные из буфера
-      //Пользователь должен что то отправить
+      //РЎРјРѕРіР»Рё РїРѕР»РЅРѕСЃС‚СЊСЋ РїРѕР»СѓС‡РёС‚СЊ Р·Р°РїСЂР°С€РµРІС‹РµРјС‹Рµ РґР°РЅРЅС‹Рµ РёР· Р±СѓС„РµСЂР°
+      //РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РґРѕР»Р¶РµРЅ С‡С‚Рѕ С‚Рѕ РѕС‚РїСЂР°РІРёС‚СЊ
 
       return SPRStopReading;
    }
@@ -215,9 +215,9 @@ bool THTTPServer<ConnectionT, GlobalDataT>::TConnection<FuncImplT>::OnSendFromBu
       return true;
    }
 
-   //Отключаемся от соединения
+   //РћС‚РєР»СЋС‡Р°РµРјСЃСЏ РѕС‚ СЃРѕРµРґРёРЅРµРЅРёСЏ
 
-   //DEBUG_MSG( "Отправлен код ошибки, отключаемся " );
+   //DEBUG_MSG( "РћС‚РїСЂР°РІР»РµРЅ РєРѕРґ РѕС€РёР±РєРё, РѕС‚РєР»СЋС‡Р°РµРјСЃСЏ " );
    TServerConnection::EndSend();
    TServerConnection::TryDisconnect();
 
@@ -239,7 +239,7 @@ bool THTTPServer<ConnectionT, GlobalDataT>::TConnection<FuncImplT>::OnSendFromBu
 
    m_CurSendMode = SMSendBody;
 
-   //Пользователь должен что то отправить хотябы в первый раз
+   //РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РґРѕР»Р¶РµРЅ С‡С‚Рѕ С‚Рѕ РѕС‚РїСЂР°РІРёС‚СЊ С…РѕС‚СЏР±С‹ РІ РїРµСЂРІС‹Р№ СЂР°Р·
    APL_CHECK( TBase::OnSendData(pBuf, Length) );
 
    APL_ASSERT( static_cast<int>(m_NeadToReceive) >= Length );
@@ -263,10 +263,10 @@ bool THTTPServer<ConnectionT, GlobalDataT>::TConnection<FuncImplT>::OnSendBody( 
 
    if( !TBase::OnSendData(pBuf, Length) )
    {
-      //Мы отправили все данные пользователя
+      //РњС‹ РѕС‚РїСЂР°РІРёР»Рё РІСЃРµ РґР°РЅРЅС‹Рµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 
-      //Проверяем что пользователь послал ровно столько данных сколько указал в параметре Header.GetContentLength()
-      //функции SendHeaderWithBody
+      //РџСЂРѕРІРµСЂСЏРµРј С‡С‚Рѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РїРѕСЃР»Р°Р» СЂРѕРІРЅРѕ СЃС‚РѕР»СЊРєРѕ РґР°РЅРЅС‹С… СЃРєРѕР»СЊРєРѕ СѓРєР°Р·Р°Р» РІ РїР°СЂР°РјРµС‚СЂРµ Header.GetContentLength()
+      //С„СѓРЅРєС†РёРё SendHeaderWithBody
       APL_ASSERT( m_NeadToReceive == 0 );
 
       return false;

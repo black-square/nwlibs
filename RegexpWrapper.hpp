@@ -1,8 +1,8 @@
-#ifndef RegExpWrapper_HPP
+п»ї#ifndef RegExpWrapper_HPP
 #define RegExpWrapper_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
-// Обертка для максимально простого использования regexp парсера GRETA 
+// РћР±РµСЂС‚РєР° РґР»СЏ РјР°РєСЃРёРјР°Р»СЊРЅРѕ РїСЂРѕСЃС‚РѕРіРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ regexp РїР°СЂСЃРµСЂР° GRETA 
 // http://research.microsoft.com/projects/greta/
 ///////////////////////////////////////////////////////////////////////////////
 #include <greta/regexpr2.h>
@@ -13,7 +13,7 @@ namespace NWLib {
 namespace RegExp {
 
 ///////////////////////////////////////////////////////////////////////////////
-// Сохранияет состояния поиска и позволяет искать несколько вхождений шаблона
+// РЎРѕС…СЂР°РЅРёСЏРµС‚ СЃРѕСЃС‚РѕСЏРЅРёСЏ РїРѕРёСЃРєР° Рё РїРѕР·РІРѕР»СЏРµС‚ РёСЃРєР°С‚СЊ РЅРµСЃРєРѕР»СЊРєРѕ РІС…РѕР¶РґРµРЅРёР№ С€Р°Р±Р»РѕРЅР°
 ///////////////////////////////////////////////////////////////////////////////
 template<class CharT = TCHAR>
 struct TFindState
@@ -37,23 +37,23 @@ struct TFindState
       End = E;
    }
 
-   TStringConstIterator Begin;      //Место с которого начнётся поиск
-   TStringConstIterator PrevBegin;  //Место с которого начинался поиск в прошлый раз
-   TStringConstIterator End;        //Последний символ поиска
+   TStringConstIterator Begin;      //РњРµСЃС‚Рѕ СЃ РєРѕС‚РѕСЂРѕРіРѕ РЅР°С‡РЅС‘С‚СЃСЏ РїРѕРёСЃРє
+   TStringConstIterator PrevBegin;  //РњРµСЃС‚Рѕ СЃ РєРѕС‚РѕСЂРѕРіРѕ РЅР°С‡РёРЅР°Р»СЃСЏ РїРѕРёСЃРє РІ РїСЂРѕС€Р»С‹Р№ СЂР°Р·
+   TStringConstIterator End;        //РџРѕСЃР»РµРґРЅРёР№ СЃРёРјРІРѕР» РїРѕРёСЃРєР°
 };
 
-//Не бросать исключения
+//РќРµ Р±СЂРѕСЃР°С‚СЊ РёСЃРєР»СЋС‡РµРЅРёСЏ
 struct TNoException { enum {NeadThrow = 0}; };
 
-//Бросать исключения при невозможности найти подстроку соотвествующую шаблону
+//Р‘СЂРѕСЃР°С‚СЊ РёСЃРєР»СЋС‡РµРЅРёСЏ РїСЂРё РЅРµРІРѕР·РјРѕР¶РЅРѕСЃС‚Рё РЅР°Р№С‚Рё РїРѕРґСЃС‚СЂРѕРєСѓ СЃРѕРѕС‚РІРµСЃС‚РІСѓСЋС‰СѓСЋ С€Р°Р±Р»РѕРЅСѓ
 struct TThrowException { enum {NeadThrow = 1}; };
 
 ///////////////////////////////////////////////////////////////////////////////
-// Обёртка над классами поиска
+// РћР±С‘СЂС‚РєР° РЅР°Рґ РєР»Р°СЃСЃР°РјРё РїРѕРёСЃРєР°
 ///////////////////////////////////////////////////////////////////////////////
 template< class ExceptionT = TThrowException, 
-   class CharT = TCHAR //Если планируется использовать параметр отличный от
-                       //TCHAR, то нужно голобально определить REGEX_WIDE_AND_NARROW
+   class CharT = TCHAR //Р•СЃР»Рё РїР»Р°РЅРёСЂСѓРµС‚СЃСЏ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РїР°СЂР°РјРµС‚СЂ РѕС‚Р»РёС‡РЅС‹Р№ РѕС‚
+                       //TCHAR, С‚Рѕ РЅСѓР¶РЅРѕ РіРѕР»РѕР±Р°Р»СЊРЅРѕ РѕРїСЂРµРґРµР»РёС‚СЊ REGEX_WIDE_AND_NARROW
 >
 class TFinder
 {
@@ -74,7 +74,7 @@ public:
       TBackRef BR = m_Pattern.match(Begin, End, m_Results);
 
       if( ExceptionT::NeadThrow && !BR.matched )
-         APL_THROW( _T("Ошибка при поиске шаблона: ") << ConvertToTStr(m_PatternStr) );
+         APL_THROW( _T("РћС€РёР±РєР° РїСЂРё РїРѕРёСЃРєРµ С€Р°Р±Р»РѕРЅР°: ") << ConvertToTStr(m_PatternStr) );
 
       return BR.matched;
    }
@@ -89,13 +89,13 @@ public:
       return (*this)( BR.begin(), BR.end() );
    }
 
-   //Используется для циклического поиска
+   //РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ С†РёРєР»РёС‡РµСЃРєРѕРіРѕ РїРѕРёСЃРєР°
    bool operator()( TFindState &State ) 
    {
       TBackRef BR = m_Pattern.match(State.Begin, State.End, m_Results);
 
       if( ExceptionT::NeadThrow && !BR.matched && State.PrevBegin == State.Begin )
-         APL_THROW( _T("Ошибка при поиске шаблона: ") << ConvertToTStr(m_PatternStr) );
+         APL_THROW( _T("РћС€РёР±РєР° РїСЂРё РїРѕРёСЃРєРµ С€Р°Р±Р»РѕРЅР°: ") << ConvertToTStr(m_PatternStr) );
 
       State.PrevBegin = State.Begin;
       State.Begin = BR.end();
@@ -103,21 +103,21 @@ public:
       return BR.matched;
    }
 
-   //Количество данных о результатах 
-   //Если поиск удался то всегда будет больше 0
+   //РљРѕР»РёС‡РµСЃС‚РІРѕ РґР°РЅРЅС‹С… Рѕ СЂРµР·СѓР»СЊС‚Р°С‚Р°С… 
+   //Р•СЃР»Рё РїРѕРёСЃРє СѓРґР°Р»СЃСЏ С‚Рѕ РІСЃРµРіРґР° Р±СѓРґРµС‚ Р±РѕР»СЊС€Рµ 0
    size_t Size() const { return m_Results.all_backrefs().size(); }
 
-   //Получить результат поиска номер i
+   //РџРѕР»СѓС‡РёС‚СЊ СЂРµР·СѓР»СЊС‚Р°С‚ РїРѕРёСЃРєР° РЅРѕРјРµСЂ i
    const TBackRef & operator[]( size_t i ) const { APL_ASSERT( i < Size()); return m_Results.all_backrefs()[i]; }
 
 private:
    TPattern m_Pattern;
    TResult m_Results;
-   TString m_PatternStr;            //Сохраняется только для того чтобы отображать значение в исключениях
+   TString m_PatternStr;            //РЎРѕС…СЂР°РЅСЏРµС‚СЃСЏ С‚РѕР»СЊРєРѕ РґР»СЏ С‚РѕРіРѕ С‡С‚РѕР±С‹ РѕС‚РѕР±СЂР°Р¶Р°С‚СЊ Р·РЅР°С‡РµРЅРёРµ РІ РёСЃРєР»СЋС‡РµРЅРёСЏС…
 };
 
 
-//Вывод в поток значения в секундах
+//Р’С‹РІРѕРґ РІ РїРѕС‚РѕРє Р·РЅР°С‡РµРЅРёСЏ РІ СЃРµРєСѓРЅРґР°С…
 template< class CharT, class CharTraitsT, class ExceptionT >
 inline std::basic_ostream<CharT, CharTraitsT> &operator<<( std::basic_ostream<CharT, CharTraitsT> &stream, const TFinder<ExceptionT, CharT> &Finder )
 {

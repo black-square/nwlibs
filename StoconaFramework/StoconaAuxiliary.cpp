@@ -1,4 +1,4 @@
-//Автор: Шестеркин Дмитрий(NW) 2005
+п»ї//РђРІС‚РѕСЂ: РЁРµСЃС‚РµСЂРєРёРЅ Р”РјРёС‚СЂРёР№(NW) 2005
 
 #define NWLIB_STOCONA_FRAMEWORK
 #include "stdafx.h"
@@ -15,21 +15,21 @@ CLoadManagerCreater::CLoadManagerCreater( const std::basic_string<TCHAR> &FileNa
 
    ::SetCurrentDirectory(Path.c_str());  
 
-   m_hLoadManager = ::LoadLibrary(FileName.c_str());			//загрузка библиотеки и получение на неё указателя
+   m_hLoadManager = ::LoadLibrary(FileName.c_str());			//Р·Р°РіСЂСѓР·РєР° Р±РёР±Р»РёРѕС‚РµРєРё Рё РїРѕР»СѓС‡РµРЅРёРµ РЅР° РЅРµС‘ СѓРєР°Р·Р°С‚РµР»СЏ
    if( m_hLoadManager == NULL )
-      APL_THROW( _T("Ошибка при загрузке файла ") << Path << FileName );
+      APL_THROW( _T("РћС€РёР±РєР° РїСЂРё Р·Р°РіСЂСѓР·РєРµ С„Р°Р№Р»Р° ") << Path << FileName );
 
-    m_CreateInstanceFunc = (CREATE_INSTANCE)GetProcAddress(m_hLoadManager, "CreateInstance" );	//получ указ. на ф-ю CreateInstance
+    m_CreateInstanceFunc = (CREATE_INSTANCE)GetProcAddress(m_hLoadManager, "CreateInstance" );	//РїРѕР»СѓС‡ СѓРєР°Р·. РЅР° С„-СЋ CreateInstance
 
    if( m_CreateInstanceFunc == NULL )
-      APL_THROW( _T("Ошибка при получении указателя на функцию") );
+      APL_THROW( _T("РћС€РёР±РєР° РїСЂРё РїРѕР»СѓС‡РµРЅРёРё СѓРєР°Р·Р°С‚РµР»СЏ РЅР° С„СѓРЅРєС†РёСЋ") );
 }
 ///////////////////////////////////////////////////////////////////////////////
 
 CLoadManagerCreater::~CLoadManagerCreater()
 {
    if( ::FreeLibrary(m_hLoadManager) == FALSE )
-      APL_THROW( _T("Ошибка при удалении библиотеки") );
+      APL_THROW( _T("РћС€РёР±РєР° РїСЂРё СѓРґР°Р»РµРЅРёРё Р±РёР±Р»РёРѕС‚РµРєРё") );
 }
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -38,7 +38,7 @@ CLoadManagerCreater::TAutoPtr CLoadManagerCreater::Create() const
    TLoadManager *pLoadManager;
 
    if((m_CreateInstanceFunc)(&CLSID_LoadManager, (void**)&pLoadManager) != S_OK || pLoadManager == NULL )
-      APL_THROW( _T("Ошибка при получении CLSID_LoadManager") );
+      APL_THROW( _T("РћС€РёР±РєР° РїСЂРё РїРѕР»СѓС‡РµРЅРёРё CLSID_LoadManager") );
 
    return TAutoPtr(pLoadManager);
 }

@@ -1,4 +1,4 @@
-//Автор: Шестеркин Дмитрий(NW) 2005
+п»ї//РђРІС‚РѕСЂ: РЁРµСЃС‚РµСЂРєРёРЅ Р”РјРёС‚СЂРёР№(NW) 2005
 
 #ifndef DBMSAuxiliary_HPP
 #define DBMSAuxiliary_HPP
@@ -9,13 +9,13 @@
 #include "..\..\ASSInterface\ILingvoBaseManager.h"
 
 /*
-   Ряд классов (в основном интеллектуальные указатели) облекчающие работу с DBMS
+   Р СЏРґ РєР»Р°СЃСЃРѕРІ (РІ РѕСЃРЅРѕРІРЅРѕРј РёРЅС‚РµР»Р»РµРєС‚СѓР°Р»СЊРЅС‹Рµ СѓРєР°Р·Р°С‚РµР»Рё) РѕР±Р»РµРєС‡Р°СЋС‰РёРµ СЂР°Р±РѕС‚Сѓ СЃ DBMS
 */
 
 namespace NWLib {
 
 ///////////////////////////////////////////////////////////////////////////////
-// Тонкая обёртка для таблицы вызывает автоматически  метод Close
+// РўРѕРЅРєР°СЏ РѕР±С‘СЂС‚РєР° РґР»СЏ С‚Р°Р±Р»РёС†С‹ РІС‹Р·С‹РІР°РµС‚ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё  РјРµС‚РѕРґ Close
 ///////////////////////////////////////////////////////////////////////////////
 class CTablePtr: public NonCopyable
 {
@@ -36,7 +36,7 @@ public:
 	{ 
       DEBUG_MSG_IF_LOG10( m_pTable != 0 && !m_pTable->IsOpen(), "TABLE CLOSE NOT OPENED " << Convert( m_pTable->GetName(), std::string()) );
       
-      if( m_pTable != 0 && m_pTable->IsOpen() ) //IsOpen, т.к. кто то мог уже закрыть таблицу
+      if( m_pTable != 0 && m_pTable->IsOpen() ) //IsOpen, С‚.Рє. РєС‚Рѕ С‚Рѕ РјРѕРі СѓР¶Рµ Р·Р°РєСЂС‹С‚СЊ С‚Р°Р±Р»РёС†Сѓ
 		{ 
          DEBUG_MSG_LOG10("TABLE CLOSE " << Convert( m_pTable->GetName(), std::string()) );
 
@@ -89,9 +89,9 @@ public:
 
 
 ///////////////////////////////////////////////////////////////////////////////
-//Предоставляет обёртку к методам поиска в DBMS::IDataTable
-//Позволяет не заботится о выделении нужного FindId и автоматически вызывает 
-//FindCancel, в деструкторе
+//РџСЂРµРґРѕСЃС‚Р°РІР»СЏРµС‚ РѕР±С‘СЂС‚РєСѓ Рє РјРµС‚РѕРґР°Рј РїРѕРёСЃРєР° РІ DBMS::IDataTable
+//РџРѕР·РІРѕР»СЏРµС‚ РЅРµ Р·Р°Р±РѕС‚РёС‚СЃСЏ Рѕ РІС‹РґРµР»РµРЅРёРё РЅСѓР¶РЅРѕРіРѕ FindId Рё Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ 
+//FindCancel, РІ РґРµСЃС‚СЂСѓРєС‚РѕСЂРµ
 ///////////////////////////////////////////////////////////////////////////////
 class CFindHelper: public NonCopyable
 {
@@ -110,7 +110,7 @@ public:
 	explicit CFindHelper(TTable *pTable): m_pTable(pTable), m_FindID(NotInitFindID()) { APL_ASSERT(m_pTable != 0); }
 	explicit CFindHelper(CTablePtr &TablePtr): m_pTable(TablePtr.Get()), m_FindID(NotInitFindID()) { APL_ASSERT(m_pTable != 0); }
 
-	//Если не вызвался конструктор с параметром - таблицей, то необходимо вызывать сетод Construct
+	//Р•СЃР»Рё РЅРµ РІС‹Р·РІР°Р»СЃСЏ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃ РїР°СЂР°РјРµС‚СЂРѕРј - С‚Р°Р±Р»РёС†РµР№, С‚Рѕ РЅРµРѕР±С…РѕРґРёРјРѕ РІС‹Р·С‹РІР°С‚СЊ СЃРµС‚РѕРґ Construct
 	void Construct(TTable *pTable)
 	{
 		Close();
@@ -125,7 +125,7 @@ public:
 		m_FindID = NotInitFindID();
 	}
 
-	//Инициализирует поиск, автоматически закрывает прошлый поиск, если был
+	//РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РїРѕРёСЃРє, Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё Р·Р°РєСЂС‹РІР°РµС‚ РїСЂРѕС€Р»С‹Р№ РїРѕРёСЃРє, РµСЃР»Рё Р±С‹Р»
 	HRESULT Init( _TCHAR * pKeyName, VOID * pKeyValue, VOID * ArrayOfPointersToData[] )
 	{									    
 		Close();
@@ -138,7 +138,7 @@ public:
 		return m_pTable->FindInitEx( nKeyIndex, pKeyValue, ArrayOfPointersToData, &m_FindID );
 	}
 
-	//Закрывает поиск если он был открыт ранее
+	//Р—Р°РєСЂС‹РІР°РµС‚ РїРѕРёСЃРє РµСЃР»Рё РѕРЅ Р±С‹Р» РѕС‚РєСЂС‹С‚ СЂР°РЅРµРµ
 	void Close()
 	{
 		if(m_FindID != NotInitFindID())
@@ -149,21 +149,21 @@ public:
 		}
 	}
 
-	//Вызывем Close
+	//Р’С‹Р·С‹РІРµРј Close
 	~CFindHelper(){ Close(); }
 
-	//Обёртки методов
+	//РћР±С‘СЂС‚РєРё РјРµС‚РѕРґРѕРІ
 	HRESULT Find() { APL_ASSERT(m_FindID != NotInitFindID() && m_pTable != 0); return m_pTable->Find(m_FindID); }
 	HRESULT FindOne() { APL_ASSERT(m_FindID != NotInitFindID() && m_pTable != 0); return m_pTable->FindOne(m_FindID); }
 	UINT32 GetFoundIdx() { APL_ASSERT(m_FindID != NotInitFindID() && m_pTable != 0); APL_ASSERT( m_pTable->GetFoundIdx(m_FindID) != 0xFFFFFFFF ); return m_pTable->GetFoundIdx(m_FindID); }
 	
-	//Лучше вместо FindStart использовать FindStop
+	//Р›СѓС‡С€Рµ РІРјРµСЃС‚Рѕ FindStart РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ FindStop
 	//HRESULT FindStart() { APL_ASSERT(m_FindID != NotInitFindID() && m_pTable != 0); return m_pTable->FindStart(m_FindID); }
 	HRESULT FindStop() { APL_ASSERT(m_FindID != NotInitFindID() && m_pTable != 0); return m_pTable->FindStop(m_FindID); }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// Класс помогает открывать и автоматически закрывать DBMS таблицы при помощи 
+// РљР»Р°СЃСЃ РїРѕРјРѕРіР°РµС‚ РѕС‚РєСЂС‹РІР°С‚СЊ Рё Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё Р·Р°РєСЂС‹РІР°С‚СЊ DBMS С‚Р°Р±Р»РёС†С‹ РїСЂРё РїРѕРјРѕС‰Рё 
 // ILingvoBaseManager
 ///////////////////////////////////////////////////////////////////////////////
 class CDBMSPtrsManager
@@ -175,8 +175,8 @@ public:
 private:
    struct SData
    {
-      std::wstring BaseType;   //Тип базы
-      TDataBase **ppDataBase;  //Двойной указатель на БД 
+      std::wstring BaseType;   //РўРёРї Р±Р°Р·С‹
+      TDataBase **ppDataBase;  //Р”РІРѕР№РЅРѕР№ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° Р‘Р” 
    };
 
    typedef std::vector<SData> TStorage;
@@ -203,14 +203,14 @@ public:
    explicit CDBMSPtrsManager( TLingvoBaseManager *pLingvoBaseManager ): m_pLingvoBaseManager(0) { SetLingvoBaseManager(pLingvoBaseManager); }
    ~CDBMSPtrsManager() { Close(); }
 
-   //Установить новый LingvoBaseManager, причём если старый был установлен и не равен нулю то закрывается регистрация у объектов
+   //РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РЅРѕРІС‹Р№ LingvoBaseManager, РїСЂРёС‡С‘Рј РµСЃР»Рё СЃС‚Р°СЂС‹Р№ Р±С‹Р» СѓСЃС‚Р°РЅРѕРІР»РµРЅ Рё РЅРµ СЂР°РІРµРЅ РЅСѓР»СЋ С‚Рѕ Р·Р°РєСЂС‹РІР°РµС‚СЃСЏ СЂРµРіРёСЃС‚СЂР°С†РёСЏ Сѓ РѕР±СЉРµРєС‚РѕРІ
    void SetLingvoBaseManager( TLingvoBaseManager *pLingvoBaseManager )
    {
       Close();
       m_pLingvoBaseManager = pLingvoBaseManager;
    }
 
-   //Закрыть регистрацию если LingvoBaseManager был установлен не в 0 и каждый указатель на БД не равен нулю
+   //Р—Р°РєСЂС‹С‚СЊ СЂРµРіРёСЃС‚СЂР°С†РёСЋ РµСЃР»Рё LingvoBaseManager Р±С‹Р» СѓСЃС‚Р°РЅРѕРІР»РµРЅ РЅРµ РІ 0 Рё РєР°Р¶РґС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° Р‘Р” РЅРµ СЂР°РІРµРЅ РЅСѓР»СЋ
    void Close()
    {
       if( m_pLingvoBaseManager != 0 )
@@ -222,8 +222,8 @@ public:
             }
    }
 
-   //Открыть регистрацию если LingvoBaseManager был установлен не в 0 и каждый указательно БД равен нулю
-   //Предварительно вызывается Close()
+   //РћС‚РєСЂС‹С‚СЊ СЂРµРіРёСЃС‚СЂР°С†РёСЋ РµСЃР»Рё LingvoBaseManager Р±С‹Р» СѓСЃС‚Р°РЅРѕРІР»РµРЅ РЅРµ РІ 0 Рё РєР°Р¶РґС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊРЅРѕ Р‘Р” СЂР°РІРµРЅ РЅСѓР»СЋ
+   //РџСЂРµРґРІР°СЂРёС‚РµР»СЊРЅРѕ РІС‹Р·С‹РІР°РµС‚СЃСЏ Close()
    void Open()
    {
       Close();
@@ -235,12 +235,12 @@ public:
                m_pLingvoBaseManager->CreateOpenAndRegister( I->BaseType.c_str(), I->ppDataBase );
 
                if( *I->ppDataBase == 0 )
-                  APL_THROW( _T("Ошибка при попытке получить указатель на базу данных ") << I->BaseType );
+                  APL_THROW( _T("РћС€РёР±РєР° РїСЂРё РїРѕРїС‹С‚РєРµ РїРѕР»СѓС‡РёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° Р±Р°Р·Сѓ РґР°РЅРЅС‹С… ") << I->BaseType );
             }
    }
 
-   //Очистить регистрацию
-   //Предварительно вызывается Close()
+   //РћС‡РёСЃС‚РёС‚СЊ СЂРµРіРёСЃС‚СЂР°С†РёСЋ
+   //РџСЂРµРґРІР°СЂРёС‚РµР»СЊРЅРѕ РІС‹Р·С‹РІР°РµС‚СЃСЏ Close()
    void Clear()
    {
       Close();
@@ -248,8 +248,8 @@ public:
       m_Storage.clear();
    }
 
-   //Зарегистрировать объект 
-   //*ppDataBase приравнивается к 0
+   //Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ РѕР±СЉРµРєС‚ 
+   //*ppDataBase РїСЂРёСЂР°РІРЅРёРІР°РµС‚СЃСЏ Рє 0
    void Register( std::wstring BaseType, TDataBase **ppDataBase )
    {
       APL_ASSERT_PTR( ppDataBase );
@@ -267,7 +267,7 @@ public:
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Автоматичиский открыватель и закрыватель баз
+// РђРІС‚РѕРјР°С‚РёС‡РёСЃРєРёР№ РѕС‚РєСЂС‹РІР°С‚РµР»СЊ Рё Р·Р°РєСЂС‹РІР°С‚РµР»СЊ Р±Р°Р·
 ///////////////////////////////////////////////////////////////////////////////
 class TTableAutoOpenClose: NonCopyable
 {
@@ -351,9 +351,9 @@ public:
             {
                for( TTableAutoOpenClose::TStorage::iterator I = m_pData->m_Storage.begin(); I != m_pData->m_Storage.end(); ++I )
                   if( !I->pTablePtr->IsOpen() )
-                     APL_THROW( "Ошибка при открытии базы: " << I->pDTableName );
+                     APL_THROW( "РћС€РёР±РєР° РїСЂРё РѕС‚РєСЂС‹С‚РёРё Р±Р°Р·С‹: " << I->pDTableName );
 
-               APL_ASSERT( false ); //Сюда дойти не должны
+               APL_ASSERT( false ); //РЎСЋРґР° РґРѕР№С‚Рё РЅРµ РґРѕР»Р¶РЅС‹
             }
 
             m_NeadClose = true;

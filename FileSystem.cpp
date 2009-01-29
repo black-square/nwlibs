@@ -1,10 +1,10 @@
-//Автор: Шестеркин Дмитрий(NW) 2005
+п»ї//РђРІС‚РѕСЂ: РЁРµСЃС‚РµСЂРєРёРЅ Р”РјРёС‚СЂРёР№(NW) 2005
 
 #include "stdafx.h"
 #include "FileSystem.h"
 #include <shlwapi.h>
 
-#pragma comment(lib, "shlwapi") //подлинкуем shlwapi.lib для PathFileExists
+#pragma comment(lib, "shlwapi") //РїРѕРґР»РёРЅРєСѓРµРј shlwapi.lib РґР»СЏ PathFileExists
 
 namespace NWLib {
 
@@ -17,8 +17,8 @@ bool CDirectoryFileList::Next()
 {
    bool IsFind;
    
-   //Мы будем пыться найти первый подходящий файл в текущем каталоге (последнем в m_FindHandles) и
-   //во всех его подкаталогах
+   //РњС‹ Р±СѓРґРµРј РїС‹С‚СЊСЃСЏ РЅР°Р№С‚Рё РїРµСЂРІС‹Р№ РїРѕРґС…РѕРґСЏС‰РёР№ С„Р°Р№Р» РІ С‚РµРєСѓС‰РµРј РєР°С‚Р°Р»РѕРіРµ (РїРѕСЃР»РµРґРЅРµРј РІ m_FindHandles) Рё
+   //РІРѕ РІСЃРµС… РµРіРѕ РїРѕРґРєР°С‚Р°Р»РѕРіР°С…
    for(;;)
    {
       if( m_FindHandles.empty() )
@@ -26,16 +26,16 @@ bool CDirectoryFileList::Next()
 
       if( m_FindHandles.back().Handle == INVALID_HANDLE_VALUE )
       {
-         //Обрезаем строку с имененем текущего каталога
+         //РћР±СЂРµР·Р°РµРј СЃС‚СЂРѕРєСѓ СЃ РёРјРµРЅРµРЅРµРј С‚РµРєСѓС‰РµРіРѕ РєР°С‚Р°Р»РѕРіР°
          m_CurDir.erase( m_CurDir.size() - m_FindHandles.back().DirNameSize );
          m_FindHandles.pop_back();
 
          continue;
       }
 
-      //m_FindHandles.back() - Содержит какой то файл
+      //m_FindHandles.back() - РЎРѕРґРµСЂР¶РёС‚ РєР°РєРѕР№ С‚Рѕ С„Р°Р№Р»
 
-      //Если это каталог попубуем залесть внутрь
+      //Р•СЃР»Рё СЌС‚Рѕ РєР°С‚Р°Р»РѕРі РїРѕРїСѓР±СѓРµРј Р·Р°Р»РµСЃС‚СЊ РІРЅСѓС‚СЂСЊ
       if( m_FindHandles.back().FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
       {
          if( 
@@ -55,10 +55,10 @@ bool CDirectoryFileList::Next()
 
             FindFirst( DirItem ); 
 
-            //Находим в предыдущем каталоге следующий файл 
+            //РќР°С…РѕРґРёРј РІ РїСЂРµРґС‹РґСѓС‰РµРј РєР°С‚Р°Р»РѕРіРµ СЃР»РµРґСѓСЋС‰РёР№ С„Р°Р№Р» 
             FindNextOrClose( m_FindHandles.back() );
 
-            //Добавляем уровень каталога 
+            //Р”РѕР±Р°РІР»СЏРµРј СѓСЂРѕРІРµРЅСЊ РєР°С‚Р°Р»РѕРіР° 
             m_FindHandles.push_back(DirItem);
          }
          else
@@ -69,7 +69,7 @@ bool CDirectoryFileList::Next()
          continue;
       }
 
-      //Мы успешно нашли какой-то файл, проверим его расширение
+      //РњС‹ СѓСЃРїРµС€РЅРѕ РЅР°С€Р»Рё РєР°РєРѕР№-С‚Рѕ С„Р°Р№Р», РїСЂРѕРІРµСЂРёРј РµРіРѕ СЂР°СЃС€РёСЂРµРЅРёРµ
       IsFind = false;
 
       if( !m_Extensions.empty() )
@@ -151,7 +151,7 @@ void CUnicodeFileReader::FillBuffer()
 {
    DWORD BytesRead;
 
-   if( m_IsEof ) //Достигли конца файла и обработали все данные
+   if( m_IsEof ) //Р”РѕСЃС‚РёРіР»Рё РєРѕРЅС†Р° С„Р°Р№Р»Р° Рё РѕР±СЂР°Р±РѕС‚Р°Р»Рё РІСЃРµ РґР°РЅРЅС‹Рµ
    {
       m_pBuffBegin = m_pBuffEnd = 0;
       return;
@@ -164,7 +164,7 @@ void CUnicodeFileReader::FillBuffer()
       BOOL Result = ::ReadFile( m_hFile, m_Buff, BuffSize * sizeof(*m_Buff), &BytesRead, NULL );
 
       if( Result == FALSE )
-         APL_THROW( _T("Ошибка при чтении файла") );
+         APL_THROW( _T("РћС€РёР±РєР° РїСЂРё С‡С‚РµРЅРёРё С„Р°Р№Р»Р°") );
 
       if( BuffSize * sizeof(*m_Buff) != BytesRead )
          m_IsEof = true;
@@ -173,11 +173,11 @@ void CUnicodeFileReader::FillBuffer()
    }
    else
    {
-      //Необходимо выполнить преобразование
+      //РќРµРѕР±С…РѕРґРёРјРѕ РІС‹РїРѕР»РЅРёС‚СЊ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ
       BOOL Result = ::ReadFile( m_hFile, &m_AuxBuff[0], BuffSize * sizeof(m_AuxBuff[0]), &BytesRead, NULL );
 
       if( Result == FALSE )
-         APL_THROW( _T("Ошибка при чтении файла") );
+         APL_THROW( _T("РћС€РёР±РєР° РїСЂРё С‡С‚РµРЅРёРё С„Р°Р№Р»Р°") );
 
       if( BuffSize * sizeof(m_AuxBuff[0]) != BytesRead )
          m_IsEof = true;
@@ -211,7 +211,7 @@ CUnicodeFileReader::EOpenResult CUnicodeFileReader::Open( LPCTSTR szFileName )
    if( m_hFile == INVALID_HANDLE_VALUE )
       return EORCantOpen;
 
-   //Читаем первые несколько байт для определения типа файла
+   //Р§РёС‚Р°РµРј РїРµСЂРІС‹Рµ РЅРµСЃРєРѕР»СЊРєРѕ Р±Р°Р№С‚ РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРёСЏ С‚РёРїР° С„Р°Р№Р»Р°
    TByte Prefix[ APL_ARRSIZE(g_UnicodeFilePrefix) ];
    DWORD BytesRead;
    BOOL Result = ::ReadFile( m_hFile, Prefix, APL_ARRSIZE(g_UnicodeFilePrefix), &BytesRead, NULL );
@@ -222,18 +222,18 @@ CUnicodeFileReader::EOpenResult CUnicodeFileReader::Open( LPCTSTR szFileName )
       std::memcmp( Prefix, g_UnicodeFilePrefix, APL_ARRSIZE(g_UnicodeFilePrefix)) != 0 
    )
    {
-      //Файл не UNICODE
+      //Р¤Р°Р№Р» РЅРµ UNICODE
       m_IsUnicode = false;
 
-      //Возвращаем курсор снова на начало файла
+      //Р’РѕР·РІСЂР°С‰Р°РµРј РєСѓСЂСЃРѕСЂ СЃРЅРѕРІР° РЅР° РЅР°С‡Р°Р»Рѕ С„Р°Р№Р»Р°
       APL_CHECK(::SetFilePointer( m_hFile, 0, NULL, FILE_BEGIN ) != INVALID_SET_FILE_POINTER );
 
-      //Создаём дополнительный буфер
+      //РЎРѕР·РґР°С‘Рј РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Р№ Р±СѓС„РµСЂ
       m_AuxBuff.resize(BuffSize);
    }
    else
    {
-      //Файл UNICODE
+      //Р¤Р°Р№Р» UNICODE
       m_IsUnicode = true;
    }
 
@@ -262,7 +262,7 @@ DWORD CopyDirectory( const std::basic_string<TCHAR> &From, const std::basic_stri
    
    do 
    {
-      //Если это каталог то вызываем рекурсивно
+      //Р•СЃР»Рё СЌС‚Рѕ РєР°С‚Р°Р»РѕРі С‚Рѕ РІС‹Р·С‹РІР°РµРј СЂРµРєСѓСЂСЃРёРІРЅРѕ
       if( FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
       {
          if( 
@@ -270,7 +270,7 @@ DWORD CopyDirectory( const std::basic_string<TCHAR> &From, const std::basic_stri
             _tcscmp(FindData.cFileName, _T(".")) != 0
          )
          {
-            //Вызываем рекурсивно
+            //Р’С‹Р·С‹РІР°РµРј СЂРµРєСѓСЂСЃРёРІРЅРѕ
             DWORD Rez = CopyDirectory( From + _T("\\") + FindData.cFileName, To + _T("\\") + FindData.cFileName );
             
             if( Rez != ERROR_SUCCESS )
@@ -279,7 +279,7 @@ DWORD CopyDirectory( const std::basic_string<TCHAR> &From, const std::basic_stri
       }
       else
       {
-         //Это файл копируем его
+         //Р­С‚Рѕ С„Р°Р№Р» РєРѕРїРёСЂСѓРµРј РµРіРѕ
          if( CopyFile((From + _T("\\") + FindData.cFileName).c_str(), (To + _T("\\") + FindData.cFileName).c_str(), FALSE) == FALSE )
             return GetLastError();
       }
@@ -303,11 +303,11 @@ DWORD DeleteDirectory( const std::basic_string<TCHAR> &Dir )
       if( AFC.hFind == INVALID_HANDLE_VALUE )
          return GetLastError();
 
-      //Удаляем вложенные файлы и каталоги
+      //РЈРґР°Р»СЏРµРј РІР»РѕР¶РµРЅРЅС‹Рµ С„Р°Р№Р»С‹ Рё РєР°С‚Р°Р»РѕРіРё
 
       do 
       {
-         //Если это каталог то вызываем рекурсивно
+         //Р•СЃР»Рё СЌС‚Рѕ РєР°С‚Р°Р»РѕРі С‚Рѕ РІС‹Р·С‹РІР°РµРј СЂРµРєСѓСЂСЃРёРІРЅРѕ
          if( FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
          {
             if( 
@@ -315,7 +315,7 @@ DWORD DeleteDirectory( const std::basic_string<TCHAR> &Dir )
                _tcscmp(FindData.cFileName, _T(".")) != 0
                )
             {
-               //Вызываем рекурсивно
+               //Р’С‹Р·С‹РІР°РµРј СЂРµРєСѓСЂСЃРёРІРЅРѕ
                DWORD Rez = DeleteDirectory( Dir + _T("\\") + FindData.cFileName );
 
                if( Rez != ERROR_SUCCESS )
@@ -324,7 +324,7 @@ DWORD DeleteDirectory( const std::basic_string<TCHAR> &Dir )
          }
          else
          {
-            //Это файл, удаляем его
+            //Р­С‚Рѕ С„Р°Р№Р», СѓРґР°Р»СЏРµРј РµРіРѕ
             if( DeleteFile((Dir + _T("\\") + FindData.cFileName).c_str()) == FALSE )
                return GetLastError();
          }
@@ -343,12 +343,12 @@ DWORD DeleteDirectory( const std::basic_string<TCHAR> &Dir )
 
 DWORD CreateFullPath( const std::basic_string<TCHAR> &Dir )
 {
-   std::vector<TCHAR> CurPath( Dir.size() + 1 ); // "+ 1" место под '\0'
+   std::vector<TCHAR> CurPath( Dir.size() + 1 ); // "+ 1" РјРµСЃС‚Рѕ РїРѕРґ '\0'
    TCHAR *pBegin = &CurPath[0], *pCur = pBegin;
    TCHAR CharTmp;
 
    std::copy( Dir.begin(), Dir.end(), CurPath.begin() );
-   CurPath.back() = _T('\0'); //Не обязательно т.к. конструктор вектора уже заполнил его нулями
+   CurPath.back() = _T('\0'); //РќРµ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ С‚.Рє. РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РІРµРєС‚РѕСЂР° СѓР¶Рµ Р·Р°РїРѕР»РЅРёР» РµРіРѕ РЅСѓР»СЏРјРё
 
    do
    {
@@ -358,7 +358,7 @@ DWORD CreateFullPath( const std::basic_string<TCHAR> &Dir )
       CharTmp = *pCur;
       *pCur = _T('\0');
 
-      //Если нет такого каталога нет, попробуем создать
+      //Р•СЃР»Рё РЅРµС‚ С‚Р°РєРѕРіРѕ РєР°С‚Р°Р»РѕРіР° РЅРµС‚, РїРѕРїСЂРѕР±СѓРµРј СЃРѕР·РґР°С‚СЊ
       if( !PathIsDirectory(pBegin) && !CreateDirectory(pBegin, NULL) )
             return GetLastError();
       
@@ -405,7 +405,7 @@ bool CFileWordReader::Get( std::string &Str )
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-// Чтение строки из файла
+// Р§С‚РµРЅРёРµ СЃС‚СЂРѕРєРё РёР· С„Р°Р№Р»Р°
 ///////////////////////////////////////////////////////////////////////////////
 DWORD ReadUnicodeFile( const std::basic_string<TCHAR> &FileName, std::basic_string<WCHAR> &Str )
 {  
@@ -422,7 +422,7 @@ DWORD ReadUnicodeFile( const std::basic_string<TCHAR> &FileName, std::basic_stri
    if( AFC.hFile == INVALID_HANDLE_VALUE )
       return GetLastError();
 
-   //Читаем первые несколько байт для определения типа файла
+   //Р§РёС‚Р°РµРј РїРµСЂРІС‹Рµ РЅРµСЃРєРѕР»СЊРєРѕ Р±Р°Р№С‚ РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРёСЏ С‚РёРїР° С„Р°Р№Р»Р°
    BYTE Prefix[ APL_ARRSIZE(g_UnicodeFilePrefix) ];
    DWORD BytesRead;
    BOOL Result = ::ReadFile( AFC.hFile, Prefix, APL_ARRSIZE(g_UnicodeFilePrefix), &BytesRead, NULL );
@@ -434,14 +434,14 @@ DWORD ReadUnicodeFile( const std::basic_string<TCHAR> &FileName, std::basic_stri
    )
       return ERROR_INVALID_DATA;
 
-   //Определяем размер файла
+   //РћРїСЂРµРґРµР»СЏРµРј СЂР°Р·РјРµСЂ С„Р°Р№Р»Р°
    DWORD FileSize = GetFileSize( AFC.hFile, NULL );
 
    if( FileSize == INVALID_FILE_SIZE )
       return GetLastError();
 
    APL_ASSERT( FileSize >= APL_ARRSIZE(g_UnicodeFilePrefix) );
-   FileSize -= APL_ARRSIZE(g_UnicodeFilePrefix); //Префикс считывать не нужно
+   FileSize -= APL_ARRSIZE(g_UnicodeFilePrefix); //РџСЂРµС„РёРєСЃ СЃС‡РёС‚С‹РІР°С‚СЊ РЅРµ РЅСѓР¶РЅРѕ
    
    Str.resize( FileSize / sizeof(WCHAR) + FileSize % sizeof(WCHAR) );
 
@@ -473,7 +473,7 @@ DWORD ReadAnsiFile( const std::basic_string<TCHAR> &FileName, std::basic_string<
    if( AFC.hFile == INVALID_HANDLE_VALUE )
       return GetLastError();
 
-   //Определяем размер файла
+   //РћРїСЂРµРґРµР»СЏРµРј СЂР°Р·РјРµСЂ С„Р°Р№Р»Р°
    DWORD FileSize = GetFileSize( AFC.hFile, NULL );
 
    if( FileSize == INVALID_FILE_SIZE )
@@ -508,7 +508,7 @@ DWORD ReadUnicodeAnsiFile( const std::basic_string<TCHAR> &FileName, std::basic_
    if( AFC.hFile == INVALID_HANDLE_VALUE )
       return GetLastError();
 
-   //Определяем размер файла
+   //РћРїСЂРµРґРµР»СЏРµРј СЂР°Р·РјРµСЂ С„Р°Р№Р»Р°
    DWORD FileSize = GetFileSize( AFC.hFile, NULL );
 
    if( FileSize == INVALID_FILE_SIZE )
@@ -517,7 +517,7 @@ DWORD ReadUnicodeAnsiFile( const std::basic_string<TCHAR> &FileName, std::basic_
    if( FileSize == 0 )
      return ERROR_SUCCESS;
 
-   //Читаем первые несколько байт для определения типа файла
+   //Р§РёС‚Р°РµРј РїРµСЂРІС‹Рµ РЅРµСЃРєРѕР»СЊРєРѕ Р±Р°Р№С‚ РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРёСЏ С‚РёРїР° С„Р°Р№Р»Р°
    BYTE Prefix[ APL_ARRSIZE(g_UnicodeFilePrefix) ];
    DWORD BytesRead;
    BOOL Result = ::ReadFile( AFC.hFile, Prefix, APL_ARRSIZE(g_UnicodeFilePrefix), &BytesRead, NULL );
@@ -528,9 +528,9 @@ DWORD ReadUnicodeAnsiFile( const std::basic_string<TCHAR> &FileName, std::basic_
       std::memcmp( Prefix, g_UnicodeFilePrefix, APL_ARRSIZE(g_UnicodeFilePrefix)) != 0 
    )
    {
-      //Мы работаем с ANSI файлом
+      //РњС‹ СЂР°Р±РѕС‚Р°РµРј СЃ ANSI С„Р°Р№Р»РѕРј
       
-      //Возвращаем курсор снова на начало файла
+      //Р’РѕР·РІСЂР°С‰Р°РµРј РєСѓСЂСЃРѕСЂ СЃРЅРѕРІР° РЅР° РЅР°С‡Р°Р»Рѕ С„Р°Р№Р»Р°
       APL_CHECK(::SetFilePointer( AFC.hFile, 0, NULL, FILE_BEGIN ) != INVALID_SET_FILE_POINTER );
       
       std::vector<CHAR> Buf(FileSize);
@@ -542,7 +542,7 @@ DWORD ReadUnicodeAnsiFile( const std::basic_string<TCHAR> &FileName, std::basic_
 
       APL_ASSERT( FileSize == BytesRead );
 
-      //Выполняем преобразование
+      //Р’С‹РїРѕР»РЅСЏРµРј РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ
       Str.resize( FileSize );
 
       MultiByteToWideChar(CP_ACP, 0, &Buf[0], BytesRead, const_cast<WCHAR *>(Str.c_str()), BytesRead);
@@ -551,10 +551,10 @@ DWORD ReadUnicodeAnsiFile( const std::basic_string<TCHAR> &FileName, std::basic_
    }
    else
    {
-      //Мы работаем с UNICODE файлом
+      //РњС‹ СЂР°Р±РѕС‚Р°РµРј СЃ UNICODE С„Р°Р№Р»РѕРј
 
       APL_ASSERT( FileSize >= APL_ARRSIZE(g_UnicodeFilePrefix) );
-      FileSize -= APL_ARRSIZE(g_UnicodeFilePrefix); //Префикс считывать не нужно
+      FileSize -= APL_ARRSIZE(g_UnicodeFilePrefix); //РџСЂРµС„РёРєСЃ СЃС‡РёС‚С‹РІР°С‚СЊ РЅРµ РЅСѓР¶РЅРѕ
       
       Str.resize( FileSize / sizeof(WCHAR) + FileSize % sizeof(WCHAR) );
 
@@ -571,7 +571,7 @@ DWORD ReadUnicodeAnsiFile( const std::basic_string<TCHAR> &FileName, std::basic_
    }
 }
 ///////////////////////////////////////////////////////////////////////////////
-// Запись строки в файл
+// Р—Р°РїРёСЃСЊ СЃС‚СЂРѕРєРё РІ С„Р°Р№Р»
 ///////////////////////////////////////////////////////////////////////////////
 DWORD WriteUnicodeFile( const std::basic_string<TCHAR> &FileName, const std::basic_string<WCHAR> &Str )
 {
@@ -620,7 +620,7 @@ DWORD WriteAnsiFile( const std::basic_string<TCHAR> &FileName, const std::basic_
       return GetLastError();
 
    if( Str.length() == 0 )
-      return ERROR_SUCCESS; //Файл создан и он пустой - то что нужно
+      return ERROR_SUCCESS; //Р¤Р°Р№Р» СЃРѕР·РґР°РЅ Рё РѕРЅ РїСѓСЃС‚РѕР№ - С‚Рѕ С‡С‚Рѕ РЅСѓР¶РЅРѕ
 
    std::vector<CHAR> Buf(Str.length());
 
@@ -652,7 +652,7 @@ DWORD WriteAnsiFile( const std::basic_string<TCHAR> &FileName, const std::basic_
       return GetLastError();
 
    if( Str.length() == 0 )
-      return ERROR_SUCCESS; //Файл создан и он пустой - то что нужно
+      return ERROR_SUCCESS; //Р¤Р°Р№Р» СЃРѕР·РґР°РЅ Рё РѕРЅ РїСѓСЃС‚РѕР№ - С‚Рѕ С‡С‚Рѕ РЅСѓР¶РЅРѕ
 
    Result = ::WriteFile( AFC.hFile, Str.c_str(), static_cast<DWORD>(Str.size() * sizeof(CHAR)), &BytesWrite, NULL );
 

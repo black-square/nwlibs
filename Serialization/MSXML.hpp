@@ -1,10 +1,10 @@
-//Автор: Шестеркин Дмитрий(NW) 2006
+п»ї//РђРІС‚РѕСЂ: РЁРµСЃС‚РµСЂРєРёРЅ Р”РјРёС‚СЂРёР№(NW) 2006
 
 #ifndef MSXML_HPP
 #define MSXML_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
-// Реализация интерфейсов Writer и Reader с использованием парсера MSXML
+// Р РµР°Р»РёР·Р°С†РёСЏ РёРЅС‚РµСЂС„РµР№СЃРѕРІ Writer Рё Reader СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј РїР°СЂСЃРµСЂР° MSXML
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "../stlauxiliary.hpp"
@@ -20,9 +20,9 @@ struct CCOMBase
    
    CCOMBase()
    {
-      //Мне очень не нравится идея вызывать CoInitialize в конструкторе
-      //и CoUninitialize в деструкторе, но это приходится делать т.к.
-      //"это работает уже полгода без проблем"
+      //РњРЅРµ РѕС‡РµРЅСЊ РЅРµ РЅСЂР°РІРёС‚СЃСЏ РёРґРµСЏ РІС‹Р·С‹РІР°С‚СЊ CoInitialize РІ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂРµ
+      //Рё CoUninitialize РІ РґРµСЃС‚СЂСѓРєС‚РѕСЂРµ, РЅРѕ СЌС‚Рѕ РїСЂРёС…РѕРґРёС‚СЃСЏ РґРµР»Р°С‚СЊ С‚.Рє.
+      //"СЌС‚Рѕ СЂР°Р±РѕС‚Р°РµС‚ СѓР¶Рµ РїРѕР»РіРѕРґР° Р±РµР· РїСЂРѕР±Р»РµРј"
       ::CoInitialize(NULL);
    }
    
@@ -35,7 +35,7 @@ struct CCOMBase
 };
 ///////////////////////////////////////////////////////////////////////////////
 
-//Запись в поток строки BSTR
+//Р—Р°РїРёСЃСЊ РІ РїРѕС‚РѕРє СЃС‚СЂРѕРєРё BSTR
 template < class CharT, class CharTraitsT >
 inline void WriteBSTRToStream( std::basic_ostream< CharT, CharTraitsT > &Ostream, BSTR Str )
 {
@@ -47,12 +47,12 @@ inline void WriteBSTRToStream( std::basic_ostream< CharT, CharTraitsT > &Ostream
 template < class CharTraitsT >
 inline void WriteBSTRToStream( std::basic_ostream< WCHAR, CharTraitsT > &Ostream, BSTR Str )
 {
-   //В этом случае никакие преобразования не нужны
+   //Р’ СЌС‚РѕРј СЃР»СѓС‡Р°Рµ РЅРёРєР°РєРёРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ РЅРµ РЅСѓР¶РЅС‹
    WriteToStream( Ostream, static_cast<const WCHAR *>(Str) );
 }
 ///////////////////////////////////////////////////////////////////////////////
 
-//Прочитать из потока строки BSTR
+//РџСЂРѕС‡РёС‚Р°С‚СЊ РёР· РїРѕС‚РѕРєР° СЃС‚СЂРѕРєРё BSTR
 template < class CharT, class CharTraitsT >
 inline void ReadBSTRFromStream( std::basic_istream< CharT, CharTraitsT > &Istream, ATL::CComBSTR &Str )
 { 
@@ -72,7 +72,7 @@ inline void ReadBSTRFromStream( std::basic_istream< CharT, CharTraitsT > &Istrea
 template < class CharTraitsT >
 inline void ReadBSTRFromStream( std::basic_istream< WCHAR, CharTraitsT > &Istream, ATL::CComBSTR &Str )
 { 
-   //Оптимизация исключающая временные объекты
+   //РћРїС‚РёРјРёР·Р°С†РёСЏ РёСЃРєР»СЋС‡Р°СЋС‰Р°СЏ РІСЂРµРјРµРЅРЅС‹Рµ РѕР±СЉРµРєС‚С‹
    Str.Empty();
 
    WCHAR Buff[256];
@@ -88,7 +88,7 @@ inline void ReadBSTRFromStream( std::basic_istream< WCHAR, CharTraitsT > &Istrea
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Запись в XML при помощи MSXML
+// Р—Р°РїРёСЃСЊ РІ XML РїСЂРё РїРѕРјРѕС‰Рё MSXML
 ///////////////////////////////////////////////////////////////////////////////
 template < class CharT, template <class> class CharTraitsT >
 class CMSXMLWriter: public CCOMBase, private NonCopyable
@@ -112,7 +112,7 @@ private:
 protected:
    explicit CMSXMLWriter( TOstream &Os ): m_Os(Os) {}
 
-   //Начать/Закончить загрузку
+   //РќР°С‡Р°С‚СЊ/Р—Р°РєРѕРЅС‡РёС‚СЊ Р·Р°РіСЂСѓР·РєСѓ
    void BeginSave() 
    {
       m_DOMDocument.Release();
@@ -121,7 +121,7 @@ protected:
       HRESULT Result;
 
       if( (Result = m_DOMDocument.CoCreateInstance(__uuidof(DOMDocument))) != S_OK  )
-         APL_THROW( _T("Ошибка при создании DOMDocument: ") << GetHRErrorInfo(Result) );
+         APL_THROW( _T("РћС€РёР±РєР° РїСЂРё СЃРѕР·РґР°РЅРёРё DOMDocument: ") << GetHRErrorInfo(Result) );
 
       APL_CHECK_S_OK( m_DOMDocument.QueryInterface(&m_CurRootNode) );
    }
@@ -131,7 +131,7 @@ protected:
       ATL::CComBSTR Xml;
       BSTR TmpStr = 0;
       
-      //Если использовать &Xml как параметр то BoundsChecker 7.2, необоснованно ругается на утечку памяти
+      //Р•СЃР»Рё РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ &Xml РєР°Рє РїР°СЂР°РјРµС‚СЂ С‚Рѕ BoundsChecker 7.2, РЅРµРѕР±РѕСЃРЅРѕРІР°РЅРЅРѕ СЂСѓРіР°РµС‚СЃСЏ РЅР° СѓС‚РµС‡РєСѓ РїР°РјСЏС‚Рё
       m_DOMDocument->get_xml( &TmpStr ); 
       Xml.Attach(TmpStr);
       
@@ -139,7 +139,7 @@ protected:
    }
 
 
-   //Начать новый уровень вложенности с именем Name
+   //РќР°С‡Р°С‚СЊ РЅРѕРІС‹Р№ СѓСЂРѕРІРµРЅСЊ РІР»РѕР¶РµРЅРЅРѕСЃС‚Рё СЃ РёРјРµРЅРµРј Name
    void BeginLevel( const TChar *Name )
    {
       TDOMElement Element;
@@ -152,7 +152,7 @@ protected:
       m_CurRootNode = NewChild;
    }
 
-   //Закончить уровень вложенности с именем Name
+   //Р—Р°РєРѕРЅС‡РёС‚СЊ СѓСЂРѕРІРµРЅСЊ РІР»РѕР¶РµРЅРЅРѕСЃС‚Рё СЃ РёРјРµРЅРµРј Name
    void EndLevel( const TChar *Name )
    {
       TDOMNode NewChild;
@@ -161,13 +161,13 @@ protected:
       m_CurRootNode = NewChild;
    }
 
-   //Сохранить данные Ob с именем Name
-   //Дожен быть определён оператор Ostream << Ob
+   //РЎРѕС…СЂР°РЅРёС‚СЊ РґР°РЅРЅС‹Рµ Ob СЃ РёРјРµРЅРµРј Name
+   //Р”РѕР¶РµРЅ Р±С‹С‚СЊ РѕРїСЂРµРґРµР»С‘РЅ РѕРїРµСЂР°С‚РѕСЂ Ostream << Ob
    template< class T >
    void SaveItem( const TChar *Name, const T &Ob )
    {
       TStringStream StringStream;
-      StringStream.copyfmt( m_Os );    //Настраиваем флаги
+      StringStream.copyfmt( m_Os );    //РќР°СЃС‚СЂР°РёРІР°РµРј С„Р»Р°РіРё
 
       WriteToStream( StringStream, Ob );
       
@@ -185,7 +185,7 @@ protected:
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Чтение из XML при помощи MSXMl
+// Р§С‚РµРЅРёРµ РёР· XML РїСЂРё РїРѕРјРѕС‰Рё MSXMl
 ///////////////////////////////////////////////////////////////////////////////
 template < class CharT, template <class> class CharTraitsT >
 class CMSXMLReader: public CCOMBase, private NonCopyable
@@ -208,18 +208,18 @@ private:
    TDOMNode m_CurRootNode;
 
 private:
-   //Проверка потока после чтения данных
+   //РџСЂРѕРІРµСЂРєР° РїРѕС‚РѕРєР° РїРѕСЃР»Рµ С‡С‚РµРЅРёСЏ РґР°РЅРЅС‹С…
    bool CheckStream( const TStringStream & Stream ) const
    {
       std::ios::iostate State( Stream.rdstate() );
        
-      //Мы должны считать до конца файла и не должно быть ошибок
+      //РњС‹ РґРѕР»Р¶РЅС‹ СЃС‡РёС‚Р°С‚СЊ РґРѕ РєРѕРЅС†Р° С„Р°Р№Р»Р° Рё РЅРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РѕС€РёР±РѕРє
       return (State & std::ios::eofbit) && !(State & std::ios::failbit);
    }
    
    
-   //Найти у узла ParentNode потомка с именем Name и присвоить ChildNode указатель на него
-   //Возвр: Удалось ли найти
+   //РќР°Р№С‚Рё Сѓ СѓР·Р»Р° ParentNode РїРѕС‚РѕРјРєР° СЃ РёРјРµРЅРµРј Name Рё РїСЂРёСЃРІРѕРёС‚СЊ ChildNode СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅРµРіРѕ
+   //Р’РѕР·РІСЂ: РЈРґР°Р»РѕСЃСЊ Р»Рё РЅР°Р№С‚Рё
    bool FindChild( TDOMNode ParentNode, const ATL::CComBSTR &Name, TDOMNode &ChildNode )
    {
       TDOMNodeList NodeList;
@@ -249,8 +249,8 @@ private:
       return false;
    }
 
-   //Прочитать текст узла 
-   //T должен выполнять [Правило 1]
+   //РџСЂРѕС‡РёС‚Р°С‚СЊ С‚РµРєСЃС‚ СѓР·Р»Р° 
+   //T РґРѕР»Р¶РµРЅ РІС‹РїРѕР»РЅСЏС‚СЊ [РџСЂР°РІРёР»Рѕ 1]
    template< class T >
    void ReadNode( TDOMNode Node, T &Ob )
    {
@@ -274,7 +274,7 @@ private:
       }
 
       TStringStream Stream;
-      Stream.copyfmt(m_Is);   //Настраиваем флаги
+      Stream.copyfmt(m_Is);   //РќР°СЃС‚СЂР°РёРІР°РµРј С„Р»Р°РіРё
 
       if( i < Length )
       {
@@ -284,21 +284,21 @@ private:
          WriteBSTRToStream( Stream, Value.bstrVal );
       }
 
-      //При записи пустой строки текстовый потомок не создаётся
-      //APL_THROW( _T("У элемента не найден ни один текстовый потомок") );
+      //РџСЂРё Р·Р°РїРёСЃРё РїСѓСЃС‚РѕР№ СЃС‚СЂРѕРєРё С‚РµРєСЃС‚РѕРІС‹Р№ РїРѕС‚РѕРјРѕРє РЅРµ СЃРѕР·РґР°С‘С‚СЃСЏ
+      //APL_THROW( _T("РЈ СЌР»РµРјРµРЅС‚Р° РЅРµ РЅР°Р№РґРµРЅ РЅРё РѕРґРёРЅ С‚РµРєСЃС‚РѕРІС‹Р№ РїРѕС‚РѕРјРѕРє") );
        
       ReadFromStream( Stream, Ob );
       
       if( !CheckStream( Stream ) )
       {
          APL_THROW( 
-            _T("Значение '") << ConvertToTStr(Stream.str()) << _T("' узла '") << 
-            GetNodePath(Node) << _T("' не соответствует формату") 
+            _T("Р—РЅР°С‡РµРЅРёРµ '") << ConvertToTStr(Stream.str()) << _T("' СѓР·Р»Р° '") << 
+            GetNodePath(Node) << _T("' РЅРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ С„РѕСЂРјР°С‚Сѓ") 
          );
       }
    }
 
-   //Получить полный путь узла для отладочного сообщения
+   //РџРѕР»СѓС‡РёС‚СЊ РїРѕР»РЅС‹Р№ РїСѓС‚СЊ СѓР·Р»Р° РґР»СЏ РѕС‚Р»Р°РґРѕС‡РЅРѕРіРѕ СЃРѕРѕР±С‰РµРЅРёСЏ
    std::basic_string<TCHAR> GetNodePath( TDOMNode Node ) const
    {
       typedef std::basic_string<TCHAR> TDstStr;
@@ -307,8 +307,8 @@ private:
       TNodeVec vecPath; 
       DOMNodeType NodeType;
 
-      //Сохраняем всех родителей на пути для того чтобы сохранить правильный порядок вывода узлов
-      //Если этого не делать получится инвертированный путь
+      //РЎРѕС…СЂР°РЅСЏРµРј РІСЃРµС… СЂРѕРґРёС‚РµР»РµР№ РЅР° РїСѓС‚Рё РґР»СЏ С‚РѕРіРѕ С‡С‚РѕР±С‹ СЃРѕС…СЂР°РЅРёС‚СЊ РїСЂР°РІРёР»СЊРЅС‹Р№ РїРѕСЂСЏРґРѕРє РІС‹РІРѕРґР° СѓР·Р»РѕРІ
+      //Р•СЃР»Рё СЌС‚РѕРіРѕ РЅРµ РґРµР»Р°С‚СЊ РїРѕР»СѓС‡РёС‚СЃСЏ РёРЅРІРµСЂС‚РёСЂРѕРІР°РЅРЅС‹Р№ РїСѓС‚СЊ
       for(;;)
       {
          APL_CHECK_S_OK( Node->get_nodeType(&NodeType) );
@@ -337,20 +337,20 @@ private:
    }
 
 protected:
-   //Курсор, инкапсулирует внутреннюю реализацию поиска
+   //РљСѓСЂСЃРѕСЂ, РёРЅРєР°РїСЃСѓР»РёСЂСѓРµС‚ РІРЅСѓС‚СЂРµРЅРЅСЋСЋ СЂРµР°Р»РёР·Р°С†РёСЋ РїРѕРёСЃРєР°
    struct TFindCursor
    {
    private:
-      ATL::CComBSTR ElementName;   //Имя искомого элемента
-      TDOMNodeList NodeList;  //Текущий список Узлов
-      TDOMNode RootNode;      //Узел, который был текущем корнем до начала поиска
+      ATL::CComBSTR ElementName;   //РРјСЏ РёСЃРєРѕРјРѕРіРѕ СЌР»РµРјРµРЅС‚Р°
+      TDOMNodeList NodeList;  //РўРµРєСѓС‰РёР№ СЃРїРёСЃРѕРє РЈР·Р»РѕРІ
+      TDOMNode RootNode;      //РЈР·РµР», РєРѕС‚РѕСЂС‹Р№ Р±С‹Р» С‚РµРєСѓС‰РµРј РєРѕСЂРЅРµРј РґРѕ РЅР°С‡Р°Р»Р° РїРѕРёСЃРєР°
 
       friend class CMSXMLReader;   
    };
 
    explicit CMSXMLReader( TIstream &Is ): m_Is(Is) {}
 
-   //Начать/Закончить загрузку
+   //РќР°С‡Р°С‚СЊ/Р—Р°РєРѕРЅС‡РёС‚СЊ Р·Р°РіСЂСѓР·РєСѓ
    void BeginLoad()
    {
       m_DOMDocument.Release();
@@ -359,7 +359,7 @@ protected:
       HRESULT Result;
 
       if( (Result = m_DOMDocument.CoCreateInstance(__uuidof(DOMDocument))) != S_OK  )
-         APL_THROW( _T("Ошибка при создании DOMDocument: ") << GetHRErrorInfo(Result) );
+         APL_THROW( _T("РћС€РёР±РєР° РїСЂРё СЃРѕР·РґР°РЅРёРё DOMDocument: ") << GetHRErrorInfo(Result) );
       
       APL_CHECK_S_OK( m_DOMDocument->put_async( FALSE ) );
       APL_CHECK_S_OK( m_DOMDocument->put_resolveExternals( FALSE ) );
@@ -369,19 +369,19 @@ protected:
       VARIANT_BOOL isSuccessful;
       ReadBSTRFromStream( m_Is, Str );
 
-      if( m_DOMDocument->loadXML( Str, &isSuccessful ) != S_OK || !isSuccessful/*isSuccessful != TRUE */) // isSuccessful почему-то равен -1
-         APL_THROW( _T("Ошибка при загрузке XML") );
+      if( m_DOMDocument->loadXML( Str, &isSuccessful ) != S_OK || !isSuccessful/*isSuccessful != TRUE */) // isSuccessful РїРѕС‡РµРјСѓ-С‚Рѕ СЂР°РІРµРЅ -1
+         APL_THROW( _T("РћС€РёР±РєР° РїСЂРё Р·Р°РіСЂСѓР·РєРµ XML") );
    }
 
    void EndLoad(){}
 
-   //Перейти на уровень Name
+   //РџРµСЂРµР№С‚Рё РЅР° СѓСЂРѕРІРµРЅСЊ Name
    bool BeginLevel( const TChar *Name )
    {
       return FindChild(m_CurRootNode, Name, m_CurRootNode);
    }
 
-   //Выйти с уровня Name
+   //Р’С‹Р№С‚Рё СЃ СѓСЂРѕРІРЅСЏ Name
    void EndLevel( const TChar *Name )
    {
       TDOMNode NewChild;
@@ -390,8 +390,8 @@ protected:
       m_CurRootNode = NewChild;
    }
 
-   //Загрузить Ob с именем Name
-   //T должен выполнять [Правило 1]
+   //Р—Р°РіСЂСѓР·РёС‚СЊ Ob СЃ РёРјРµРЅРµРј Name
+   //T РґРѕР»Р¶РµРЅ РІС‹РїРѕР»РЅСЏС‚СЊ [РџСЂР°РІРёР»Рѕ 1]
    template< class T >
    bool LoadItem( const TChar *Name, T &Ob )
    {
@@ -404,7 +404,7 @@ protected:
       return true;
    }
 
-   //Инициализировать поиск всех элементов с именем Name
+   //РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РїРѕРёСЃРє РІСЃРµС… СЌР»РµРјРµРЅС‚РѕРІ СЃ РёРјРµРЅРµРј Name
    void FindInit( const TChar *Name, TFindCursor &FindCursor )
    {
       FindCursor.ElementName = Name;
@@ -413,10 +413,10 @@ protected:
       APL_CHECK_S_OK( m_CurRootNode->get_childNodes(&FindCursor.NodeList) );
    }
 
-   //Найти следующий (в т.ч. первый) элемент.
-   //FindCursor - должен быть заранее инициализирован функцией FindInit
-   //Возвр - true элемент успешно записан, false - элемент найти не удалось
-   //T должен выполнять [Правило 1]
+   //РќР°Р№С‚Рё СЃР»РµРґСѓСЋС‰РёР№ (РІ С‚.С‡. РїРµСЂРІС‹Р№) СЌР»РµРјРµРЅС‚.
+   //FindCursor - РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ Р·Р°СЂР°РЅРµРµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ С„СѓРЅРєС†РёРµР№ FindInit
+   //Р’РѕР·РІСЂ - true СЌР»РµРјРµРЅС‚ СѓСЃРїРµС€РЅРѕ Р·Р°РїРёСЃР°РЅ, false - СЌР»РµРјРµРЅС‚ РЅР°Р№С‚Рё РЅРµ СѓРґР°Р»РѕСЃСЊ
+   //T РґРѕР»Р¶РµРЅ РІС‹РїРѕР»РЅСЏС‚СЊ [РџСЂР°РІРёР»Рѕ 1]
    template< class T >
    bool FindNext( TFindCursor &FindCursor, T &Ob)
    {
@@ -469,7 +469,7 @@ protected:
    }
 
 public:
-   //Получить путь к текущему узлу
+   //РџРѕР»СѓС‡РёС‚СЊ РїСѓС‚СЊ Рє С‚РµРєСѓС‰РµРјСѓ СѓР·Р»Сѓ
    std::basic_string<TCHAR> GetCurNodePath() const
    {
       return GetNodePath( m_CurRootNode );

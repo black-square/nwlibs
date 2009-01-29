@@ -1,4 +1,4 @@
-//Автор: Шестеркин Дмитрий(NW) 2005
+п»ї//РђРІС‚РѕСЂ: РЁРµСЃС‚РµСЂРєРёРЅ Р”РјРёС‚СЂРёР№(NW) 2005
 
 #include "stdafx.h"
 #include "TestHelper.h"
@@ -81,7 +81,7 @@ void ExecutePreRunFile( const TCHAR *FilePath )
    ShExecInfo.nShow = nShowCmd;
    ShExecInfo.hInstApp = NULL;
 
-   cout << "Запуск файла " << FullPath;
+   cout << "Р—Р°РїСѓСЃРє С„Р°Р№Р»Р° " << FullPath;
    if( ShellExecuteEx(&ShExecInfo) != TRUE )
    {
       cout << "ERROR: " << GetDWErrorInfo( GetLastError() );
@@ -124,7 +124,7 @@ void ExecutePreRunFile( const TCHAR *FilePath )
    
    lstrcat( FullPath, CMD_LINE );
 
-   std::cout << "Запуск файла: " << FullPath << std::endl << APL_LINE;
+   std::cout << "Р—Р°РїСѓСЃРє С„Р°Р№Р»Р°: " << FullPath << std::endl << APL_LINE;
 
    DWORD ExitCode = RunCommand( FullPath, FileDir );
    std::cout << APL_LINE;
@@ -151,7 +151,7 @@ void CopyLoadManager()
 
    std::basic_string<TCHAR> CopyTo(GetExeDirPath() + _T("LoadManager.dll") );
 
-   std::cout << "Копируем\n\t" << CopyFrom << "\n\t" << CopyTo << std::endl << std::endl;
+   std::cout << "РљРѕРїРёСЂСѓРµРј\n\t" << CopyFrom << "\n\t" << CopyTo << std::endl << std::endl;
    if( CopyFile(CopyFrom.c_str(), CopyTo.c_str(), FALSE) == FALSE )
    {
       std::cout << GetDWErrorInfo(GetLastError());

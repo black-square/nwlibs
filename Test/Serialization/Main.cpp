@@ -1,4 +1,4 @@
-#include "..\..\FirstHeader.h"
+п»ї#include "..\..\FirstHeader.h"
 #include "..\..\Serialization\Serialization.hpp"
 #include "..\..\Serialization\MSXML.hpp"
 #include "..\..\Serialization\TinyXML.hpp"
@@ -107,7 +107,7 @@ void Serialize( Archive &A, CB& ob )
 }
 }
 
-//Простой тест
+//РџСЂРѕСЃС‚РѕР№ С‚РµСЃС‚
 struct Foo
 {
    int m_A;
@@ -153,7 +153,7 @@ void SaveToFile( const char *FileName, const TCHAR *RootTagName, T &Object )
       CWriteArchive<TCHAR, CMSXMLWriter> Archive(Stream);
       Archive.Save( RootTagName, Object );
    #else
-      //В Юникоде стандартные потоки не работают, совсем!
+      //Р’ Р®РЅРёРєРѕРґРµ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ РїРѕС‚РѕРєРё РЅРµ СЂР°Р±РѕС‚Р°СЋС‚, СЃРѕРІСЃРµРј!
       basic_stringstream<TCHAR> Stream;
       Stream.setf(ios_base::boolalpha);
       CWriteArchive<TCHAR, CMSXMLWriter> Archive(Stream);
@@ -185,7 +185,7 @@ void LoadFromFile( const char *FileName, const TCHAR *RootTagName, T &Object )
       CReadArchive<TCHAR, CMSXMLReader> Archive(Stream);
       Archive.Load( RootTagName, Object );
    #else
-      //В Юникоде стандартные потоки не работают, совсем!
+      //Р’ Р®РЅРёРєРѕРґРµ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ РїРѕС‚РѕРєРё РЅРµ СЂР°Р±РѕС‚Р°СЋС‚, СЃРѕРІСЃРµРј!
       wstring FileNameW, XML;
       Convert( FileName, FileNameW );
       
@@ -232,7 +232,7 @@ void Serialize( Archive &A, TCoordList& ob )
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Потестим необязательные элементы
+// РџРѕС‚РµСЃС‚РёРј РЅРµРѕР±СЏР·Р°С‚РµР»СЊРЅС‹Рµ СЌР»РµРјРµРЅС‚С‹
 ///////////////////////////////////////////////////////////////////////////////
 struct Bar2
 {
@@ -263,11 +263,11 @@ int _tmain()
       
       for( int i = 0; i < 1; ++i )
       {
-         CB cb(CA(4, 2.6, _T("honda")), CA(3, -4.7, _T("\"ОКА\"<капсула смерти>")), _T("Два слова"), 8 );
+         CB cb(CA(4, 2.6, _T("honda")), CA(3, -4.7, _T("\"РћРљРђ\"<РєР°РїСЃСѓР»Р° СЃРјРµСЂС‚Рё>")), _T("Р”РІР° СЃР»РѕРІР°"), 8 );
          cout << GetXML(_T("cars"), cb) << endl;
          CB cb2, cb2_UTF8;
          
-         Bar B( Foo(1, 2.0, _T("Первый")), Foo(-1, -2.0e-11, _T("Второй")), _T("<ROOT>") );
+         Bar B( Foo(1, 2.0, _T("РџРµСЂРІС‹Р№")), Foo(-1, -2.0e-11, _T("Р’С‚РѕСЂРѕР№")), _T("<ROOT>") );
          Bar B2, B2_UTF8;
 
          cout << GetXML(_T("bar"), B2) << endl;

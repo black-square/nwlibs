@@ -1,32 +1,32 @@
-#ifndef HTTPInterfaces_HPP
+п»ї#ifndef HTTPInterfaces_HPP
 #define HTTPInterfaces_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
-// Файл содержит описание интерфейсов классов для HTTP сервера/клиента
+// Р¤Р°Р№Р» СЃРѕРґРµСЂР¶РёС‚ РѕРїРёСЃР°РЅРёРµ РёРЅС‚РµСЂС„РµР№СЃРѕРІ РєР»Р°СЃСЃРѕРІ РґР»СЏ HTTP СЃРµСЂРІРµСЂР°/РєР»РёРµРЅС‚Р°
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace NWLib
 {
 namespace HTTP
 {
-//Коды ошибок возвращаемые клиенту сервером
+//РљРѕРґС‹ РѕС€РёР±РѕРє РІРѕР·РІСЂР°С‰Р°РµРјС‹Рµ РєР»РёРµРЅС‚Сѓ СЃРµСЂРІРµСЂРѕРј
 enum TErrorCode
 {
-   ECOk,                          //"200"   ; Всё хорошо, OK
-   ECBadRequest,                  //"400"   ; Испорченный Запрос, Bad Request
-   ECLengthRequired,              //"411"   ; Требуется длина, Length Required
-   ECForbidden,                   //"403"   ; Запрещено, Forbidden
-   ECNotFound,                    //"404"   ; Не найден, Not Found
-   ECMethodNotAllowed,            //"405"   ; Метод не дозволен, Method Not Allowed
-   ECRequestEntityTooLarge,       //"413"   ; Объект запроса слишком большой, Request Entity Too Large
-   ECUnsupportedMediaType,        //"415"   ; Неподдерживаемый медиа тип, Unsupported Media Type
-   ECInternalServerError,         //"500"   ; Внутренняя ошибка сервера, Internal Server Error
-   ECNotImplemented,              //"501"   ; Не реализовано, Not Implemented
+   ECOk,                          //"200"   ; Р’СЃС‘ С…РѕСЂРѕС€Рѕ, OK
+   ECBadRequest,                  //"400"   ; РСЃРїРѕСЂС‡РµРЅРЅС‹Р№ Р—Р°РїСЂРѕСЃ, Bad Request
+   ECLengthRequired,              //"411"   ; РўСЂРµР±СѓРµС‚СЃСЏ РґР»РёРЅР°, Length Required
+   ECForbidden,                   //"403"   ; Р—Р°РїСЂРµС‰РµРЅРѕ, Forbidden
+   ECNotFound,                    //"404"   ; РќРµ РЅР°Р№РґРµРЅ, Not Found
+   ECMethodNotAllowed,            //"405"   ; РњРµС‚РѕРґ РЅРµ РґРѕР·РІРѕР»РµРЅ, Method Not Allowed
+   ECRequestEntityTooLarge,       //"413"   ; РћР±СЉРµРєС‚ Р·Р°РїСЂРѕСЃР° СЃР»РёС€РєРѕРј Р±РѕР»СЊС€РѕР№, Request Entity Too Large
+   ECUnsupportedMediaType,        //"415"   ; РќРµРїРѕРґРґРµСЂР¶РёРІР°РµРјС‹Р№ РјРµРґРёР° С‚РёРї, Unsupported Media Type
+   ECInternalServerError,         //"500"   ; Р’РЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР° СЃРµСЂРІРµСЂР°, Internal Server Error
+   ECNotImplemented,              //"501"   ; РќРµ СЂРµР°Р»РёР·РѕРІР°РЅРѕ, Not Implemented
 
    ECCount
 };    
 
-//Базовый класс для заголовков HTTP запроса/ответа
+//Р‘Р°Р·РѕРІС‹Р№ РєР»Р°СЃСЃ РґР»СЏ Р·Р°РіРѕР»РѕРІРєРѕРІ HTTP Р·Р°РїСЂРѕСЃР°/РѕС‚РІРµС‚Р°
 class THeaderBase
 {
    size_t m_ContentLength; 
@@ -34,15 +34,15 @@ class THeaderBase
 public:
    THeaderBase() { Clear(); }
 
-   //Ошибочная длина тела сообщения
+   //РћС€РёР±РѕС‡РЅР°СЏ РґР»РёРЅР° С‚РµР»Р° СЃРѕРѕР±С‰РµРЅРёСЏ
    static size_t ErrorContentLength() { return std::numeric_limits<size_t>::max(); }
    
-   //Длина тела сообщения
-   //Если она равна ErrorContentLength() то считается что запрос не содержит тела
+   //Р”Р»РёРЅР° С‚РµР»Р° СЃРѕРѕР±С‰РµРЅРёСЏ
+   //Р•СЃР»Рё РѕРЅР° СЂР°РІРЅР° ErrorContentLength() С‚Рѕ СЃС‡РёС‚Р°РµС‚СЃСЏ С‡С‚Рѕ Р·Р°РїСЂРѕСЃ РЅРµ СЃРѕРґРµСЂР¶РёС‚ С‚РµР»Р°
    size_t GetContentLength() const { return m_ContentLength; }
    void SetContentLength( size_t Val ) { APL_ASSERT( Val != ErrorContentLength() ); m_ContentLength = Val; }
 
-   //Очистить параметры
+   //РћС‡РёСЃС‚РёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹
    void Clear()
    {
       m_ContentLength = ErrorContentLength();
@@ -50,9 +50,9 @@ public:
 
 
 #if 0
-   //Обработать строку заголовка и установить необходимые параметры класса
-   // FieldName - Имя поля заголовка ПРИВЕДЁННОЕ К НИЖНЕМУ РЕГИСТРУ
-   // [pBeginFieldValue, pEndFieldValue) - Значение поля заголовка
+   //РћР±СЂР°Р±РѕС‚Р°С‚СЊ СЃС‚СЂРѕРєСѓ Р·Р°РіРѕР»РѕРІРєР° Рё СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РЅРµРѕР±С…РѕРґРёРјС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ РєР»Р°СЃСЃР°
+   // FieldName - РРјСЏ РїРѕР»СЏ Р·Р°РіРѕР»РѕРІРєР° РџР РР’Р•Р”РЃРќРќРћР• Рљ РќРР–РќР•РњРЈ Р Р•Р“РРЎРўР РЈ
+   // [pBeginFieldValue, pEndFieldValue) - Р—РЅР°С‡РµРЅРёРµ РїРѕР»СЏ Р·Р°РіРѕР»РѕРІРєР°
    bool PraseHeaderString( const std::string &FieldName, const char *pBeginFieldValue, const char *pEndFieldValue )
    {
       APL_ASSERT_PTR(pBeginFieldValue);
@@ -73,7 +73,7 @@ public:
 #endif 
 };
 
-//Хранит параметры заголовка запроса клиента
+//РҐСЂР°РЅРёС‚ РїР°СЂР°РјРµС‚СЂС‹ Р·Р°РіРѕР»РѕРІРєР° Р·Р°РїСЂРѕСЃР° РєР»РёРµРЅС‚Р°
 class TRequestHeader: public THeaderBase
 {
    std::string m_Url;
@@ -81,7 +81,7 @@ class TRequestHeader: public THeaderBase
 public:
    TRequestHeader() { Clear(); }
 
-   //Запрашиваемый URL
+   //Р—Р°РїСЂР°С€РёРІР°РµРјС‹Р№ URL
    const std::string &GetUrl() const { return m_Url; }
    void SetUrl(const std::string &Val) { m_Url = Val; }
 
@@ -93,8 +93,8 @@ public:
 };
 
 
-//Хранит параметры заголовка ответа сервера
-class TResponseHeader: public THeaderBase { /*Пока нет специализированных полей*/ };
+//РҐСЂР°РЅРёС‚ РїР°СЂР°РјРµС‚СЂС‹ Р·Р°РіРѕР»РѕРІРєР° РѕС‚РІРµС‚Р° СЃРµСЂРІРµСЂР°
+class TResponseHeader: public THeaderBase { /*РџРѕРєР° РЅРµС‚ СЃРїРµС†РёР°Р»РёР·РёСЂРѕРІР°РЅРЅС‹С… РїРѕР»РµР№*/ };
 } //namespace HTTP
 } //namespace NWLib
 

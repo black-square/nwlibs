@@ -1,4 +1,4 @@
-#ifndef HTTP_HPP
+п»ї#ifndef HTTP_HPP
 #define HTTP_HPP
 
 #include "TCPBasicServer.hpp"
@@ -8,26 +8,26 @@
 #include <algorithm>
     
 ///////////////////////////////////////////////////////////////////////////////
-// Модуль реализует HTTP сервер и HTTP клиент которые поддерживают асинхронный 
-// ввод/вывод
+// РњРѕРґСѓР»СЊ СЂРµР°Р»РёР·СѓРµС‚ HTTP СЃРµСЂРІРµСЂ Рё HTTP РєР»РёРµРЅС‚ РєРѕС‚РѕСЂС‹Рµ РїРѕРґРґРµСЂР¶РёРІР°СЋС‚ Р°СЃРёРЅС…СЂРѕРЅРЅС‹Р№ 
+// РІРІРѕРґ/РІС‹РІРѕРґ
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-// Реализация сервера
+// Р РµР°Р»РёР·Р°С†РёСЏ СЃРµСЂРІРµСЂР°
 ///////////////////////////////////////////////////////////////////////////////
 namespace NWLib
 {
 template< template <class FuncImplT> class ConnectionT = HTTP::TServerConnectionBasic, class GlobalDataT = HTTP::TServerGlobalDataBasic >
 class THTTPServer: public GlobalDataT, public NonCopyable
 {
-   //Глобальные данные для всех соединений
-   //Класс позволяющий получить доступ к GlobalDataT из ThreadsManager
+   //Р“Р»РѕР±Р°Р»СЊРЅС‹Рµ РґР°РЅРЅС‹Рµ РґР»СЏ РІСЃРµС… СЃРѕРµРґРёРЅРµРЅРёР№
+   //РљР»Р°СЃСЃ РїРѕР·РІРѕР»СЏСЋС‰РёР№ РїРѕР»СѓС‡РёС‚СЊ РґРѕСЃС‚СѓРї Рє GlobalDataT РёР· ThreadsManager
    class TGlobalData: public AsyncIOConnection::TGlobalDataBasic
    {
       THTTPServer *m_pParent;
 
    public:
-      //При таком подходе появляется предупреждение 
+      //РџСЂРё С‚Р°РєРѕРј РїРѕРґС…РѕРґРµ РїРѕСЏРІР»СЏРµС‚СЃСЏ РїСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ 
       //warning C4355: 'this' : used in base member initializer list
       //explicit TGlobalData( TTCPBasicClientServerBase *pParent ): m_pParent(pParent) {}
       TGlobalData(): m_pParent(0) {}
@@ -36,12 +36,12 @@ class THTTPServer: public GlobalDataT, public NonCopyable
       const THTTPServer *GetParent() const { APL_ASSERT_PTR(m_pParent); return m_pParent; }
    };
 
-   //Класс автоматически освобождает ресурсы для TConnection
+   //РљР»Р°СЃСЃ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РѕСЃРІРѕР±РѕР¶РґР°РµС‚ СЂРµСЃСѓСЂСЃС‹ РґР»СЏ TConnection
    class TConnectionBase: NonCopyable
    {
    private:
-      TGlobalData &m_GlobalData;   //Хранится в этом классе для того чтобы 
-      //конструктор ConnectionT мог обращаться к GlobalDataT
+      TGlobalData &m_GlobalData;   //РҐСЂР°РЅРёС‚СЃСЏ РІ СЌС‚РѕРј РєР»Р°СЃСЃРµ РґР»СЏ С‚РѕРіРѕ С‡С‚РѕР±С‹ 
+      //РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ ConnectionT РјРѕРі РѕР±СЂР°С‰Р°С‚СЊСЃСЏ Рє GlobalDataT
 
    public:
       TConnectionBase( TGlobalData &GlobalData ): m_GlobalData(GlobalData) {}
@@ -50,8 +50,8 @@ class THTTPServer: public GlobalDataT, public NonCopyable
       const TGlobalData &GetGlobalData() const { return m_GlobalData; }
    };
 
-   //Поскольку TConnection не является полностью определённым мы не можем использовать
-   //TConnection::TGlobalData в классе TServerCallRedirection. поэтому вводим дополнительную структуру 
+   //РџРѕСЃРєРѕР»СЊРєСѓ TConnection РЅРµ СЏРІР»СЏРµС‚СЃСЏ РїРѕР»РЅРѕСЃС‚СЊСЋ РѕРїСЂРµРґРµР»С‘РЅРЅС‹Рј РјС‹ РЅРµ РјРѕР¶РµРј РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ
+   //TConnection::TGlobalData РІ РєР»Р°СЃСЃРµ TServerCallRedirection. РїРѕСЌС‚РѕРјСѓ РІРІРѕРґРёРј РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅСѓСЋ СЃС‚СЂСѓРєС‚СѓСЂСѓ 
    template<class UserConnectionT>
    struct TTypeDefinition
    {
@@ -59,14 +59,14 @@ class THTTPServer: public GlobalDataT, public NonCopyable
       typedef GlobalDataT TUserGlobalData;
    };
 
-   //Класс соединения создаётся при подключении нового пользователя и уничтожается при обрыве соединения
+   //РљР»Р°СЃСЃ СЃРѕРµРґРёРЅРµРЅРёСЏ СЃРѕР·РґР°С‘С‚СЃСЏ РїСЂРё РїРѕРґРєР»СЋС‡РµРЅРёРё РЅРѕРІРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ Рё СѓРЅРёС‡С‚РѕР¶Р°РµС‚СЃСЏ РїСЂРё РѕР±СЂС‹РІРµ СЃРѕРµРґРёРЅРµРЅРёСЏ
    template<class FuncImplT>
    class TConnection; 
    
-   typedef TTCPBasicServer<TConnection, TGlobalData> TServer;  //Реализация сервера
+   typedef TTCPBasicServer<TConnection, TGlobalData> TServer;  //Р РµР°Р»РёР·Р°С†РёСЏ СЃРµСЂРІРµСЂР°
 
 public:
-   //Настройки сервера
+   //РќР°СЃС‚СЂРѕР№РєРё СЃРµСЂРІРµСЂР°
    typedef typename TServer::TSettings TSettings;
 
 private:
@@ -75,28 +75,28 @@ private:
 public:
    THTTPServer() { m_Server.SetParent(this); }
 
-   //Конструктор передающий параметр в GlobalDataT
+   //РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРµСЂРµРґР°СЋС‰РёР№ РїР°СЂР°РјРµС‚СЂ РІ GlobalDataT
    template <class InitDataT>
    THTTPServer(const InitDataT &InitData): GlobalDataT(InitData) { m_Server.SetParent(this); }
 
-   //Остановить сервер.
-   //Проверка флага оставновки происходит с интервалом указанном в TSettings
-   //Сервер/Клиент пытается корректно закрыть все соединения и после этого функция Run
-   //возвращает управление
+   //РћСЃС‚Р°РЅРѕРІРёС‚СЊ СЃРµСЂРІРµСЂ.
+   //РџСЂРѕРІРµСЂРєР° С„Р»Р°РіР° РѕСЃС‚Р°РІРЅРѕРІРєРё РїСЂРѕРёСЃС…РѕРґРёС‚ СЃ РёРЅС‚РµСЂРІР°Р»РѕРј СѓРєР°Р·Р°РЅРЅРѕРј РІ TSettings
+   //РЎРµСЂРІРµСЂ/РљР»РёРµРЅС‚ РїС‹С‚Р°РµС‚СЃСЏ РєРѕСЂСЂРµРєС‚РЅРѕ Р·Р°РєСЂС‹С‚СЊ РІСЃРµ СЃРѕРµРґРёРЅРµРЅРёСЏ Рё РїРѕСЃР»Рµ СЌС‚РѕРіРѕ С„СѓРЅРєС†РёСЏ Run
+   //РІРѕР·РІСЂР°С‰Р°РµС‚ СѓРїСЂР°РІР»РµРЅРёРµ
    void Stop() { m_Server.Stop(); }
 
-   //Перестать принимать новые подключения.
-   //Проверка флага оставновки происходит с интервалом указанном в TSettings
-   //Сервер перестаёт ожжидать новые подключения дожидается когда существующие соединения 
-   //завершаться сами и затем функция Run возвращает управление
+   //РџРµСЂРµСЃС‚Р°С‚СЊ РїСЂРёРЅРёРјР°С‚СЊ РЅРѕРІС‹Рµ РїРѕРґРєР»СЋС‡РµРЅРёСЏ.
+   //РџСЂРѕРІРµСЂРєР° С„Р»Р°РіР° РѕСЃС‚Р°РІРЅРѕРІРєРё РїСЂРѕРёСЃС…РѕРґРёС‚ СЃ РёРЅС‚РµСЂРІР°Р»РѕРј СѓРєР°Р·Р°РЅРЅРѕРј РІ TSettings
+   //РЎРµСЂРІРµСЂ РїРµСЂРµСЃС‚Р°С‘С‚ РѕР¶Р¶РёРґР°С‚СЊ РЅРѕРІС‹Рµ РїРѕРґРєР»СЋС‡РµРЅРёСЏ РґРѕР¶РёРґР°РµС‚СЃСЏ РєРѕРіРґР° СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёРµ СЃРѕРµРґРёРЅРµРЅРёСЏ 
+   //Р·Р°РІРµСЂС€Р°С‚СЊСЃСЏ СЃР°РјРё Рё Р·Р°С‚РµРј С„СѓРЅРєС†РёСЏ Run РІРѕР·РІСЂР°С‰Р°РµС‚ СѓРїСЂР°РІР»РµРЅРёРµ
    void StopWaitConnection(){ m_Server.StopWaitConnection(); }
 
-   //Запустить сервер с настройками Settings.
-   //Сервер начинает слушать порт и как только поступает входящие соединение создаёт ConnectionT
-   //который обслуживает соединение
-   //Поток вызвавший Run блокируется пока не будет вызван из другого потока метод Stop()
-   //ConnectionInitData - Параметр который передаётся конструктору производного от TConnectionBasic классу
-   //                     если нет необходимости передавать параметр можно, например, передать NullType
+   //Р—Р°РїСѓСЃС‚РёС‚СЊ СЃРµСЂРІРµСЂ СЃ РЅР°СЃС‚СЂРѕР№РєР°РјРё Settings.
+   //РЎРµСЂРІРµСЂ РЅР°С‡РёРЅР°РµС‚ СЃР»СѓС€Р°С‚СЊ РїРѕСЂС‚ Рё РєР°Рє С‚РѕР»СЊРєРѕ РїРѕСЃС‚СѓРїР°РµС‚ РІС…РѕРґСЏС‰РёРµ СЃРѕРµРґРёРЅРµРЅРёРµ СЃРѕР·РґР°С‘С‚ ConnectionT
+   //РєРѕС‚РѕСЂС‹Р№ РѕР±СЃР»СѓР¶РёРІР°РµС‚ СЃРѕРµРґРёРЅРµРЅРёРµ
+   //РџРѕС‚РѕРє РІС‹Р·РІР°РІС€РёР№ Run Р±Р»РѕРєРёСЂСѓРµС‚СЃСЏ РїРѕРєР° РЅРµ Р±СѓРґРµС‚ РІС‹Р·РІР°РЅ РёР· РґСЂСѓРіРѕРіРѕ РїРѕС‚РѕРєР° РјРµС‚РѕРґ Stop()
+   //ConnectionInitData - РџР°СЂР°РјРµС‚СЂ РєРѕС‚РѕСЂС‹Р№ РїРµСЂРµРґР°С‘С‚СЃСЏ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂСѓ РїСЂРѕРёР·РІРѕРґРЅРѕРіРѕ РѕС‚ TConnectionBasic РєР»Р°СЃСЃСѓ
+   //                     РµСЃР»Рё РЅРµС‚ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё РїРµСЂРµРґР°РІР°С‚СЊ РїР°СЂР°РјРµС‚СЂ РјРѕР¶РЅРѕ, РЅР°РїСЂРёРјРµСЂ, РїРµСЂРµРґР°С‚СЊ NullType
    template<class InitDataT>
    void Run( const TSettings &Settings, const InitDataT &InitData ){ m_Server.Run(Settings, InitData); }
 };
@@ -104,21 +104,21 @@ public:
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Реализация клиента
-// Реализация была прервана, решил использовать в проекте libcurl 
+// Р РµР°Р»РёР·Р°С†РёСЏ РєР»РёРµРЅС‚Р°
+// Р РµР°Р»РёР·Р°С†РёСЏ Р±С‹Р»Р° РїСЂРµСЂРІР°РЅР°, СЂРµС€РёР» РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РІ РїСЂРѕРµРєС‚Рµ libcurl 
 // http://curl.haxx.se/libcurl/
 ///////////////////////////////////////////////////////////////////////////////
 template< template <class FuncImplT> class ConnectionT = HTTP::TClientConnectionBasic, class GlobalDataT = HTTP::TClientGlobalDataBasic >
 class THTTPClient: public GlobalDataT, public NonCopyable
 {
-   //Глобальные данные для всех соединений
-   //Класс позволяющий получить доступ к GlobalDataT из ThreadsManager
+   //Р“Р»РѕР±Р°Р»СЊРЅС‹Рµ РґР°РЅРЅС‹Рµ РґР»СЏ РІСЃРµС… СЃРѕРµРґРёРЅРµРЅРёР№
+   //РљР»Р°СЃСЃ РїРѕР·РІРѕР»СЏСЋС‰РёР№ РїРѕР»СѓС‡РёС‚СЊ РґРѕСЃС‚СѓРї Рє GlobalDataT РёР· ThreadsManager
    class TGlobalData: public AsyncIOConnection::TGlobalDataBasic
    {
       THTTPClient *m_pParent;
 
    public:
-      //При таком подходе появляется предупреждение 
+      //РџСЂРё С‚Р°РєРѕРј РїРѕРґС…РѕРґРµ РїРѕСЏРІР»СЏРµС‚СЃСЏ РїСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ 
       //warning C4355: 'this' : used in base member initializer list
       //explicit TGlobalData( TTCPBasicClientServerBase *pParent ): m_pParent(pParent) {}
       TGlobalData(): m_pParent(0) {}
@@ -127,12 +127,12 @@ class THTTPClient: public GlobalDataT, public NonCopyable
       const THTTPClient *GetParent() const { APL_ASSERT_PTR(m_pParent); return m_pParent; }
    };
 
-   //Класс автоматически освобождает ресурсы для TConnection
+   //РљР»Р°СЃСЃ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РѕСЃРІРѕР±РѕР¶РґР°РµС‚ СЂРµСЃСѓСЂСЃС‹ РґР»СЏ TConnection
    class TConnectionBase: NonCopyable
    {
    private:
-      TGlobalData &m_GlobalData;   //Хранится в этом классе для того чтобы 
-      //конструктор ConnectionT мог обращаться к GlobalDataT
+      TGlobalData &m_GlobalData;   //РҐСЂР°РЅРёС‚СЃСЏ РІ СЌС‚РѕРј РєР»Р°СЃСЃРµ РґР»СЏ С‚РѕРіРѕ С‡С‚РѕР±С‹ 
+      //РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ ConnectionT РјРѕРі РѕР±СЂР°С‰Р°С‚СЊСЃСЏ Рє GlobalDataT
 
    public:
       TConnectionBase( TGlobalData &GlobalData ): m_GlobalData(GlobalData) {}
@@ -141,8 +141,8 @@ class THTTPClient: public GlobalDataT, public NonCopyable
       const TGlobalData &GetGlobalData() const { return m_GlobalData; }
    };
 
-   //Поскольку TConnection не является полностью определённым мы не можем использовать
-   //TConnection::TGlobalData в классе TServerCallRedirection. поэтому вводим дополнительную структуру 
+   //РџРѕСЃРєРѕР»СЊРєСѓ TConnection РЅРµ СЏРІР»СЏРµС‚СЃСЏ РїРѕР»РЅРѕСЃС‚СЊСЋ РѕРїСЂРµРґРµР»С‘РЅРЅС‹Рј РјС‹ РЅРµ РјРѕР¶РµРј РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ
+   //TConnection::TGlobalData РІ РєР»Р°СЃСЃРµ TServerCallRedirection. РїРѕСЌС‚РѕРјСѓ РІРІРѕРґРёРј РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅСѓСЋ СЃС‚СЂСѓРєС‚СѓСЂСѓ 
    template<class UserConnectionT>
    struct TTypeDefinition
    {
@@ -150,14 +150,14 @@ class THTTPClient: public GlobalDataT, public NonCopyable
       typedef GlobalDataT TUserGlobalData;
    };
 
-   //Класс соединения создаётся при создании соединения и уничтожается при обрыве соединения
+   //РљР»Р°СЃСЃ СЃРѕРµРґРёРЅРµРЅРёСЏ СЃРѕР·РґР°С‘С‚СЃСЏ РїСЂРё СЃРѕР·РґР°РЅРёРё СЃРѕРµРґРёРЅРµРЅРёСЏ Рё СѓРЅРёС‡С‚РѕР¶Р°РµС‚СЃСЏ РїСЂРё РѕР±СЂС‹РІРµ СЃРѕРµРґРёРЅРµРЅРёСЏ
    template<class FuncImplT>
    class TConnection; 
    
-   typedef TTCPBasicClient<TConnection, TGlobalData> TClient;  //Реализация клиента
+   typedef TTCPBasicClient<TConnection, TGlobalData> TClient;  //Р РµР°Р»РёР·Р°С†РёСЏ РєР»РёРµРЅС‚Р°
 
 public:
-   //Настройки сервера
+   //РќР°СЃС‚СЂРѕР№РєРё СЃРµСЂРІРµСЂР°
    typedef typename TClient::TSettings TSettings;
 
 private:
@@ -166,21 +166,21 @@ private:
 public:
    THTTPClient() { m_Client.SetParent(this); }
 
-   //Конструктор передающий параметр в GlobalDataT
+   //РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРµСЂРµРґР°СЋС‰РёР№ РїР°СЂР°РјРµС‚СЂ РІ GlobalDataT
    template <class InitDataT>
    THTTPClient(const InitDataT &InitData): GlobalDataT(InitData) { m_Server.SetParent(this); }
 
-   //Ждать пока все соединения закроются
+   //Р–РґР°С‚СЊ РїРѕРєР° РІСЃРµ СЃРѕРµРґРёРЅРµРЅРёСЏ Р·Р°РєСЂРѕСЋС‚СЃСЏ
    void Wait() { m_Client.Wait(); }
 
-   //Уведомить соединения о том что им необходимо закрыться
+   //РЈРІРµРґРѕРјРёС‚СЊ СЃРѕРµРґРёРЅРµРЅРёСЏ Рѕ С‚РѕРј С‡С‚Рѕ РёРј РЅРµРѕР±С…РѕРґРёРјРѕ Р·Р°РєСЂС‹С‚СЊСЃСЏ
    void Stop() { m_Client.Stop(); }
 
-   //Попытаться соединится с сервером используя наcтройки Settings.
-   //Клиент пытается соединится c сервером в отдельном потоке и вызывающий поток возвращает управление
-   //Уведомления о неудачных попытках соединения приходят в уведомлении HTTP::TClientConnectionBasic::OnConnectTimer  
-   //ConnectionInitData - Параметр который передаётся конструктору производного от TConnectionBasic классу
-   //                     если нет необходимости передавать параметр можно, например, передать NullType
+   //РџРѕРїС‹С‚Р°С‚СЊСЃСЏ СЃРѕРµРґРёРЅРёС‚СЃСЏ СЃ СЃРµСЂРІРµСЂРѕРј РёСЃРїРѕР»СЊР·СѓСЏ РЅР°cС‚СЂРѕР№РєРё Settings.
+   //РљР»РёРµРЅС‚ РїС‹С‚Р°РµС‚СЃСЏ СЃРѕРµРґРёРЅРёС‚СЃСЏ c СЃРµСЂРІРµСЂРѕРј РІ РѕС‚РґРµР»СЊРЅРѕРј РїРѕС‚РѕРєРµ Рё РІС‹Р·С‹РІР°СЋС‰РёР№ РїРѕС‚РѕРє РІРѕР·РІСЂР°С‰Р°РµС‚ СѓРїСЂР°РІР»РµРЅРёРµ
+   //РЈРІРµРґРѕРјР»РµРЅРёСЏ Рѕ РЅРµСѓРґР°С‡РЅС‹С… РїРѕРїС‹С‚РєР°С… СЃРѕРµРґРёРЅРµРЅРёСЏ РїСЂРёС…РѕРґСЏС‚ РІ СѓРІРµРґРѕРјР»РµРЅРёРё HTTP::TClientConnectionBasic::OnConnectTimer  
+   //ConnectionInitData - РџР°СЂР°РјРµС‚СЂ РєРѕС‚РѕСЂС‹Р№ РїРµСЂРµРґР°С‘С‚СЃСЏ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂСѓ РїСЂРѕРёР·РІРѕРґРЅРѕРіРѕ РѕС‚ TConnectionBasic РєР»Р°СЃСЃСѓ
+   //                     РµСЃР»Рё РЅРµС‚ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё РїРµСЂРµРґР°РІР°С‚СЊ РїР°СЂР°РјРµС‚СЂ РјРѕР¶РЅРѕ, РЅР°РїСЂРёРјРµСЂ, РїРµСЂРµРґР°С‚СЊ NullType
    template<class InitDataT>
    void Connect( const TSettings &Settings, const InitDataT &ConnectionInitData ) { m_Client.Connect(Settings, ConnectionInitData); }
 };

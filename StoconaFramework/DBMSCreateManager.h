@@ -1,4 +1,4 @@
-//Автор: Шестеркин Дмитрий(NW) 2005
+п»ї//РђРІС‚РѕСЂ: РЁРµСЃС‚РµСЂРєРёРЅ Р”РјРёС‚СЂРёР№(NW) 2005
 
 #ifndef DBMSCreateManager_H
 #define DBMSCreateManager_H
@@ -11,37 +11,37 @@
 namespace NWLib {
 
 /**
-   Управляет созданием и удалением объектов, реализуещих интерфейс IDBManager. 
+   РЈРїСЂР°РІР»СЏРµС‚ СЃРѕР·РґР°РЅРёРµРј Рё СѓРґР°Р»РµРЅРёРµРј РѕР±СЉРµРєС‚РѕРІ, СЂРµР°Р»РёР·СѓРµС‰РёС… РёРЅС‚РµСЂС„РµР№СЃ IDBManager. 
    Singleton
-   Позволяет получать объекты IDataBase
-   Гарантирует что всегда для одной копии инициализационных параметров (путь к БД) будет 
-   не более одного объекта реализуещего интерфейс IDBManager
-   Не передаёт во вне IDBManager, только объекты IDataBase
+   РџРѕР·РІРѕР»СЏРµС‚ РїРѕР»СѓС‡Р°С‚СЊ РѕР±СЉРµРєС‚С‹ IDataBase
+   Р“Р°СЂР°РЅС‚РёСЂСѓРµС‚ С‡С‚Рѕ РІСЃРµРіРґР° РґР»СЏ РѕРґРЅРѕР№ РєРѕРїРёРё РёРЅРёС†РёР°Р»РёР·Р°С†РёРѕРЅРЅС‹С… РїР°СЂР°РјРµС‚СЂРѕРІ (РїСѓС‚СЊ Рє Р‘Р”) Р±СѓРґРµС‚ 
+   РЅРµ Р±РѕР»РµРµ РѕРґРЅРѕРіРѕ РѕР±СЉРµРєС‚Р° СЂРµР°Р»РёР·СѓРµС‰РµРіРѕ РёРЅС‚РµСЂС„РµР№СЃ IDBManager
+   РќРµ РїРµСЂРµРґР°С‘С‚ РІРѕ РІРЅРµ IDBManager, С‚РѕР»СЊРєРѕ РѕР±СЉРµРєС‚С‹ IDataBase
 
-   Ведёт счётчик ссылок объектов IDataBase прозрачно от пользователя и самостоятельно удаляет все объекты 
-   реализуещие интерфейс IDBManager, как только будут освобождены все объекты типа IDataBase.
+   Р’РµРґС‘С‚ СЃС‡С‘С‚С‡РёРє СЃСЃС‹Р»РѕРє РѕР±СЉРµРєС‚РѕРІ IDataBase РїСЂРѕР·СЂР°С‡РЅРѕ РѕС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ Рё СЃР°РјРѕСЃС‚РѕСЏС‚РµР»СЊРЅРѕ СѓРґР°Р»СЏРµС‚ РІСЃРµ РѕР±СЉРµРєС‚С‹ 
+   СЂРµР°Р»РёР·СѓРµС‰РёРµ РёРЅС‚РµСЂС„РµР№СЃ IDBManager, РєР°Рє С‚РѕР»СЊРєРѕ Р±СѓРґСѓС‚ РѕСЃРІРѕР±РѕР¶РґРµРЅС‹ РІСЃРµ РѕР±СЉРµРєС‚С‹ С‚РёРїР° IDataBase.
 
-   Для того чтобы получить указатель на IDataBase необходимо вызвать 
+   Р”Р»СЏ С‚РѕРіРѕ С‡С‚РѕР±С‹ РїРѕР»СѓС‡РёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° IDataBase РЅРµРѕР±С…РѕРґРёРјРѕ РІС‹Р·РІР°С‚СЊ 
       CDBMSCreateManager::Create()->OpenDataBase(...)
    
-   А для освобождения базы (автоматически вызывается Close) 
+   Рђ РґР»СЏ РѕСЃРІРѕР±РѕР¶РґРµРЅРёСЏ Р±Р°Р·С‹ (Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚СЃСЏ Close) 
       CDBMSCreateManager::Create()->CloseDataBase(...)
 */
 
 class CDBMSCreateManager: public NonCopyable
 {
 private:
-   CDBMSCreateManager() {} //Запрещаем инстанцирование из вне
+   CDBMSCreateManager() {} //Р—Р°РїСЂРµС‰Р°РµРј РёРЅСЃС‚Р°РЅС†РёСЂРѕРІР°РЅРёРµ РёР· РІРЅРµ
 
 private:              
-   typedef std::wstring TMapKey;                          //Путь к базе
+   typedef std::wstring TMapKey;                          //РџСѓС‚СЊ Рє Р±Р°Р·Рµ
    typedef Interface::Core::DBMS::IDBManager IDBManager;  
    typedef Interface::Core::DBMS::IDataBase IDataBase;  
    typedef Interface::Core::ResourceManagers::ILoadManager ILoadManager;  
 
    class CRefCounter
    {
-      size_t m_RefCount; //Количество ссылок на объёкт
+      size_t m_RefCount; //РљРѕР»РёС‡РµСЃС‚РІРѕ СЃСЃС‹Р»РѕРє РЅР° РѕР±СЉС‘РєС‚
 
    public:
       CRefCounter(): m_RefCount(0) {}
@@ -52,7 +52,7 @@ private:
 
    class CManagerData: public CRefCounter
    {
-      IDBManager *m_pDBManager;    //Сам сохранённый менеджер
+      IDBManager *m_pDBManager;    //РЎР°Рј СЃРѕС…СЂР°РЅС‘РЅРЅС‹Р№ РјРµРЅРµРґР¶РµСЂ
 
    public:
       CManagerData( IDBManager *pDBManager = 0 ): m_pDBManager(pDBManager) {}
@@ -64,7 +64,7 @@ private:
    class CDataBaseData: public CRefCounter
    {
       typedef TObjectsMap::iterator TIter;
-      TIter m_Iter;   //Сохранённый итератор 
+      TIter m_Iter;   //РЎРѕС…СЂР°РЅС‘РЅРЅС‹Р№ РёС‚РµСЂР°С‚РѕСЂ 
 
    public:
       CDataBaseData( TIter Iter = TIter() ): m_Iter(Iter) {}
@@ -76,7 +76,7 @@ private:
       }
    };
 
-   typedef std::map<IDataBase*, CDataBaseData> TIDataBase2ObjectsMapIter;  //Открытые базы у менеджеров
+   typedef std::map<IDataBase*, CDataBaseData> TIDataBase2ObjectsMapIter;  //РћС‚РєСЂС‹С‚С‹Рµ Р±Р°Р·С‹ Сѓ РјРµРЅРµРґР¶РµСЂРѕРІ
 
    typedef ClassLevelLockable<CDBMSCreateManager> TMutex;
 
@@ -86,7 +86,7 @@ public:
    typedef CDBMSCreateManager ThisType;
 
 private:
-   //Будем вести два списка у каждого элемента из них будет свой счётчик ссылкок.
+   //Р‘СѓРґРµРј РІРµСЃС‚Рё РґРІР° СЃРїРёСЃРєР° Сѓ РєР°Р¶РґРѕРіРѕ СЌР»РµРјРµРЅС‚Р° РёР· РЅРёС… Р±СѓРґРµС‚ СЃРІРѕР№ СЃС‡С‘С‚С‡РёРє СЃСЃС‹Р»РєРѕРє.
    TObjectsMap m_ObjectsMap;
    TIDataBase2ObjectsMapIter m_IDataBase2ObjectsMapIter;
    static TMutex m_Mutex;
@@ -100,10 +100,10 @@ private:
 
 
 public:
-   //Получить указатель на CDBMSCreateManager
+   //РџРѕР»СѓС‡РёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° CDBMSCreateManager
    static ThisType *Create()
    {
-      //Мы реализуем блокировку с двумя проверками
+      //РњС‹ СЂРµР°Р»РёР·СѓРµРј Р±Р»РѕРєРёСЂРѕРІРєСѓ СЃ РґРІСѓРјСЏ РїСЂРѕРІРµСЂРєР°РјРё
       if( pInstance_ == 0 )
       {
          TMutex::Lock Guard(m_Mutex);
@@ -115,11 +115,11 @@ public:
       return pInstance_;
    }
 
-   // Открыть БД IDataBase, при этом если ещё не создан, создаётся IDBManager
-   // pLoadManager - Используется для создания IDBManager (Методом Create)
-   // FullPathToIniFile - Путь к ini-файлу БД
-   // FullPathToDbmsBases - Путь к базам данных
-   // DBName - Имя  БД
+   // РћС‚РєСЂС‹С‚СЊ Р‘Р” IDataBase, РїСЂРё СЌС‚РѕРј РµСЃР»Рё РµС‰С‘ РЅРµ СЃРѕР·РґР°РЅ, СЃРѕР·РґР°С‘С‚СЃСЏ IDBManager
+   // pLoadManager - РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ IDBManager (РњРµС‚РѕРґРѕРј Create)
+   // FullPathToIniFile - РџСѓС‚СЊ Рє ini-С„Р°Р№Р»Сѓ Р‘Р”
+   // FullPathToDbmsBases - РџСѓС‚СЊ Рє Р±Р°Р·Р°Рј РґР°РЅРЅС‹С…
+   // DBName - РРјСЏ  Р‘Р”
    TPointer OpenDataBase( 
       ILoadManager *pLoadManager,
       const std::wstring &FullPathToIniFile, 
@@ -127,8 +127,8 @@ public:
       const std::wstring &DBName 
    );
 
-   //Закрыть БД (автоматически выполняется Close), если нет больше открытых ссылок на IDBManager
-   //то он удаляется
+   //Р—Р°РєСЂС‹С‚СЊ Р‘Р” (Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ Close), РµСЃР»Рё РЅРµС‚ Р±РѕР»СЊС€Рµ РѕС‚РєСЂС‹С‚С‹С… СЃСЃС‹Р»РѕРє РЅР° IDBManager
+   //С‚Рѕ РѕРЅ СѓРґР°Р»СЏРµС‚СЃСЏ
    void CloseDataBase(TPointer pDB);
 
    ~CDBMSCreateManager();

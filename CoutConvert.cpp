@@ -1,4 +1,4 @@
-//Автор: Шестеркин Дмитрий(NW) 2005
+п»ї//РђРІС‚РѕСЂ: РЁРµСЃС‚РµСЂРєРёРЅ Р”РјРёС‚СЂРёР№(NW) 2005
 
 #include "stdafx.h"
 #include <iostream>
@@ -15,7 +15,7 @@ std::ostream &operator <<( std::ostream &stream, const char * const obj )
 
    if( &stream == &std::cout )
    {
-	   std::vector<CHAR> Vec(Rez + 1); //+1 Для избежания проблем с пустой строкой
+	   std::vector<CHAR> Vec(Rez + 1); //+1 Р”Р»СЏ РёР·Р±РµР¶Р°РЅРёСЏ РїСЂРѕР±Р»РµРј СЃ РїСѓСЃС‚РѕР№ СЃС‚СЂРѕРєРѕР№
 
 	   CharToOemBuffA(obj, &Vec[0], Rez);
 
@@ -36,7 +36,7 @@ std::ostream &operator<< ( std::ostream &stream, const std::string &obj )
    {
       int Rez = static_cast<int>(obj.length());
 
-      std::vector<CHAR> Vec(Rez + 1); //+1 Для избежания проблем с пустой строкой
+      std::vector<CHAR> Vec(Rez + 1); //+1 Р”Р»СЏ РёР·Р±РµР¶Р°РЅРёСЏ РїСЂРѕР±Р»РµРј СЃ РїСѓСЃС‚РѕР№ СЃС‚СЂРѕРєРѕР№
 
 	   CharToOemBuffA(obj.c_str(), &Vec[0], Rez);
 
@@ -57,7 +57,7 @@ std::ostream &operator<<( std::ostream &stream, const wchar_t * const obj )
    
    int Rez = static_cast<int>(wcslen(obj));
 	
-	std::vector<CHAR> Vec(Rez + 1); //+1 Для избежания проблем с пустой строкой
+	std::vector<CHAR> Vec(Rez + 1); //+1 Р”Р»СЏ РёР·Р±РµР¶Р°РЅРёСЏ РїСЂРѕР±Р»РµРј СЃ РїСѓСЃС‚РѕР№ СЃС‚СЂРѕРєРѕР№
 
 	APL_CHECK( WideCharToMultiByte(CP_ACP, 0, obj, Rez, &Vec[0], static_cast<int>(Vec.size()), NULL, NULL) == Rez);
    
@@ -73,7 +73,7 @@ std::ostream &operator<< ( std::ostream &stream, const std::wstring &obj )
 {
 	int Rez = static_cast<int>(obj.length()); 
 	
-	std::vector<CHAR> Vec(Rez + 1); //+1 Для избежания проблем с пустой строкой
+	std::vector<CHAR> Vec(Rez + 1); //+1 Р”Р»СЏ РёР·Р±РµР¶Р°РЅРёСЏ РїСЂРѕР±Р»РµРј СЃ РїСѓСЃС‚РѕР№ СЃС‚СЂРѕРєРѕР№
 
 	APL_CHECK( WideCharToMultiByte(CP_ACP, 0, obj.c_str(), Rez, &Vec[0], static_cast<int>(Vec.size()), NULL, NULL) == Rez );
    

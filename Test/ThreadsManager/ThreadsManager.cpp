@@ -1,4 +1,4 @@
-// ThreadsManager.cpp : Defines the entry point for the console application.
+п»ї// ThreadsManager.cpp : Defines the entry point for the console application.
 //
 
 #include "stdafx.h"
@@ -23,9 +23,9 @@ public:
       while( WorkTime-- && !*pShutdown )
       {
          if( !ExceptionTime-- )
-            APL_THROW( _T("Исключение в потоке: ") << ThreadNum );
+            APL_THROW( _T("РСЃРєР»СЋС‡РµРЅРёРµ РІ РїРѕС‚РѕРєРµ: ") << ThreadNum );
 
-         NWLib::Console.Write( ThreadNum, " раз: ",  WorkTime + 1 );
+         NWLib::Console.Write( ThreadNum, " СЂР°Р·: ",  WorkTime + 1 );
          Sleep(1000);
       }
       

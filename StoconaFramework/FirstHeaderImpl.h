@@ -1,4 +1,4 @@
-#ifndef FirstHeaderImplH
+п»ї#ifndef FirstHeaderImplH
 #define FirstHeaderImplH
 
 #include <exception>
@@ -10,8 +10,8 @@ namespace StoconaSearch
 	using std::exception;
 }
 
-//SS_THROW не всегда кидает исключения, в противном случае она просто игнорирует комманду SS_THROW
-//Такое поведение врядле можно назвать корретным. В таких случаях кидается стандратный тип исключения
+//SS_THROW РЅРµ РІСЃРµРіРґР° РєРёРґР°РµС‚ РёСЃРєР»СЋС‡РµРЅРёСЏ, РІ РїСЂРѕС‚РёРІРЅРѕРј СЃР»СѓС‡Р°Рµ РѕРЅР° РїСЂРѕСЃС‚Рѕ РёРіРЅРѕСЂРёСЂСѓРµС‚ РєРѕРјРјР°РЅРґСѓ SS_THROW
+//РўР°РєРѕРµ РїРѕРІРµРґРµРЅРёРµ РІСЂСЏРґР»Рµ РјРѕР¶РЅРѕ РЅР°Р·РІР°С‚СЊ РєРѕСЂСЂРµС‚РЅС‹Рј. Р’ С‚Р°РєРёС… СЃР»СѓС‡Р°СЏС… РєРёРґР°РµС‚СЃСЏ СЃС‚Р°РЅРґСЂР°С‚РЅС‹Р№ С‚РёРї РёСЃРєР»СЋС‡РµРЅРёСЏ
 //std::exception 
 #include "../ASCInterface/defines.h"
 
@@ -19,7 +19,7 @@ SET_LOAD_MANAGER_DEFINE;
 USES_LOAD_MANAGER;
 
 ///////////////////////////////////////////////////////////////////////////////
-// !!! Необходимо в одном из модулей CPP определить SET_LOAD_MANAGER_IMPLEMENTATION; !!!
+// !!! РќРµРѕР±С…РѕРґРёРјРѕ РІ РѕРґРЅРѕРј РёР· РјРѕРґСѓР»РµР№ CPP РѕРїСЂРµРґРµР»РёС‚СЊ SET_LOAD_MANAGER_IMPLEMENTATION; !!!
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef USES_IBASE
@@ -45,6 +45,6 @@ USES_LOAD_MANAGER;
        NWLib::ConvertToBuf<std::wstring>(Stream__.str()).c_str()) );                                   \
 } while(false)
 
-#include "Auxiliary.h" //Для функции Convert
+#include "Auxiliary.h" //Р”Р»СЏ С„СѓРЅРєС†РёРё Convert
 
 #endif

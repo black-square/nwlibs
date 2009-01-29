@@ -1,4 +1,4 @@
-// WinSocket.cpp : Defines the entry point for the console application.
+п»ї// WinSocket.cpp : Defines the entry point for the console application.
 //
 
 #include "stdafx.h"
@@ -7,10 +7,10 @@
 #include "../../TestHelper.h"
 #include "../../CoutConvert.h"
 
-const int SleepTime = 10;   //Время запаздывания отправки в мс
-const int RepeatCount = 3;  //Сколько раз повторять отправку строк
+const int SleepTime = 10;   //Р’СЂРµРјСЏ Р·Р°РїР°Р·РґС‹РІР°РЅРёСЏ РѕС‚РїСЂР°РІРєРё РІ РјСЃ
+const int RepeatCount = 3;  //РЎРєРѕР»СЊРєРѕ СЂР°Р· РїРѕРІС‚РѕСЂСЏС‚СЊ РѕС‚РїСЂР°РІРєСѓ СЃС‚СЂРѕРє
 
-//Класс читает строки из входного файла и отсылает их назад обёрнутыми в скобки
+//РљР»Р°СЃСЃ С‡РёС‚Р°РµС‚ СЃС‚СЂРѕРєРё РёР· РІС…РѕРґРЅРѕРіРѕ С„Р°Р№Р»Р° Рё РѕС‚СЃС‹Р»Р°РµС‚ РёС… РЅР°Р·Р°Рґ РѕР±С‘СЂРЅСѓС‚С‹РјРё РІ СЃРєРѕР±РєРё
 template<class T>
 class TConnectionServer: public NWLib::AsyncIOConnection::TConnectionBasic<T>
 {
@@ -27,13 +27,13 @@ private:
    char m_WriteBufTmp[BufSize];
    TBuffer m_ReadBuf;
    TBuffer m_WriteBuf;
-   TMutex m_WriteBufMutex; //Защита буфера записи
-   bool m_DataSending;     //Ожидается ли отправка данных
-   int m_IdleTime;         //Время простоя
-   bool m_EndReceive;      //Приём даных закончен
+   TMutex m_WriteBufMutex; //Р—Р°С‰РёС‚Р° Р±СѓС„РµСЂР° Р·Р°РїРёСЃРё
+   bool m_DataSending;     //РћР¶РёРґР°РµС‚СЃСЏ Р»Рё РѕС‚РїСЂР°РІРєР° РґР°РЅРЅС‹С…
+   int m_IdleTime;         //Р’СЂРµРјСЏ РїСЂРѕСЃС‚РѕСЏ
+   bool m_EndReceive;      //РџСЂРёС‘Рј РґР°РЅС‹С… Р·Р°РєРѕРЅС‡РµРЅ
 
 public:
-   //Сервер испоользует только одно соединение
+   //РЎРµСЂРІРµСЂ РёСЃРїРѕРѕР»СЊР·СѓРµС‚ С‚РѕР»СЊРєРѕ РѕРґРЅРѕ СЃРѕРµРґРёРЅРµРЅРёРµ
    TConnectionServer(bool OnlyOneConnection): m_DataSending(false), m_IdleTime(0), m_EndReceive(false) 
    { 
       GetGlobalData().Check();
@@ -58,7 +58,7 @@ public:
       DEBUG_MSG_LOG1( "Server\t" << "OnConnect()" );
  
       {
-         //Ставим в очередь на отправку
+         //РЎС‚Р°РІРёРј РІ РѕС‡РµСЂРµРґСЊ РЅР° РѕС‚РїСЂР°РІРєСѓ
          TMutex::Lock Guard(m_WriteBufMutex);
          m_WriteBuf.append("Welcome to simple server");
          m_WriteBuf.append(szStringDelim);
@@ -74,7 +74,7 @@ public:
       DEBUG_MSG_LOG1( "Server\t" << "OnEndReceive " << ER );
  
       {
-         //Ставим в очередь на отправку то что осталось
+         //РЎС‚Р°РІРёРј РІ РѕС‡РµСЂРµРґСЊ РЅР° РѕС‚РїСЂР°РІРєСѓ С‚Рѕ С‡С‚Рѕ РѕСЃС‚Р°Р»РѕСЃСЊ
          TMutex::Lock Guard(m_WriteBufMutex);
          if( !m_ReadBuf.empty() )
          {
@@ -96,9 +96,9 @@ public:
       DEBUG_MSG_LOG1( "Server\t" << "OnEndSend " << ER );
    }
 
-   //Уведомление о том что сработал таймер ожидания операции чтения или записи
-   //Можно вызвать TryDisconnect, для завершения соединения или выполнить другие действия,
-   //например попытаться отправить запрос KEEP ALIVE (если не было ожидания операции записи)
+   //РЈРІРµРґРѕРјР»РµРЅРёРµ Рѕ С‚РѕРј С‡С‚Рѕ СЃСЂР°Р±РѕС‚Р°Р» С‚Р°Р№РјРµСЂ РѕР¶РёРґР°РЅРёСЏ РѕРїРµСЂР°С†РёРё С‡С‚РµРЅРёСЏ РёР»Рё Р·Р°РїРёСЃРё
+   //РњРѕР¶РЅРѕ РІС‹Р·РІР°С‚СЊ TryDisconnect, РґР»СЏ Р·Р°РІРµСЂС€РµРЅРёСЏ СЃРѕРµРґРёРЅРµРЅРёСЏ РёР»Рё РІС‹РїРѕР»РЅРёС‚СЊ РґСЂСѓРіРёРµ РґРµР№СЃС‚РІРёСЏ,
+   //РЅР°РїСЂРёРјРµСЂ РїРѕРїС‹С‚Р°С‚СЊСЃСЏ РѕС‚РїСЂР°РІРёС‚СЊ Р·Р°РїСЂРѕСЃ KEEP ALIVE (РµСЃР»Рё РЅРµ Р±С‹Р»Рѕ РѕР¶РёРґР°РЅРёСЏ РѕРїРµСЂР°С†РёРё Р·Р°РїРёСЃРё)
    void OnTimer() 
    {
       std::cout << "OnTimer " << MaxTimeIdle - m_IdleTime - 1 << std::endl;
@@ -112,8 +112,8 @@ public:
       APL_ASSERT( !m_WriteBuf.empty() );
       int SendSize = static_cast<int>(std::min( BufSize, m_WriteBuf.size() ));
 
-      //VC 8.0 ругается на эту строчку, потому что функция не может проверить переполнение буфера
-      //необходимо сделать #define _SCL_SECURE_NO_DEPRECATE 
+      //VC 8.0 СЂСѓРіР°РµС‚СЃСЏ РЅР° СЌС‚Сѓ СЃС‚СЂРѕС‡РєСѓ, РїРѕС‚РѕРјСѓ С‡С‚Рѕ С„СѓРЅРєС†РёСЏ РЅРµ РјРѕР¶РµС‚ РїСЂРѕРІРµСЂРёС‚СЊ РїРµСЂРµРїРѕР»РЅРµРЅРёРµ Р±СѓС„РµСЂР°
+      //РЅРµРѕР±С…РѕРґРёРјРѕ СЃРґРµР»Р°С‚СЊ #define _SCL_SECURE_NO_DEPRECATE 
       //http://groups.google.com/group/microsoft.public.vc.language/browse_thread/thread/635dd11faa9651f3/
       std::copy( m_WriteBuf.begin(), m_WriteBuf.begin() + SendSize, m_WriteBufTmp );
       m_WriteBuf.erase( m_WriteBuf.begin(), m_WriteBuf.begin() + SendSize ); 
@@ -144,7 +144,7 @@ public:
 
       APL_ASSERT(m_DataSending);
       
-      //Еслди мы не смогли отправить весь буфер повторяем попытку
+      //Р•СЃР»РґРё РјС‹ РЅРµ СЃРјРѕРіР»Рё РѕС‚РїСЂР°РІРёС‚СЊ РІРµСЃСЊ Р±СѓС„РµСЂ РїРѕРІС‚РѕСЂСЏРµРј РїРѕРїС‹С‚РєСѓ
       if( SendSize != Length )
       {
          pBuf += SendSize;
@@ -153,7 +153,7 @@ public:
          return true;
       }
 
-      //Всё отправили смотрим есть ли ещё данные для отправки
+      //Р’СЃС‘ РѕС‚РїСЂР°РІРёР»Рё СЃРјРѕС‚СЂРёРј РµСЃС‚СЊ Р»Рё РµС‰С‘ РґР°РЅРЅС‹Рµ РґР»СЏ РѕС‚РїСЂР°РІРєРё
       if( !m_WriteBuf.empty() )
       {
          Length = MoveToWriteBuffer();
@@ -179,7 +179,7 @@ public:
       pBuf = m_ReadBufTmp;
       Length = BufSize;
 
-      //Ищем перевод строки
+      //РС‰РµРј РїРµСЂРµРІРѕРґ СЃС‚СЂРѕРєРё
       for(;;)
       {
          TBuffer::size_type DelimPos = m_ReadBuf.find( szStringDelim );
@@ -188,7 +188,7 @@ public:
             break;
 
          {
-            //Ставим в очередь на отправку
+            //РЎС‚Р°РІРёРј РІ РѕС‡РµСЂРµРґСЊ РЅР° РѕС‚РїСЂР°РІРєСѓ
             TMutex::Lock Guard(m_WriteBufMutex);
             
             for( int i = 0; i < RepeatCount; ++i )
@@ -218,7 +218,7 @@ const size_t TConnectionServer<T>::StringDelimSize = APL_ARRSIZE(szStringDelim) 
 ///////////////////////////////////////////////////////////////////////////////
 
 
-//Клиент читает файл, отправляет его серверу и записывает пришедший ответ в другой файл
+//РљР»РёРµРЅС‚ С‡РёС‚Р°РµС‚ С„Р°Р№Р», РѕС‚РїСЂР°РІР»СЏРµС‚ РµРіРѕ СЃРµСЂРІРµСЂСѓ Рё Р·Р°РїРёСЃС‹РІР°РµС‚ РїСЂРёС€РµРґС€РёР№ РѕС‚РІРµС‚ РІ РґСЂСѓРіРѕР№ С„Р°Р№Р»
 template<class T>
 class TConnectionClient: public NWLib::AsyncIOConnection::TConnectionBasic<T>
 {
@@ -232,8 +232,8 @@ private:
    std::ifstream m_FlInp;
    std::ofstream m_FlOut;
 
-   int m_IdleTime;        //Время простоя
-   int m_ConnectTime;     //Время ожидания попыток подключения
+   int m_IdleTime;        //Р’СЂРµРјСЏ РїСЂРѕСЃС‚РѕСЏ
+   int m_ConnectTime;     //Р’СЂРµРјСЏ РѕР¶РёРґР°РЅРёСЏ РїРѕРїС‹С‚РѕРє РїРѕРґРєР»СЋС‡РµРЅРёСЏ
 
 private:
    
@@ -293,9 +293,9 @@ public:
       DEBUG_MSG_LOG1( "Client\t" << "OnEndSend " << ER );
    }
 
-   //Уведомление о том что сработал таймер ожидания операции чтения или записи
-   //Можно вызвать TryDisconnect, для завершения соединения или выполнить другие действия,
-   //например попытаться отправить запрос KEEP ALIVE (если не было ожидания операции записи)
+   //РЈРІРµРґРѕРјР»РµРЅРёРµ Рѕ С‚РѕРј С‡С‚Рѕ СЃСЂР°Р±РѕС‚Р°Р» С‚Р°Р№РјРµСЂ РѕР¶РёРґР°РЅРёСЏ РѕРїРµСЂР°С†РёРё С‡С‚РµРЅРёСЏ РёР»Рё Р·Р°РїРёСЃРё
+   //РњРѕР¶РЅРѕ РІС‹Р·РІР°С‚СЊ TryDisconnect, РґР»СЏ Р·Р°РІРµСЂС€РµРЅРёСЏ СЃРѕРµРґРёРЅРµРЅРёСЏ РёР»Рё РІС‹РїРѕР»РЅРёС‚СЊ РґСЂСѓРіРёРµ РґРµР№СЃС‚РІРёСЏ,
+   //РЅР°РїСЂРёРјРµСЂ РїРѕРїС‹С‚Р°С‚СЊСЃСЏ РѕС‚РїСЂР°РІРёС‚СЊ Р·Р°РїСЂРѕСЃ KEEP ALIVE (РµСЃР»Рё РЅРµ Р±С‹Р»Рѕ РѕР¶РёРґР°РЅРёСЏ РѕРїРµСЂР°С†РёРё Р·Р°РїРёСЃРё)
    void OnTimer() 
    {
       std::cout << "OnTimer " << MaxTimeIdle - m_IdleTime - 1 << std::endl;
@@ -304,8 +304,8 @@ public:
          TryDisconnect();
    }
 
-   //Уведомление в том что сработал таймер ожидания подключения к серверу
-   //Можно вызвать TryDisconnect, для завершения попыток подключения или выполнить другие действия
+   //РЈРІРµРґРѕРјР»РµРЅРёРµ РІ С‚РѕРј С‡С‚Рѕ СЃСЂР°Р±РѕС‚Р°Р» С‚Р°Р№РјРµСЂ РѕР¶РёРґР°РЅРёСЏ РїРѕРґРєР»СЋС‡РµРЅРёСЏ Рє СЃРµСЂРІРµСЂСѓ
+   //РњРѕР¶РЅРѕ РІС‹Р·РІР°С‚СЊ TryDisconnect, РґР»СЏ Р·Р°РІРµСЂС€РµРЅРёСЏ РїРѕРїС‹С‚РѕРє РїРѕРґРєР»СЋС‡РµРЅРёСЏ РёР»Рё РІС‹РїРѕР»РЅРёС‚СЊ РґСЂСѓРіРёРµ РґРµР№СЃС‚РІРёСЏ
    void OnConnectTimer()
    {
       std::cout << "OnConnectTimer " << MaxTimeIdle - m_ConnectTime - 1 << std::endl;
@@ -319,7 +319,7 @@ public:
       m_IdleTime = 0;
       std::cout << "SEND: " << std::string(pBuf, SendSize) << std::endl;
 
-      //Еслди мы не смогли отправить весь буфер повторяем попытку
+      //Р•СЃР»РґРё РјС‹ РЅРµ СЃРјРѕРіР»Рё РѕС‚РїСЂР°РІРёС‚СЊ РІРµСЃСЊ Р±СѓС„РµСЂ РїРѕРІС‚РѕСЂСЏРµРј РїРѕРїС‹С‚РєСѓ
       if( SendSize != Length )
       {
          pBuf += SendSize;
@@ -385,7 +385,7 @@ typedef NWLib::TTCPBasicClient<TConnectionClient, TGlobalData> TClient;
 NWLib::auto_ptr_ex<TServer> g_pServer;
 NWLib::auto_ptr_ex<TClient> g_pClient;
 
-//Обрабатываем прерывания с консоли
+//РћР±СЂР°Р±Р°С‚С‹РІР°РµРј РїСЂРµСЂС‹РІР°РЅРёСЏ СЃ РєРѕРЅСЃРѕР»Рё
 BOOL WINAPI ConsoleCtrlHandler( DWORD dwCtrlType )
 {
    switch (dwCtrlType)
@@ -411,10 +411,10 @@ int _tmain(int argc, _TCHAR* argv[])
    APL_TRY()
    {      
       if( argc < 2 )
-         APL_THROW( "Вызывайте с параметром '-S' для сервера и с параметром '-C' для клиента" );
+         APL_THROW( "Р’С‹Р·С‹РІР°Р№С‚Рµ СЃ РїР°СЂР°РјРµС‚СЂРѕРј '-S' РґР»СЏ СЃРµСЂРІРµСЂР° Рё СЃ РїР°СЂР°РјРµС‚СЂРѕРј '-C' РґР»СЏ РєР»РёРµРЅС‚Р°" );
 
       SetConsoleCtrlHandler(ConsoleCtrlHandler, TRUE);
-      std::cout << "Нажмите CTRL + C для остановки..." << std::endl;
+      std::cout << "РќР°Р¶РјРёС‚Рµ CTRL + C РґР»СЏ РѕСЃС‚Р°РЅРѕРІРєРё..." << std::endl;
 
       if( _stricmp( argv[1], "-S_Multi") == 0 )
       {
@@ -437,7 +437,7 @@ int _tmain(int argc, _TCHAR* argv[])
          TClient::TSettings Settings;
          
          if(argc < 3)
-            APL_THROW( "Необходимо указать IP Адресс" );
+            APL_THROW( "РќРµРѕР±С…РѕРґРёРјРѕ СѓРєР°Р·Р°С‚СЊ IP РђРґСЂРµСЃСЃ" );
 
          g_pClient.reset( new TClient );
 

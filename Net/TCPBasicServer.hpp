@@ -1,4 +1,4 @@
-#ifndef TCPBasicServer_HPP
+п»ї#ifndef TCPBasicServer_HPP
 #define TCPBasicServer_HPP
 
 #include "TCPInterfaces.hpp"
@@ -6,21 +6,21 @@
 #include "Detail/TCPBasicClientServerBaseConnection.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
-// Модуль содержит реализации TCP сервера и клиента работающего при помощи 
-// функций Berkly-socket и использующего функцию select для синхронизации 
-// ввода/вывода
-// Сейчас каждое соедиенение создаётся в отдельном потоке, но если при помощи
-// изменения класса TThreadsManager на сходный по интерфейсу но другой класс
-// можно реализаовать множество других стратегий, таких как "потоки вобще не 
-// создаются", "создаётся и работает постоянно определённое количество потоков",
-// и т.п.
-// Кроме того в последствии имеет смысл создать класс со схожим с TTCPBasicServer
-// интерфейсом, но работающем на Overlaped I/O
+// РњРѕРґСѓР»СЊ СЃРѕРґРµСЂР¶РёС‚ СЂРµР°Р»РёР·Р°С†РёРё TCP СЃРµСЂРІРµСЂР° Рё РєР»РёРµРЅС‚Р° СЂР°Р±РѕС‚Р°СЋС‰РµРіРѕ РїСЂРё РїРѕРјРѕС‰Рё 
+// С„СѓРЅРєС†РёР№ Berkly-socket Рё РёСЃРїРѕР»СЊР·СѓСЋС‰РµРіРѕ С„СѓРЅРєС†РёСЋ select РґР»СЏ СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё 
+// РІРІРѕРґР°/РІС‹РІРѕРґР°
+// РЎРµР№С‡Р°СЃ РєР°Р¶РґРѕРµ СЃРѕРµРґРёРµРЅРµРЅРёРµ СЃРѕР·РґР°С‘С‚СЃСЏ РІ РѕС‚РґРµР»СЊРЅРѕРј РїРѕС‚РѕРєРµ, РЅРѕ РµСЃР»Рё РїСЂРё РїРѕРјРѕС‰Рё
+// РёР·РјРµРЅРµРЅРёСЏ РєР»Р°СЃСЃР° TThreadsManager РЅР° СЃС…РѕРґРЅС‹Р№ РїРѕ РёРЅС‚РµСЂС„РµР№СЃСѓ РЅРѕ РґСЂСѓРіРѕР№ РєР»Р°СЃСЃ
+// РјРѕР¶РЅРѕ СЂРµР°Р»РёР·Р°РѕРІР°С‚СЊ РјРЅРѕР¶РµСЃС‚РІРѕ РґСЂСѓРіРёС… СЃС‚СЂР°С‚РµРіРёР№, С‚Р°РєРёС… РєР°Рє "РїРѕС‚РѕРєРё РІРѕР±С‰Рµ РЅРµ 
+// СЃРѕР·РґР°СЋС‚СЃСЏ", "СЃРѕР·РґР°С‘С‚СЃСЏ Рё СЂР°Р±РѕС‚Р°РµС‚ РїРѕСЃС‚РѕСЏРЅРЅРѕ РѕРїСЂРµРґРµР»С‘РЅРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕС‚РѕРєРѕРІ",
+// Рё С‚.Рї.
+// РљСЂРѕРјРµ С‚РѕРіРѕ РІ РїРѕСЃР»РµРґСЃС‚РІРёРё РёРјРµРµС‚ СЃРјС‹СЃР» СЃРѕР·РґР°С‚СЊ РєР»Р°СЃСЃ СЃРѕ СЃС…РѕР¶РёРј СЃ TTCPBasicServer
+// РёРЅС‚РµСЂС„РµР№СЃРѕРј, РЅРѕ СЂР°Р±РѕС‚Р°СЋС‰РµРј РЅР° Overlaped I/O
 ///////////////////////////////////////////////////////////////////////////////
 namespace NWLib
 {
 ///////////////////////////////////////////////////////////////////////////////
-// Реализация сервера
+// Р РµР°Р»РёР·Р°С†РёСЏ СЃРµСЂРІРµСЂР°
 ///////////////////////////////////////////////////////////////////////////////
 template< template <class FuncImplT> class ConnectionT = AsyncIOConnection::TConnectionBasic, class GlobalDataT = AsyncIOConnection::TGlobalDataBasic >
 class TTCPBasicServer: public Detail::TTCPBasicClientServerBase<Detail::TCPBasicServerTag, ConnectionT, GlobalDataT>
@@ -29,19 +29,19 @@ class TTCPBasicServer: public Detail::TTCPBasicClientServerBase<Detail::TCPBasic
    typedef typename TBase::TThreadsManager TThreadsManager;
 
 public:
-   //Конструктор
+   //РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
    TTCPBasicServer() {}
 
-   //Конструктор передающий параметр в GlobalDataT
+   //РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРµСЂРµРґР°СЋС‰РёР№ РїР°СЂР°РјРµС‚СЂ РІ GlobalDataT
    template <class InitDataT>
    TTCPBasicServer(const InitDataT &InitData): TBase(InitData) {}
 
-   //Запустить сервер с настройками Settings.
-   //Сервер начинает слушать порт и как только поступает входящие соединение создаёт ConnectionT
-   //который обслуживает соединение
-   //Поток вызвавший Run блокируется пока не будет вызван из другого потока метод Stop()
-   //ConnectionInitData - Параметр который передаётся конструктору производного от TConnectionBasic классу
-   //                     если нет необходимости передавать параметр можно, например, передать NullType
+   //Р—Р°РїСѓСЃС‚РёС‚СЊ СЃРµСЂРІРµСЂ СЃ РЅР°СЃС‚СЂРѕР№РєР°РјРё Settings.
+   //РЎРµСЂРІРµСЂ РЅР°С‡РёРЅР°РµС‚ СЃР»СѓС€Р°С‚СЊ РїРѕСЂС‚ Рё РєР°Рє С‚РѕР»СЊРєРѕ РїРѕСЃС‚СѓРїР°РµС‚ РІС…РѕРґСЏС‰РёРµ СЃРѕРµРґРёРЅРµРЅРёРµ СЃРѕР·РґР°С‘С‚ ConnectionT
+   //РєРѕС‚РѕСЂС‹Р№ РѕР±СЃР»СѓР¶РёРІР°РµС‚ СЃРѕРµРґРёРЅРµРЅРёРµ
+   //РџРѕС‚РѕРє РІС‹Р·РІР°РІС€РёР№ Run Р±Р»РѕРєРёСЂСѓРµС‚СЃСЏ РїРѕРєР° РЅРµ Р±СѓРґРµС‚ РІС‹Р·РІР°РЅ РёР· РґСЂСѓРіРѕРіРѕ РїРѕС‚РѕРєР° РјРµС‚РѕРґ Stop()
+   //ConnectionInitData - РџР°СЂР°РјРµС‚СЂ РєРѕС‚РѕСЂС‹Р№ РїРµСЂРµРґР°С‘С‚СЃСЏ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂСѓ РїСЂРѕРёР·РІРѕРґРЅРѕРіРѕ РѕС‚ TConnectionBasic РєР»Р°СЃСЃСѓ
+   //                     РµСЃР»Рё РЅРµС‚ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё РїРµСЂРµРґР°РІР°С‚СЊ РїР°СЂР°РјРµС‚СЂ РјРѕР¶РЅРѕ, РЅР°РїСЂРёРјРµСЂ, РїРµСЂРµРґР°С‚СЊ NullType
    template<class InitDataT>
    void Run( const TSettings &Settings, const InitDataT &InitData );
 };
@@ -55,7 +55,7 @@ void TTCPBasicServer<ConnectionT, GlobalDataT>::Run( const TSettings &Settings, 
    TThreadsManager ThreadsManager; 
    ThreadsManager.SetParent(this);
    
-   //Автоматически освобождает данные при выходе из функции
+   //РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РѕСЃРІРѕР±РѕР¶РґР°РµС‚ РґР°РЅРЅС‹Рµ РїСЂРё РІС‹С…РѕРґРµ РёР· С„СѓРЅРєС†РёРё
    struct THolder: public NonCopyable
    {
       SOCKET Socket;
@@ -78,7 +78,7 @@ void TTCPBasicServer<ConnectionT, GlobalDataT>::Run( const TSettings &Settings, 
       THolder Holder;
       sockaddr_in SockAddr;
 
-      //Заполняем данные об адресе и порте
+      //Р—Р°РїРѕР»РЅСЏРµРј РґР°РЅРЅС‹Рµ РѕР± Р°РґСЂРµСЃРµ Рё РїРѕСЂС‚Рµ
       SockAddr.sin_family = AF_INET;
 
       if( Settings.Adress.empty() )
@@ -103,7 +103,7 @@ void TTCPBasicServer<ConnectionT, GlobalDataT>::Run( const TSettings &Settings, 
       if ( listen( Holder.Socket, SOMAXCONN ) == SOCKET_ERROR )
          APL_THROW( _T("listen() failed: ") << WSAGetLastError() );
 
-      //Принимаем входящие соединения
+      //РџСЂРёРЅРёРјР°РµРј РІС…РѕРґСЏС‰РёРµ СЃРѕРµРґРёРЅРµРЅРёСЏ
       fd_set FdSetRead;
       TIMEVAL TimeVal;
       TIMEVAL *pTimeVal;
@@ -124,7 +124,7 @@ void TTCPBasicServer<ConnectionT, GlobalDataT>::Run( const TSettings &Settings, 
 
          if( SelectRet == 0 )
          {
-            //Не дождались соединения, проверим может необходимо остановиться
+            //РќРµ РґРѕР¶РґР°Р»РёСЃСЊ СЃРѕРµРґРёРЅРµРЅРёСЏ, РїСЂРѕРІРµСЂРёРј РјРѕР¶РµС‚ РЅРµРѕР±С…РѕРґРёРјРѕ РѕСЃС‚Р°РЅРѕРІРёС‚СЊСЃСЏ
             continue;
          }
 
@@ -146,7 +146,7 @@ void TTCPBasicServer<ConnectionT, GlobalDataT>::Run( const TSettings &Settings, 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Реализация Клиента
+// Р РµР°Р»РёР·Р°С†РёСЏ РљР»РёРµРЅС‚Р°
 ///////////////////////////////////////////////////////////////////////////////
 template< template <class FuncImplT> class ConnectionT = AsyncIOConnection::TConnectionBasic, class GlobalDataT = AsyncIOConnection::TGlobalDataBasic >
 class TTCPBasicClient: public Detail::TTCPBasicClientServerBase<Detail::TCPBasicClientTag, ConnectionT, GlobalDataT>
@@ -158,30 +158,30 @@ private:
    TThreadsManager m_ThreadsManager;
 
 public:
-   //Конструктор
+   //РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
    TTCPBasicClient() { m_ThreadsManager.SetParent(this); }
 
-   //Конструктор передающий параметр в GlobalDataT
+   //РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРµСЂРµРґР°СЋС‰РёР№ РїР°СЂР°РјРµС‚СЂ РІ GlobalDataT
    template <class InitDataT>
    TTCPBasicClient(const InitDataT &InitData): TBase(InitData) { m_ThreadsManager.SetParent(this); }
 
-   //Ждать пока все соединения закроются
+   //Р–РґР°С‚СЊ РїРѕРєР° РІСЃРµ СЃРѕРµРґРёРЅРµРЅРёСЏ Р·Р°РєСЂРѕСЋС‚СЃСЏ
    void Wait() 
    {
       m_ThreadsManager.Wait();
    }
 
-   //Уведомить все соединения что им нужно закрыться
+   //РЈРІРµРґРѕРјРёС‚СЊ РІСЃРµ СЃРѕРµРґРёРЅРµРЅРёСЏ С‡С‚Рѕ РёРј РЅСѓР¶РЅРѕ Р·Р°РєСЂС‹С‚СЊСЃСЏ
    void Stop()
    {
       m_ThreadsManager.Stop();
    }
 
-   //Попытаться соединится с сервером используя наcтройки Settings.
-   //Клиент пытается соединится c сервером в отдельном потоке вызывающий поток возвращает управление
-   //Уведомления о неудачных попытках соединения приходят в уведомлении AsyncIOConnection::TConnectionBasic::OnConnectTimer 
-   //ConnectionInitData - Параметр который передаётся конструктору производного от TConnectionBasic классу
-   //                     если нет необходимости передавать параметр можно, например, передать NullType
+   //РџРѕРїС‹С‚Р°С‚СЊСЃСЏ СЃРѕРµРґРёРЅРёС‚СЃСЏ СЃ СЃРµСЂРІРµСЂРѕРј РёСЃРїРѕР»СЊР·СѓСЏ РЅР°cС‚СЂРѕР№РєРё Settings.
+   //РљР»РёРµРЅС‚ РїС‹С‚Р°РµС‚СЃСЏ СЃРѕРµРґРёРЅРёС‚СЃСЏ c СЃРµСЂРІРµСЂРѕРј РІ РѕС‚РґРµР»СЊРЅРѕРј РїРѕС‚РѕРєРµ РІС‹Р·С‹РІР°СЋС‰РёР№ РїРѕС‚РѕРє РІРѕР·РІСЂР°С‰Р°РµС‚ СѓРїСЂР°РІР»РµРЅРёРµ
+   //РЈРІРµРґРѕРјР»РµРЅРёСЏ Рѕ РЅРµСѓРґР°С‡РЅС‹С… РїРѕРїС‹С‚РєР°С… СЃРѕРµРґРёРЅРµРЅРёСЏ РїСЂРёС…РѕРґСЏС‚ РІ СѓРІРµРґРѕРјР»РµРЅРёРё AsyncIOConnection::TConnectionBasic::OnConnectTimer 
+   //ConnectionInitData - РџР°СЂР°РјРµС‚СЂ РєРѕС‚РѕСЂС‹Р№ РїРµСЂРµРґР°С‘С‚СЃСЏ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂСѓ РїСЂРѕРёР·РІРѕРґРЅРѕРіРѕ РѕС‚ TConnectionBasic РєР»Р°СЃСЃСѓ
+   //                     РµСЃР»Рё РЅРµС‚ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё РїРµСЂРµРґР°РІР°С‚СЊ РїР°СЂР°РјРµС‚СЂ РјРѕР¶РЅРѕ, РЅР°РїСЂРёРјРµСЂ, РїРµСЂРµРґР°С‚СЊ NullType
    template<class InitDataT>
    void Connect( const TSettings &Settings, const InitDataT &ConnectionInitData );
 };
@@ -193,7 +193,7 @@ void TTCPBasicClient<ConnectionT, GlobalDataT>::Connect( const TSettings &Settin
 {
    TBase::TConnectionInitData<InitDataT> InitData(ConnectionInitData, Settings);
 
-   //Заполняем данные об адресе и порте
+   //Р—Р°РїРѕР»РЅСЏРµРј РґР°РЅРЅС‹Рµ РѕР± Р°РґСЂРµСЃРµ Рё РїРѕСЂС‚Рµ
    InitData.SockAddr.sin_family = AF_INET;
 
    if( Settings.Adress.empty() )

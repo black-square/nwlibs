@@ -1,13 +1,13 @@
-#ifndef FirstHeaderImplH
+п»ї#ifndef FirstHeaderImplH
 #define FirstHeaderImplH
 
 namespace NWLib
 {
    class TAplThrowException: public std::exception
    {
-      //BoundsChecker может ругаться на утечку памяти при бросании исключения с типом std::string
-      //и ключом компилятора Multi-threaded Debug /MTd
-      //Вообще BoundsCheсker работает намного лучше если установить ключ Multi-threaded Debug DLL (/MDd)
+      //BoundsChecker РјРѕР¶РµС‚ СЂСѓРіР°С‚СЊСЃСЏ РЅР° СѓС‚РµС‡РєСѓ РїР°РјСЏС‚Рё РїСЂРё Р±СЂРѕСЃР°РЅРёРё РёСЃРєР»СЋС‡РµРЅРёСЏ СЃ С‚РёРїРѕРј std::string
+      //Рё РєР»СЋС‡РѕРј РєРѕРјРїРёР»СЏС‚РѕСЂР° Multi-threaded Debug /MTd
+      //Р’РѕРѕР±С‰Рµ BoundsCheСЃker СЂР°Р±РѕС‚Р°РµС‚ РЅР°РјРЅРѕРіРѕ Р»СѓС‡С€Рµ РµСЃР»Рё СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РєР»СЋС‡ Multi-threaded Debug DLL (/MDd)
       std::string m_File;  
       int m_Line;
 
@@ -35,6 +35,6 @@ do {                    \
 } while(false)
 
 
-#include "Auxiliary.h" //Для функции Convert
+#include "Auxiliary.h" //Р”Р»СЏ С„СѓРЅРєС†РёРё Convert
 
 #endif

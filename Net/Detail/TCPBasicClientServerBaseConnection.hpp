@@ -1,8 +1,8 @@
-#ifndef TCPBasicClientServerBaseConnection_HPP
+п»ї#ifndef TCPBasicClientServerBaseConnection_HPP
 #define TCPBasicClientServerBaseConnection_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
-// Определение класса Detail::TTCPBasicClientServerBase::TConnection 
+// РћРїСЂРµРґРµР»РµРЅРёРµ РєР»Р°СЃСЃР° Detail::TTCPBasicClientServerBase::TConnection 
 ///////////////////////////////////////////////////////////////////////////////
 namespace NWLib
 {
@@ -17,7 +17,7 @@ class TTCPBasicClientServerBase<TagT, ConnectionT, GlobalDataT>::TConnection:
 {
    typedef ConnectionT<TTypeDefinition> TBase;
 
-   //Указатель и размер буфера
+   //РЈРєР°Р·Р°С‚РµР»СЊ Рё СЂР°Р·РјРµСЂ Р±СѓС„РµСЂР°
    struct TBufPtrReceive
    {
       char* pBuf;
@@ -35,30 +35,30 @@ class TTCPBasicClientServerBase<TagT, ConnectionT, GlobalDataT>::TConnection:
    };
 
 private:
-   TBufPtrReceive m_ReadBufPtr; //Текущий буфер чтения
-   TBufPtrSend m_WriteBufPtr;   //Текущий буфер записи
-   fd_set m_FdSetRead;          //Множество сокетов чтения функции select
-   fd_set m_FdSetWrite;         //Множество сокетов записи функции select
-   TIMEVAL m_TimeVal;           //Время ожидания чтения/записи
-   TIMEVAL *pTimeVal;           //Указатель на m_TimeVal или 0
-   bool m_Disconnect;           //Необходимо ли отключить соединение
+   TBufPtrReceive m_ReadBufPtr; //РўРµРєСѓС‰РёР№ Р±СѓС„РµСЂ С‡С‚РµРЅРёСЏ
+   TBufPtrSend m_WriteBufPtr;   //РўРµРєСѓС‰РёР№ Р±СѓС„РµСЂ Р·Р°РїРёСЃРё
+   fd_set m_FdSetRead;          //РњРЅРѕР¶РµСЃС‚РІРѕ СЃРѕРєРµС‚РѕРІ С‡С‚РµРЅРёСЏ С„СѓРЅРєС†РёРё select
+   fd_set m_FdSetWrite;         //РњРЅРѕР¶РµСЃС‚РІРѕ СЃРѕРєРµС‚РѕРІ Р·Р°РїРёСЃРё С„СѓРЅРєС†РёРё select
+   TIMEVAL m_TimeVal;           //Р’СЂРµРјСЏ РѕР¶РёРґР°РЅРёСЏ С‡С‚РµРЅРёСЏ/Р·Р°РїРёСЃРё
+   TIMEVAL *pTimeVal;           //РЈРєР°Р·Р°С‚РµР»СЊ РЅР° m_TimeVal РёР»Рё 0
+   bool m_Disconnect;           //РќРµРѕР±С…РѕРґРёРјРѕ Р»Рё РѕС‚РєР»СЋС‡РёС‚СЊ СЃРѕРµРґРёРЅРµРЅРёРµ
 
 private:
-   TConnection(); //Шаблонный конструктор не замещает конструктор по умолчанию
+   TConnection(); //РЁР°Р±Р»РѕРЅРЅС‹Р№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РЅРµ Р·Р°РјРµС‰Р°РµС‚ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 
 private:
-   //Функция для Tag == TCPBasicClientTag открывает сокет и вызывает ProcessWithOpenSocket,
-   //а для Tag == TCPBasicServerTag сразу вызыввает ProcessWithOpenSocket (т.к. в этом случае
-   //сокет полностью подготовлен)
+   //Р¤СѓРЅРєС†РёСЏ РґР»СЏ Tag == TCPBasicClientTag РѕС‚РєСЂС‹РІР°РµС‚ СЃРѕРєРµС‚ Рё РІС‹Р·С‹РІР°РµС‚ ProcessWithOpenSocket,
+   //Р° РґР»СЏ Tag == TCPBasicServerTag СЃСЂР°Р·Сѓ РІС‹Р·С‹РІРІР°РµС‚ ProcessWithOpenSocket (С‚.Рє. РІ СЌС‚РѕРј СЃР»СѓС‡Р°Рµ
+   //СЃРѕРєРµС‚ РїРѕР»РЅРѕСЃС‚СЊСЋ РїРѕРґРіРѕС‚РѕРІР»РµРЅ)
    void RunImpl( TGlobalData &GlobalData, TShutdownPtr pShutdown, TCPBasicServerTag );
    void RunImpl( TGlobalData &GlobalData, TShutdownPtr pShutdown, TCPBasicClientTag );
 
-   //Функция управляет чтением и записью из/в сокет. Поведение сходно как для сервера так и для клиента
+   //Р¤СѓРЅРєС†РёСЏ СѓРїСЂР°РІР»СЏРµС‚ С‡С‚РµРЅРёРµРј Рё Р·Р°РїРёСЃСЊСЋ РёР·/РІ СЃРѕРєРµС‚. РџРѕРІРµРґРµРЅРёРµ СЃС…РѕРґРЅРѕ РєР°Рє РґР»СЏ СЃРµСЂРІРµСЂР° С‚Р°Рє Рё РґР»СЏ РєР»РёРµРЅС‚Р°
    void ProcessWithOpenSocket( TGlobalData &GlobalData, TShutdownPtr pShutdown );
 
 public:
-   //Конструктор 
-   //InitData - Данные инициализации соединения
+   //РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ 
+   //InitData - Р”Р°РЅРЅС‹Рµ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё СЃРѕРµРґРёРЅРµРЅРёСЏ
    template<class InitDataT>
    TConnection( const TConnectionInitData<InitDataT> &InitData, TGlobalData &GlobalData ): 
    TConnectionBase(InitData.Socket, GlobalData, InitData), TBase( InitData.m_InitData ),  pTimeVal(0), m_Disconnect(false)
@@ -67,21 +67,21 @@ public:
       SetCloseTimer( InitData.SettingsRef.DefaultCloseWaitTime );
    }
 
-   //Установить таймер ожидания ввода/вывода
+   //РЈСЃС‚Р°РЅРѕРІРёС‚СЊ С‚Р°Р№РјРµСЂ РѕР¶РёРґР°РЅРёСЏ РІРІРѕРґР°/РІС‹РІРѕРґР°
    void SetIOTimer( DWORD dwMilliseconds )
    {
       TimeConvert(dwMilliseconds, m_TimeVal, pTimeVal);
    }
 
-   //Установить время ожидания передачи данных перед закрытием соединения
+   //РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РІСЂРµРјСЏ РѕР¶РёРґР°РЅРёСЏ РїРµСЂРµРґР°С‡Рё РґР°РЅРЅС‹С… РїРµСЂРµРґ Р·Р°РєСЂС‹С‚РёРµРј СЃРѕРµРґРёРЅРµРЅРёСЏ
    void SetCloseTimer( DWORD dwMilliseconds )
    {
       /*
-      If SO_DONTLINGER is enabled (the default setting) it always returns immediately—connection is gracefully closed in the background. 
-      If SO_LINGER is enabled with a zero time-out: it always returns immediately —connection is reset/terminated. 
+      If SO_DONTLINGER is enabled (the default setting) it always returns immediatelyвЂ”connection is gracefully closed in the background. 
+      If SO_LINGER is enabled with a zero time-out: it always returns immediately вЂ”connection is reset/terminated. 
       If SO_LINGER is enabled with a nonzero time-out: 
-      – with a blocking socket, it blocks until all data sent or time-out expires.
-      – with a nonblocking socket, it returns immediately indicating failure.
+      вЂ“ with a blocking socket, it blocks until all data sent or time-out expires.
+      вЂ“ with a nonblocking socket, it returns immediately indicating failure.
       */
       const u_short TimeInSec = static_cast<u_short>(dwMilliseconds / 1000);
 
@@ -91,53 +91,53 @@ public:
          APL_THROW( _T("setsockopt(SO_LINGER) failed: ") << WSAGetLastError() );
    }
 
-   //Отключится от соединения при следующем срабатыванию таймера ввода/вывода
+   //РћС‚РєР»СЋС‡РёС‚СЃСЏ РѕС‚ СЃРѕРµРґРёРЅРµРЅРёСЏ РїСЂРё СЃР»РµРґСѓСЋС‰РµРј СЃСЂР°Р±Р°С‚С‹РІР°РЅРёСЋ С‚Р°Р№РјРµСЂР° РІРІРѕРґР°/РІС‹РІРѕРґР°
    void TryDisconnect()
    {
       m_Disconnect = true;
    }
 
-   //Находится ли соединение в состоянии отключения.
-   //Т.е. пользователь вызвал метод TryDisconnect и вызов методов TrySend и TryReceive не
-   //приведёт к передаче или получению данных
+   //РќР°С…РѕРґРёС‚СЃСЏ Р»Рё СЃРѕРµРґРёРЅРµРЅРёРµ РІ СЃРѕСЃС‚РѕСЏРЅРёРё РѕС‚РєР»СЋС‡РµРЅРёСЏ.
+   //Рў.Рµ. РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РІС‹Р·РІР°Р» РјРµС‚РѕРґ TryDisconnect Рё РІС‹Р·РѕРІ РјРµС‚РѕРґРѕРІ TrySend Рё TryReceive РЅРµ
+   //РїСЂРёРІРµРґС‘С‚ Рє РїРµСЂРµРґР°С‡Рµ РёР»Рё РїРѕР»СѓС‡РµРЅРёСЋ РґР°РЅРЅС‹С…
    bool IsDisconnecting() const
    {
       return m_Disconnect;
    }
 
-   //Установить указатель на буфер чтения
+   //РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° Р±СѓС„РµСЂ С‡С‚РµРЅРёСЏ
    void TryReceive( char* pBuf, int Length )
    {
       APL_ASSERT_PTR( pBuf );
       APL_ASSERT( Length > 0 );
 
-      //Нельзя быть уверенными что m_ReadBufPtr.pBuf равен нулю т.к. TryReceive может быть вызван 
-      //в другом потоке (Например в потоке OnSend) пока поток вызвавший OnReceive пытается вернуть false
+      //РќРµР»СЊР·СЏ Р±С‹С‚СЊ СѓРІРµСЂРµРЅРЅС‹РјРё С‡С‚Рѕ m_ReadBufPtr.pBuf СЂР°РІРµРЅ РЅСѓР»СЋ С‚.Рє. TryReceive РјРѕР¶РµС‚ Р±С‹С‚СЊ РІС‹Р·РІР°РЅ 
+      //РІ РґСЂСѓРіРѕРј РїРѕС‚РѕРєРµ (РќР°РїСЂРёРјРµСЂ РІ РїРѕС‚РѕРєРµ OnSend) РїРѕРєР° РїРѕС‚РѕРє РІС‹Р·РІР°РІС€РёР№ OnReceive РїС‹С‚Р°РµС‚СЃСЏ РІРµСЂРЅСѓС‚СЊ false
 
       m_ReadBufPtr.pBuf = pBuf;
       m_ReadBufPtr.Length = Length;
    }
 
-   //Установить указатель на буфер записи
+   //РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° Р±СѓС„РµСЂ Р·Р°РїРёСЃРё
    void TrySend( const char* pBuf, int Length )
    {
       APL_ASSERT_PTR( pBuf );
       APL_ASSERT( Length > 0 );
 
-      //Нельзя быть уверенными что m_WriteBufPtr.pBuf равен нулю т.к. TrySend может быть вызван 
-      //в другом потоке (Например в потоке OnReceive) пока поток вызвавший OnSend пытается вернуть false
+      //РќРµР»СЊР·СЏ Р±С‹С‚СЊ СѓРІРµСЂРµРЅРЅС‹РјРё С‡С‚Рѕ m_WriteBufPtr.pBuf СЂР°РІРµРЅ РЅСѓР»СЋ С‚.Рє. TrySend РјРѕР¶РµС‚ Р±С‹С‚СЊ РІС‹Р·РІР°РЅ 
+      //РІ РґСЂСѓРіРѕРј РїРѕС‚РѕРєРµ (РќР°РїСЂРёРјРµСЂ РІ РїРѕС‚РѕРєРµ OnReceive) РїРѕРєР° РїРѕС‚РѕРє РІС‹Р·РІР°РІС€РёР№ OnSend РїС‹С‚Р°РµС‚СЃСЏ РІРµСЂРЅСѓС‚СЊ false
 
       m_WriteBufPtr.pBuf = pBuf;
       m_WriteBufPtr.Length = Length;
    }
 
-   //Перестать слушать порт
+   //РџРµСЂРµСЃС‚Р°С‚СЊ СЃР»СѓС€Р°С‚СЊ РїРѕСЂС‚
    void StopWaitConnection()
    {
       TConnectionBase::GetGlobalData().GetParent()->StopWaitConnection();
    }
 
-   //Завершить отправку данных
+   //Р—Р°РІРµСЂС€РёС‚СЊ РѕС‚РїСЂР°РІРєСѓ РґР°РЅРЅС‹С…
    void EndSend()
    {
       if( shutdown(TConnectionBase::GetSocket(), SD_SEND) == SOCKET_ERROR  )
@@ -147,7 +147,7 @@ public:
    GlobalDataT &GetGlobalData() { return *TConnectionBase::GetGlobalData().GetParent(); }
    const GlobalDataT &GetGlobalData() const { return *TConnectionBase::GetGlobalData().GetParent(); }
 
-   //Функция потока
+   //Р¤СѓРЅРєС†РёСЏ РїРѕС‚РѕРєР°
    DWORD Run( TGlobalData &GlobalData, TShutdownPtr pShutdown );
 };
 
@@ -155,7 +155,7 @@ public:
 template < class TagT, template <class FuncImplT> class ConnectionT, class GlobalDataT >
 void TTCPBasicClientServerBase<TagT, ConnectionT, GlobalDataT>::TConnection::RunImpl( TGlobalData &GlobalData, TShutdownPtr pShutdown, TCPBasicClientTag )
 {
-   //Сейчас нам необходимо попытаться установить соединение с удалённым хостом
+   //РЎРµР№С‡Р°СЃ РЅР°Рј РЅРµРѕР±С…РѕРґРёРјРѕ РїРѕРїС‹С‚Р°С‚СЊСЃСЏ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ СЃРѕРµРґРёРЅРµРЅРёРµ СЃ СѓРґР°Р»С‘РЅРЅС‹Рј С…РѕСЃС‚РѕРј
    fd_set FdSetWrite;
    TIMEVAL TimeVal;
    TIMEVAL *pTimeVal;
@@ -163,7 +163,7 @@ void TTCPBasicClientServerBase<TagT, ConnectionT, GlobalDataT>::TConnection::Run
 
    Detail::TimeConvert( TConnectionBase::GetBaseInitData().ConnectionWaitTime, TimeVal, pTimeVal );
 
-   //Устанавливаем режим non-blocking
+   //РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј СЂРµР¶РёРј non-blocking
    u_long BlockingMode = 1;
 
    if( ioctlsocket(TConnectionBase::GetSocket(), FIONBIO, &BlockingMode) == SOCKET_ERROR  )
@@ -190,9 +190,9 @@ void TTCPBasicClientServerBase<TagT, ConnectionT, GlobalDataT>::TConnection::Run
 
       APL_ASSERT( FD_ISSET(TConnectionBase::GetSocket(), &FdSetWrite) );
 
-      //Если сокет готов для записи, то соединение установлено 
+      //Р•СЃР»Рё СЃРѕРєРµС‚ РіРѕС‚РѕРІ РґР»СЏ Р·Р°РїРёСЃРё, С‚Рѕ СЃРѕРµРґРёРЅРµРЅРёРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅРѕ 
 
-      BlockingMode = 0; //Возвращаем режим блокирования
+      BlockingMode = 0; //Р’РѕР·РІСЂР°С‰Р°РµРј СЂРµР¶РёРј Р±Р»РѕРєРёСЂРѕРІР°РЅРёСЏ
       if( ioctlsocket(TConnectionBase::GetSocket(), FIONBIO, &BlockingMode) == SOCKET_ERROR  )
          APL_THROW( _T("ioctlsocket() failed: ") << WSAGetLastError() );
 
@@ -219,7 +219,7 @@ void TTCPBasicClientServerBase<TagT, ConnectionT, GlobalDataT>::TConnection::Pro
 
    while( *pShutdown != TRUE && !m_Disconnect && (m_ReadBufPtr.pBuf != 0 || m_WriteBufPtr.pBuf != 0) )
    {
-      //Настраиваем select
+      //РќР°СЃС‚СЂР°РёРІР°РµРј select
       FD_ZERO(&m_FdSetRead);
       FD_ZERO(&m_FdSetWrite);
 
@@ -236,14 +236,14 @@ void TTCPBasicClientServerBase<TagT, ConnectionT, GlobalDataT>::TConnection::Pro
 
       if( Rezult == 0 )
       {
-         //Сработал Таймер
+         //РЎСЂР°Р±РѕС‚Р°Р» РўР°Р№РјРµСЂ
          TBase::OnTimer();
          continue;
       }
 
       if( FD_ISSET(TConnectionBase::GetSocket(), &m_FdSetRead) )
       {
-         //Попробуем прочитать данные
+         //РџРѕРїСЂРѕР±СѓРµРј РїСЂРѕС‡РёС‚Р°С‚СЊ РґР°РЅРЅС‹Рµ
          Rezult = recv( TConnectionBase::GetSocket(), m_ReadBufPtr.pBuf, m_ReadBufPtr.Length, 0  );
 
          if( Rezult == SOCKET_ERROR )
@@ -267,7 +267,7 @@ void TTCPBasicClientServerBase<TagT, ConnectionT, GlobalDataT>::TConnection::Pro
 
       if( FD_ISSET(TConnectionBase::GetSocket(), &m_FdSetWrite) )
       {
-         //Попробуем отправить данные
+         //РџРѕРїСЂРѕР±СѓРµРј РѕС‚РїСЂР°РІРёС‚СЊ РґР°РЅРЅС‹Рµ
          Rezult = send( TConnectionBase::GetSocket(), m_WriteBufPtr.pBuf, m_WriteBufPtr.Length, 0  );
 
          if( Rezult == SOCKET_ERROR )

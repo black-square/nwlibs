@@ -1,22 +1,22 @@
-//Автор: Шестеркин Дмитрий(NW) 2005
+п»ї//РђРІС‚РѕСЂ: РЁРµСЃС‚РµСЂРєРёРЅ Р”РјРёС‚СЂРёР№(NW) 2005
 
 #ifndef Auxiliary_H
 #define Auxiliary_H
 
 ///////////////////////////////////////////////////////////////////////////////
-// Модуль содержит вспомогательные функции и макросы системного характера
+// РњРѕРґСѓР»СЊ СЃРѕРґРµСЂР¶РёС‚ РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ С„СѓРЅРєС†РёРё Рё РјР°РєСЂРѕСЃС‹ СЃРёСЃС‚РµРјРЅРѕРіРѕ С…Р°СЂР°РєС‚РµСЂР°
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace NWLib {
 
-//Преобразования строк char и wchar_t друг в друга
+//РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ СЃС‚СЂРѕРє char Рё wchar_t РґСЂСѓРі РІ РґСЂСѓРіР°
 std::wstring &Convert(const std::string &In, std::wstring &Out);
 std::string &Convert(const std::wstring &In, std::string &Out);
 
-//Заменить следующие две функции на
+//Р—Р°РјРµРЅРёС‚СЊ СЃР»РµРґСѓСЋС‰РёРµ РґРІРµ С„СѓРЅРєС†РёРё РЅР°
 //template< class T > inline T &Convert(const T &In, T &Out){ return Out = In; }
-//нельзя т.к. при вызове Convert возможно неявное преобразование типов, и шаблонная 
-//функция вызвана не будет
+//РЅРµР»СЊР·СЏ С‚.Рє. РїСЂРё РІС‹Р·РѕРІРµ Convert РІРѕР·РјРѕР¶РЅРѕ РЅРµСЏРІРЅРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ С‚РёРїРѕРІ, Рё С€Р°Р±Р»РѕРЅРЅР°СЏ 
+//С„СѓРЅРєС†РёСЏ РІС‹Р·РІР°РЅР° РЅРµ Р±СѓРґРµС‚
 inline std::wstring &Convert(const std::wstring &In, std::wstring &Out){ return Out = In; }
 inline std::string &Convert(const std::string &In, std::string &Out){ return Out = In; }
 
@@ -37,23 +37,23 @@ namespace Detail
    };
 }
 
-//Возвращение объекта по значению, с созданием внутреннего буфера. Медленная операция.
+//Р’РѕР·РІСЂР°С‰РµРЅРёРµ РѕР±СЉРµРєС‚Р° РїРѕ Р·РЅР°С‡РµРЅРёСЋ, СЃ СЃРѕР·РґР°РЅРёРµРј РІРЅСѓС‚СЂРµРЅРЅРµРіРѕ Р±СѓС„РµСЂР°. РњРµРґР»РµРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ.
 template< class TOut, class TIn >
 inline typename Detail::ConvertToBufImpl<TIn, TOut>::TRetVal 
    ConvertToBuf( const TIn &In ){ return Detail::ConvertToBufImpl<TIn, TOut>::F(In); }
 
-//Функции нужны для поддержания совместимости, лучше пользоваться ConvertToBuf
+//Р¤СѓРЅРєС†РёРё РЅСѓР¶РЅС‹ РґР»СЏ РїРѕРґРґРµСЂР¶Р°РЅРёСЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё, Р»СѓС‡С€Рµ РїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ ConvertToBuf
 inline std::wstring ConvertToWide(const std::string &In){ return ConvertToBuf<std::wstring>(In); }
 inline const std::wstring &ConvertToWide(const std::wstring &In){ return ConvertToBuf<std::wstring>(In); }
 inline std::string ConvertToNarrow(const std::wstring &In){ return ConvertToBuf<std::string>(In); }
 inline const std::string &ConvertToNarrow(const std::string &In){ return ConvertToBuf<std::string>(In); }
 
-//Конвертировать строку в нижний регистр, Src и Dst могут совпадать
+//РљРѕРЅРІРµСЂС‚РёСЂРѕРІР°С‚СЊ СЃС‚СЂРѕРєСѓ РІ РЅРёР¶РЅРёР№ СЂРµРіРёСЃС‚СЂ, Src Рё Dst РјРѕРіСѓС‚ СЃРѕРІРїР°РґР°С‚СЊ
 std::wstring &ToLower( const std::wstring &Src, std::wstring &Dst );
 std::string &ToLower( const std::string &Src, std::string &Dst );
 
-//Конвертировить строку в std::basic_string<TCHAR>
-//Просто сокращаённая запись ConvertToBuf< std::basic_string<TCHAR> >(In);
+//РљРѕРЅРІРµСЂС‚РёСЂРѕРІРёС‚СЊ СЃС‚СЂРѕРєСѓ РІ std::basic_string<TCHAR>
+//РџСЂРѕСЃС‚Рѕ СЃРѕРєСЂР°С‰Р°С‘РЅРЅР°СЏ Р·Р°РїРёСЃСЊ ConvertToBuf< std::basic_string<TCHAR> >(In);
 inline Detail::ConvertToBufImpl< std::wstring, std::basic_string<TCHAR> >::TRetVal 
    ConvertToTStr( const std::wstring &In ){ return ConvertToBuf< std::basic_string<TCHAR> >(In); }
 
@@ -62,20 +62,20 @@ inline Detail::ConvertToBufImpl< std::string, std::basic_string<TCHAR> >::TRetVa
 
 ///////////////////////////////////////////////////////////////////////////////
 
-//Путь к текущему модулю
-//В конце сохраняется '\\'
+//РџСѓС‚СЊ Рє С‚РµРєСѓС‰РµРјСѓ РјРѕРґСѓР»СЋ
+//Р’ РєРѕРЅС†Рµ СЃРѕС…СЂР°РЅСЏРµС‚СЃСЏ '\\'
 std::basic_string<TCHAR> GetExeDirPath( HMODULE hModule = NULL );
 
-//Имя компьютера
+//РРјСЏ РєРѕРјРїСЊСЋС‚РµСЂР°
 std::basic_string<TCHAR> GetComputerName();
 
-//Строка с текущем временем
+//РЎС‚СЂРѕРєР° СЃ С‚РµРєСѓС‰РµРј РІСЂРµРјРµРЅРµРј
 std::basic_string<TCHAR> GetTimeStampString();
 
-// Возвращает текстовое описание HRESULT
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ С‚РµРєСЃС‚РѕРІРѕРµ РѕРїРёСЃР°РЅРёРµ HRESULT
 std::basic_string<TCHAR> GetHRErrorInfo( HRESULT hr );
 
-// Возвращает текстовое описание DWORD
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ С‚РµРєСЃС‚РѕРІРѕРµ РѕРїРёСЃР°РЅРёРµ DWORD
 inline std::basic_string<TCHAR> GetDWErrorInfo( DWORD dwErr )
 {
    return GetHRErrorInfo( HRESULT_FROM_WIN32(dwErr) );

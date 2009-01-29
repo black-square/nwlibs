@@ -1,71 +1,71 @@
-#ifndef HTTPBasicConnection_HPP
+п»ї#ifndef HTTPBasicConnection_HPP
 #define HTTPBasicConnection_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
-// Реализация базового класса для THTTPClient::TConnection и THTTPServer::TConnection
-// в котором реализуются общшие функции для сервера и клиента
+// Р РµР°Р»РёР·Р°С†РёСЏ Р±Р°Р·РѕРІРѕРіРѕ РєР»Р°СЃСЃР° РґР»СЏ THTTPClient::TConnection Рё THTTPServer::TConnection
+// РІ РєРѕС‚РѕСЂРѕРј СЂРµР°Р»РёР·СѓСЋС‚СЃСЏ РѕР±С‰С€РёРµ С„СѓРЅРєС†РёРё РґР»СЏ СЃРµСЂРІРµСЂР° Рё РєР»РёРµРЅС‚Р°
 ///////////////////////////////////////////////////////////////////////////////
 namespace NWLib
 {
 namespace Detail
 {
 ///////////////////////////////////////////////////////////////////////////////
-// Общие детали в реализациях TServerTraits и TClientTraits
+// РћР±С‰РёРµ РґРµС‚Р°Р»Рё РІ СЂРµР°Р»РёР·Р°С†РёСЏС… TServerTraits Рё TClientTraits
 ///////////////////////////////////////////////////////////////////////////////
 template< class ConnectionT >
 class TTraitsBasic
 {
 protected:
-   //Возвр значение функции TStringParseFunc
+   //Р’РѕР·РІСЂ Р·РЅР°С‡РµРЅРёРµ С„СѓРЅРєС†РёРё TStringParseFunc
    enum TStringParseResult
    {
-      SPRContinue,            //Продолжаем обработку строк в том же состояниии чтения      
-      SPRChangeState,         //Изменилось состояние чтения необходимо выйти из функции TOnReceiveFunc, но чтение не прерывать      
-      SPRStopReading          //Необходимо прервать чтение      
+      SPRContinue,            //РџСЂРѕРґРѕР»Р¶Р°РµРј РѕР±СЂР°Р±РѕС‚РєСѓ СЃС‚СЂРѕРє РІ С‚РѕРј Р¶Рµ СЃРѕСЃС‚РѕСЏРЅРёРёРё С‡С‚РµРЅРёСЏ      
+      SPRChangeState,         //РР·РјРµРЅРёР»РѕСЃСЊ СЃРѕСЃС‚РѕСЏРЅРёРµ С‡С‚РµРЅРёСЏ РЅРµРѕР±С…РѕРґРёРјРѕ РІС‹Р№С‚Рё РёР· С„СѓРЅРєС†РёРё TOnReceiveFunc, РЅРѕ С‡С‚РµРЅРёРµ РЅРµ РїСЂРµСЂС‹РІР°С‚СЊ      
+      SPRStopReading          //РќРµРѕР±С…РѕРґРёРјРѕ РїСЂРµСЂРІР°С‚СЊ С‡С‚РµРЅРёРµ      
    };
 
-   //Тип функции обработки для каждого режима разбора строки заголовка
-   //После нахождении в заголовке строки она передаётся в текущую функцию обработки (без \r\n)
-   //которая должна корректно обработать её и возможно поменять текущую функцию обработки строк заголовка
-   //или даже сам режим чтения.
+   //РўРёРї С„СѓРЅРєС†РёРё РѕР±СЂР°Р±РѕС‚РєРё РґР»СЏ РєР°Р¶РґРѕРіРѕ СЂРµР¶РёРјР° СЂР°Р·Р±РѕСЂР° СЃС‚СЂРѕРєРё Р·Р°РіРѕР»РѕРІРєР°
+   //РџРѕСЃР»Рµ РЅР°С…РѕР¶РґРµРЅРёРё РІ Р·Р°РіРѕР»РѕРІРєРµ СЃС‚СЂРѕРєРё РѕРЅР° РїРµСЂРµРґР°С‘С‚СЃСЏ РІ С‚РµРєСѓС‰СѓСЋ С„СѓРЅРєС†РёСЋ РѕР±СЂР°Р±РѕС‚РєРё (Р±РµР· \r\n)
+   //РєРѕС‚РѕСЂР°СЏ РґРѕР»Р¶РЅР° РєРѕСЂСЂРµРєС‚РЅРѕ РѕР±СЂР°Р±РѕС‚Р°С‚СЊ РµС‘ Рё РІРѕР·РјРѕР¶РЅРѕ РїРѕРјРµРЅСЏС‚СЊ С‚РµРєСѓС‰СѓСЋ С„СѓРЅРєС†РёСЋ РѕР±СЂР°Р±РѕС‚РєРё СЃС‚СЂРѕРє Р·Р°РіРѕР»РѕРІРєР°
+   //РёР»Рё РґР°Р¶Рµ СЃР°Рј СЂРµР¶РёРј С‡С‚РµРЅРёСЏ.
    typedef TStringParseResult (ConnectionT::*TStringParseFunc)( const char *pBegin, const char *pEnd );
 
-   //Тип функции для каждого из режимов отправки данных
-   //pBuf   - Ссылка на указатель на буффер для следующей операции записи
-   //Length - Ссылка на размер данных для следующей операции записи
-   //SendSize - Количество отправленных байт (0, Length] 
-   //Возвр  - true:  Необходимо выполнить очередную операцию записи c параметрами pBuf и Length, 
-   //                после окончания которой будет вновь вызван OnSend
-   //         false: Необходимо закончить запись 
+   //РўРёРї С„СѓРЅРєС†РёРё РґР»СЏ РєР°Р¶РґРѕРіРѕ РёР· СЂРµР¶РёРјРѕРІ РѕС‚РїСЂР°РІРєРё РґР°РЅРЅС‹С…
+   //pBuf   - РЎСЃС‹Р»РєР° РЅР° СѓРєР°Р·Р°С‚РµР»СЊ РЅР° Р±СѓС„С„РµСЂ РґР»СЏ СЃР»РµРґСѓСЋС‰РµР№ РѕРїРµСЂР°С†РёРё Р·Р°РїРёСЃРё
+   //Length - РЎСЃС‹Р»РєР° РЅР° СЂР°Р·РјРµСЂ РґР°РЅРЅС‹С… РґР»СЏ СЃР»РµРґСѓСЋС‰РµР№ РѕРїРµСЂР°С†РёРё Р·Р°РїРёСЃРё
+   //SendSize - РљРѕР»РёС‡РµСЃС‚РІРѕ РѕС‚РїСЂР°РІР»РµРЅРЅС‹С… Р±Р°Р№С‚ (0, Length] 
+   //Р’РѕР·РІСЂ  - true:  РќРµРѕР±С…РѕРґРёРјРѕ РІС‹РїРѕР»РЅРёС‚СЊ РѕС‡РµСЂРµРґРЅСѓСЋ РѕРїРµСЂР°С†РёСЋ Р·Р°РїРёСЃРё c РїР°СЂР°РјРµС‚СЂР°РјРё pBuf Рё Length, 
+   //                РїРѕСЃР»Рµ РѕРєРѕРЅС‡Р°РЅРёСЏ РєРѕС‚РѕСЂРѕР№ Р±СѓРґРµС‚ РІРЅРѕРІСЊ РІС‹Р·РІР°РЅ OnSend
+   //         false: РќРµРѕР±С…РѕРґРёРјРѕ Р·Р°РєРѕРЅС‡РёС‚СЊ Р·Р°РїРёСЃСЊ 
    typedef bool (ConnectionT::*TOnSendFunc)( int SendSize, const char *&pBuf, int &Length );
 };
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Параметр шаблона TraitsT для THTTPBasicConnection
-// Функциональность сервера
+// РџР°СЂР°РјРµС‚СЂ С€Р°Р±Р»РѕРЅР° TraitsT РґР»СЏ THTTPBasicConnection
+// Р¤СѓРЅРєС†РёРѕРЅР°Р»СЊРЅРѕСЃС‚СЊ СЃРµСЂРІРµСЂР°
 ///////////////////////////////////////////////////////////////////////////////
 template< class ConnectionT >
 class TServerTraits: public TTraitsBasic< ConnectionT >
 {
 protected:
-   //Текущий режим обработки прочитанной строки заголовка
+   //РўРµРєСѓС‰РёР№ СЂРµР¶РёРј РѕР±СЂР°Р±РѕС‚РєРё РїСЂРѕС‡РёС‚Р°РЅРЅРѕР№ СЃС‚СЂРѕРєРё Р·Р°РіРѕР»РѕРІРєР°
    enum TStringParseMode
    {
-      SPMFirstLine,               //Чтение первой строки запроса
-      SPMGETHeader,               //Чтение остальных строк запроса GET
-      SPMPOSTHeader,              //Чтение остальных строк запроса POST
+      SPMFirstLine,               //Р§С‚РµРЅРёРµ РїРµСЂРІРѕР№ СЃС‚СЂРѕРєРё Р·Р°РїСЂРѕСЃР°
+      SPMGETHeader,               //Р§С‚РµРЅРёРµ РѕСЃС‚Р°Р»СЊРЅС‹С… СЃС‚СЂРѕРє Р·Р°РїСЂРѕСЃР° GET
+      SPMPOSTHeader,              //Р§С‚РµРЅРёРµ РѕСЃС‚Р°Р»СЊРЅС‹С… СЃС‚СЂРѕРє Р·Р°РїСЂРѕСЃР° POST
 
       SPMCount
    };
 
-   //Текущий режим записи данных
+   //РўРµРєСѓС‰РёР№ СЂРµР¶РёРј Р·Р°РїРёСЃРё РґР°РЅРЅС‹С…
    enum TSendMode
    {
-      SMSendFromBufferOnly,              //Оправить только заголовок и вернуться в режим чтения
-      SMSendFromBufferAndDisconnect,     //Оправить только заголовок и Разорвать соединение
-      SMSendFromBufferAndThenBody,       //Отправить заголовок и после этого перейти в режим SMSendBody
-      SMSendBody,                        //Отправить тело ответа (берётся у наследника ConnectionT) и затем вернуться в режим чтения
+      SMSendFromBufferOnly,              //РћРїСЂР°РІРёС‚СЊ С‚РѕР»СЊРєРѕ Р·Р°РіРѕР»РѕРІРѕРє Рё РІРµСЂРЅСѓС‚СЊСЃСЏ РІ СЂРµР¶РёРј С‡С‚РµРЅРёСЏ
+      SMSendFromBufferAndDisconnect,     //РћРїСЂР°РІРёС‚СЊ С‚РѕР»СЊРєРѕ Р·Р°РіРѕР»РѕРІРѕРє Рё Р Р°Р·РѕСЂРІР°С‚СЊ СЃРѕРµРґРёРЅРµРЅРёРµ
+      SMSendFromBufferAndThenBody,       //РћС‚РїСЂР°РІРёС‚СЊ Р·Р°РіРѕР»РѕРІРѕРє Рё РїРѕСЃР»Рµ СЌС‚РѕРіРѕ РїРµСЂРµР№С‚Рё РІ СЂРµР¶РёРј SMSendBody
+      SMSendBody,                        //РћС‚РїСЂР°РІРёС‚СЊ С‚РµР»Рѕ РѕС‚РІРµС‚Р° (Р±РµСЂС‘С‚СЃСЏ Сѓ РЅР°СЃР»РµРґРЅРёРєР° ConnectionT) Рё Р·Р°С‚РµРј РІРµСЂРЅСѓС‚СЊСЃСЏ РІ СЂРµР¶РёРј С‡С‚РµРЅРёСЏ
 
       SMCount
    };
@@ -73,8 +73,8 @@ protected:
    typedef HTTP::TRequestHeader TReceiveHeader;
 
 protected:
-   static const TStringParseFunc StringParseFunc[SPMCount];  //Соответствие текущего режима обработки строк заголовка и функции этого режима
-   static const TOnSendFunc OnSendFunc[SMCount];             //Соответствие текущего режима передачи данных и функции этого режима
+   static const TStringParseFunc StringParseFunc[SPMCount];  //РЎРѕРѕС‚РІРµС‚СЃС‚РІРёРµ С‚РµРєСѓС‰РµРіРѕ СЂРµР¶РёРјР° РѕР±СЂР°Р±РѕС‚РєРё СЃС‚СЂРѕРє Р·Р°РіРѕР»РѕРІРєР° Рё С„СѓРЅРєС†РёРё СЌС‚РѕРіРѕ СЂРµР¶РёРјР°
+   static const TOnSendFunc OnSendFunc[SMCount];             //РЎРѕРѕС‚РІРµС‚СЃС‚РІРёРµ С‚РµРєСѓС‰РµРіРѕ СЂРµР¶РёРјР° РїРµСЂРµРґР°С‡Рё РґР°РЅРЅС‹С… Рё С„СѓРЅРєС†РёРё СЌС‚РѕРіРѕ СЂРµР¶РёРјР°
 
 protected:
    void OnCompleateReceive() { static_cast<ConnectionT *>(this)->OnCompleatePostRequest(); }
@@ -83,29 +83,29 @@ protected:
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Параметр шаблона TraitsT для THTTPBasicConnection
-// Функциональность клиента
+// РџР°СЂР°РјРµС‚СЂ С€Р°Р±Р»РѕРЅР° TraitsT РґР»СЏ THTTPBasicConnection
+// Р¤СѓРЅРєС†РёРѕРЅР°Р»СЊРЅРѕСЃС‚СЊ РєР»РёРµРЅС‚Р°
 ///////////////////////////////////////////////////////////////////////////////
 template< class ConnectionT >
 class TClientTraits: public TTraitsBasic< ConnectionT >
 {
 protected:
-   //Текущий режим обработки прочитанной строки ответа
+   //РўРµРєСѓС‰РёР№ СЂРµР¶РёРј РѕР±СЂР°Р±РѕС‚РєРё РїСЂРѕС‡РёС‚Р°РЅРЅРѕР№ СЃС‚СЂРѕРєРё РѕС‚РІРµС‚Р°
    enum TStringParseMode
    {
-      SPMFirstLine,         //Чтение первой строки ответа
-      SPMOtherLines,        //Чтение остальных строк ответа
+      SPMFirstLine,         //Р§С‚РµРЅРёРµ РїРµСЂРІРѕР№ СЃС‚СЂРѕРєРё РѕС‚РІРµС‚Р°
+      SPMOtherLines,        //Р§С‚РµРЅРёРµ РѕСЃС‚Р°Р»СЊРЅС‹С… СЃС‚СЂРѕРє РѕС‚РІРµС‚Р°
 
       SPMCount
    };
 
 
-   //Текущий режим записи данных
+   //РўРµРєСѓС‰РёР№ СЂРµР¶РёРј Р·Р°РїРёСЃРё РґР°РЅРЅС‹С…
    enum TSendMode
    {
-      SMSendGETHeader,          //Оправить только заголовок запроса GET и вернуться в режим чтения
-      SMSendPOSTGeader,         //Отправить заголовок запроса POST и после этого перейти в режим SMSendBody, для отправки тела
-      SMSendBody,               //Отправить тело запроса (берётся у наследника ConnectionT) и перейти в режим чтения
+      SMSendGETHeader,          //РћРїСЂР°РІРёС‚СЊ С‚РѕР»СЊРєРѕ Р·Р°РіРѕР»РѕРІРѕРє Р·Р°РїСЂРѕСЃР° GET Рё РІРµСЂРЅСѓС‚СЊСЃСЏ РІ СЂРµР¶РёРј С‡С‚РµРЅРёСЏ
+      SMSendPOSTGeader,         //РћС‚РїСЂР°РІРёС‚СЊ Р·Р°РіРѕР»РѕРІРѕРє Р·Р°РїСЂРѕСЃР° POST Рё РїРѕСЃР»Рµ СЌС‚РѕРіРѕ РїРµСЂРµР№С‚Рё РІ СЂРµР¶РёРј SMSendBody, РґР»СЏ РѕС‚РїСЂР°РІРєРё С‚РµР»Р°
+      SMSendBody,               //РћС‚РїСЂР°РІРёС‚СЊ С‚РµР»Рѕ Р·Р°РїСЂРѕСЃР° (Р±РµСЂС‘С‚СЃСЏ Сѓ РЅР°СЃР»РµРґРЅРёРєР° ConnectionT) Рё РїРµСЂРµР№С‚Рё РІ СЂРµР¶РёРј С‡С‚РµРЅРёСЏ
 
       SMCount
    };
@@ -113,8 +113,8 @@ protected:
    typedef HTTP::TResponseHeader TReceiveHeader;
 
 protected:
-   static const TStringParseFunc StringParseFunc[SPMCount];  //Соответствие текущего режима обработки строк заголовка и функции этого режима
-   static const TOnSendFunc OnSendFunc[SMCount];             //Соответствие текущего режима передачи данных и функции этого режима
+   static const TStringParseFunc StringParseFunc[SPMCount];  //РЎРѕРѕС‚РІРµС‚СЃС‚РІРёРµ С‚РµРєСѓС‰РµРіРѕ СЂРµР¶РёРјР° РѕР±СЂР°Р±РѕС‚РєРё СЃС‚СЂРѕРє Р·Р°РіРѕР»РѕРІРєР° Рё С„СѓРЅРєС†РёРё СЌС‚РѕРіРѕ СЂРµР¶РёРјР°
+   static const TOnSendFunc OnSendFunc[SMCount];             //РЎРѕРѕС‚РІРµС‚СЃС‚РІРёРµ С‚РµРєСѓС‰РµРіРѕ СЂРµР¶РёРјР° РїРµСЂРµРґР°С‡Рё РґР°РЅРЅС‹С… Рё С„СѓРЅРєС†РёРё СЌС‚РѕРіРѕ СЂРµР¶РёРјР°
 
 protected:
    void OnCompleateReceive() { static_cast<ConnectionT *>(this)->OnCompleatePostRequest(); }
@@ -123,12 +123,12 @@ protected:
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Класс соединения от которого наследуются THTTPClient::TConnection и THTTPServer::TConnection
-// Был введён для исключения повторов кода.
-// ConnectionT     - THTTPClient::TConnection или THTTPServer::TConnection
-// TraitsT         - Типы и функции которые различаются в клиенте и сервере
-// UserConnectionT - Базовый класс соединения который передал пользователь в параметре шаблона ConnectionT
-//                   класса THTTPClient::TConnection и THTTPServer::TConnection
+// РљР»Р°СЃСЃ СЃРѕРµРґРёРЅРµРЅРёСЏ РѕС‚ РєРѕС‚РѕСЂРѕРіРѕ РЅР°СЃР»РµРґСѓСЋС‚СЃСЏ THTTPClient::TConnection Рё THTTPServer::TConnection
+// Р‘С‹Р» РІРІРµРґС‘РЅ РґР»СЏ РёСЃРєР»СЋС‡РµРЅРёСЏ РїРѕРІС‚РѕСЂРѕРІ РєРѕРґР°.
+// ConnectionT     - THTTPClient::TConnection РёР»Рё THTTPServer::TConnection
+// TraitsT         - РўРёРїС‹ Рё С„СѓРЅРєС†РёРё РєРѕС‚РѕСЂС‹Рµ СЂР°Р·Р»РёС‡Р°СЋС‚СЃСЏ РІ РєР»РёРµРЅС‚Рµ Рё СЃРµСЂРІРµСЂРµ
+// UserConnectionT - Р‘Р°Р·РѕРІС‹Р№ РєР»Р°СЃСЃ СЃРѕРµРґРёРЅРµРЅРёСЏ РєРѕС‚РѕСЂС‹Р№ РїРµСЂРµРґР°Р» РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РІ РїР°СЂР°РјРµС‚СЂРµ С€Р°Р±Р»РѕРЅР° ConnectionT
+//                   РєР»Р°СЃСЃР° THTTPClient::TConnection Рё THTTPServer::TConnection
 ///////////////////////////////////////////////////////////////////////////////
 template<class ConnectionT, template<class> class TraitsT, class UserConnectionT, class FuncImplT>
 class THTTPBasicConnection: public TraitsT<ConnectionT>, public UserConnectionT, public AsyncIOConnection::TConnectionBasic<FuncImplT>
@@ -144,56 +144,56 @@ protected:
    typedef typename TTraits::TStringParseResult                TStringParseResult;
 
 protected:
-   //Текущий режим чтения сервера
+   //РўРµРєСѓС‰РёР№ СЂРµР¶РёРј С‡С‚РµРЅРёСЏ СЃРµСЂРІРµСЂР°
    enum TReceiveMode
    {
-      RMReadString,        //Разбиение поступивших данных на строки и передача их текущей функции обработки строк
-      RMReadBody,          //Передача принятых данных пользователю классу ConnectionT.
-                           //В общей сложности передаётся ровно m_RequestHeader.GetContentLength() байт
+      RMReadString,        //Р Р°Р·Р±РёРµРЅРёРµ РїРѕСЃС‚СѓРїРёРІС€РёС… РґР°РЅРЅС‹С… РЅР° СЃС‚СЂРѕРєРё Рё РїРµСЂРµРґР°С‡Р° РёС… С‚РµРєСѓС‰РµР№ С„СѓРЅРєС†РёРё РѕР±СЂР°Р±РѕС‚РєРё СЃС‚СЂРѕРє
+      RMReadBody,          //РџРµСЂРµРґР°С‡Р° РїСЂРёРЅСЏС‚С‹С… РґР°РЅРЅС‹С… РїРѕР»СЊР·РѕРІР°С‚РµР»СЋ РєР»Р°СЃСЃСѓ ConnectionT.
+                           //Р’ РѕР±С‰РµР№ СЃР»РѕР¶РЅРѕСЃС‚Рё РїРµСЂРµРґР°С‘С‚СЃСЏ СЂРѕРІРЅРѕ m_RequestHeader.GetContentLength() Р±Р°Р№С‚
       RMCount
    };
 
-   //Тип функции для каждого из режимов чтения
-   //При приёме данных они записываются в m_ReceiveBuf. Функция должна обработать эти данные и подготовить 
-   //буфер для приёма новых данных. Должна корректно обрабатывать отсутствие данных в буфере.
-   //Возвр: Нужно ли продолжать чтение данных
+   //РўРёРї С„СѓРЅРєС†РёРё РґР»СЏ РєР°Р¶РґРѕРіРѕ РёР· СЂРµР¶РёРјРѕРІ С‡С‚РµРЅРёСЏ
+   //РџСЂРё РїСЂРёС‘РјРµ РґР°РЅРЅС‹С… РѕРЅРё Р·Р°РїРёСЃС‹РІР°СЋС‚СЃСЏ РІ m_ReceiveBuf. Р¤СѓРЅРєС†РёСЏ РґРѕР»Р¶РЅР° РѕР±СЂР°Р±РѕС‚Р°С‚СЊ СЌС‚Рё РґР°РЅРЅС‹Рµ Рё РїРѕРґРіРѕС‚РѕРІРёС‚СЊ 
+   //Р±СѓС„РµСЂ РґР»СЏ РїСЂРёС‘РјР° РЅРѕРІС‹С… РґР°РЅРЅС‹С…. Р”РѕР»Р¶РЅР° РєРѕСЂСЂРµРєС‚РЅРѕ РѕР±СЂР°Р±Р°С‚С‹РІР°С‚СЊ РѕС‚СЃСѓС‚СЃС‚РІРёРµ РґР°РЅРЅС‹С… РІ Р±СѓС„РµСЂРµ.
+   //Р’РѕР·РІСЂ: РќСѓР¶РЅРѕ Р»Рё РїСЂРѕРґРѕР»Р¶Р°С‚СЊ С‡С‚РµРЅРёРµ РґР°РЅРЅС‹С…
    typedef bool (THTTPBasicConnection::*TOnReceiveFunc)();
 
 protected:
-   static const TOnReceiveFunc OnReceiveFunc[RMCount];       //Соответствие текущего режима чтения и функции этого режима
+   static const TOnReceiveFunc OnReceiveFunc[RMCount];       //РЎРѕРѕС‚РІРµС‚СЃС‚РІРёРµ С‚РµРєСѓС‰РµРіРѕ СЂРµР¶РёРјР° С‡С‚РµРЅРёСЏ Рё С„СѓРЅРєС†РёРё СЌС‚РѕРіРѕ СЂРµР¶РёРјР°
 
 protected:
-   TReceiveBuf m_ReceiveBuf;                               //Буфер чтения
-   TSendBuf m_SendBuf;                                     //Буфер записи
-   TReceiveMode m_CurReceiveMode;                          //Текущее режим чтения
-   TStringParseMode m_CurStringParseMode;                  //Текущее режим обработки строк заголовка
-   TSendMode m_CurSendMode;                                //Текущий режим передачи
-   TReceiveHeader m_ReceiveHeader;                         //Текущий заголовок принимаемых данных
-   TSendMode m_SendMode;                                   //Режим приёма данных
-   size_t m_NeadToReceive;                                 //Количество данных которое ещё необходимо принять в теле запроса
+   TReceiveBuf m_ReceiveBuf;                               //Р‘СѓС„РµСЂ С‡С‚РµРЅРёСЏ
+   TSendBuf m_SendBuf;                                     //Р‘СѓС„РµСЂ Р·Р°РїРёСЃРё
+   TReceiveMode m_CurReceiveMode;                          //РўРµРєСѓС‰РµРµ СЂРµР¶РёРј С‡С‚РµРЅРёСЏ
+   TStringParseMode m_CurStringParseMode;                  //РўРµРєСѓС‰РµРµ СЂРµР¶РёРј РѕР±СЂР°Р±РѕС‚РєРё СЃС‚СЂРѕРє Р·Р°РіРѕР»РѕРІРєР°
+   TSendMode m_CurSendMode;                                //РўРµРєСѓС‰РёР№ СЂРµР¶РёРј РїРµСЂРµРґР°С‡Рё
+   TReceiveHeader m_ReceiveHeader;                         //РўРµРєСѓС‰РёР№ Р·Р°РіРѕР»РѕРІРѕРє РїСЂРёРЅРёРјР°РµРјС‹С… РґР°РЅРЅС‹С…
+   TSendMode m_SendMode;                                   //Р РµР¶РёРј РїСЂРёС‘РјР° РґР°РЅРЅС‹С…
+   size_t m_NeadToReceive;                                 //РљРѕР»РёС‡РµСЃС‚РІРѕ РґР°РЅРЅС‹С… РєРѕС‚РѕСЂРѕРµ РµС‰С‘ РЅРµРѕР±С…РѕРґРёРјРѕ РїСЂРёРЅСЏС‚СЊ РІ С‚РµР»Рµ Р·Р°РїСЂРѕСЃР°
 
 protected:
-   //Является ли символ пробельным
+   //РЇРІР»СЏРµС‚СЃСЏ Р»Рё СЃРёРјРІРѕР» РїСЂРѕР±РµР»СЊРЅС‹Рј
    static bool IsSpace( char Ch ) { return Ch == ' ' || Ch == '\t'; }   
 
-   //Расшифровать строку и дабавиить данные (если параметр известен) к m_ReceiveHeader
-   //Возвр: true можно продолжать обработку заголовка и false в случае неправильного формата
+   //Р Р°СЃС€РёС„СЂРѕРІР°С‚СЊ СЃС‚СЂРѕРєСѓ Рё РґР°Р±Р°РІРёРёС‚СЊ РґР°РЅРЅС‹Рµ (РµСЃР»Рё РїР°СЂР°РјРµС‚СЂ РёР·РІРµСЃС‚РµРЅ) Рє m_ReceiveHeader
+   //Р’РѕР·РІСЂ: true РјРѕР¶РЅРѕ РїСЂРѕРґРѕР»Р¶Р°С‚СЊ РѕР±СЂР°Р±РѕС‚РєСѓ Р·Р°РіРѕР»РѕРІРєР° Рё false РІ СЃР»СѓС‡Р°Рµ РЅРµРїСЂР°РІРёР»СЊРЅРѕРіРѕ С„РѕСЂРјР°С‚Р°
    bool AddStringToHeader( const char *pBegin, const char *pEnd );
 
 protected:
-   //Обработка уведомления об отправке данных
+   //РћР±СЂР°Р±РѕС‚РєР° СѓРІРµРґРѕРјР»РµРЅРёСЏ РѕР± РѕС‚РїСЂР°РІРєРµ РґР°РЅРЅС‹С…
    bool OnSend( int SendSize, const char *&pBuf, int &Length );
 
-   //Обработка уведомления о приёме данных
+   //РћР±СЂР°Р±РѕС‚РєР° СѓРІРµРґРѕРјР»РµРЅРёСЏ Рѕ РїСЂРёС‘РјРµ РґР°РЅРЅС‹С…
    bool OnReceive( int ReceiveSize, char *&pBuf, int &Length );
 
 protected:
-   //Функция TOnReceiveFunc, состояние RMReadString
-   //Разбивает входные данные на строки и передаёт  в текущую функцию обработки строк
+   //Р¤СѓРЅРєС†РёСЏ TOnReceiveFunc, СЃРѕСЃС‚РѕСЏРЅРёРµ RMReadString
+   //Р Р°Р·Р±РёРІР°РµС‚ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ РЅР° СЃС‚СЂРѕРєРё Рё РїРµСЂРµРґР°С‘С‚  РІ С‚РµРєСѓС‰СѓСЋ С„СѓРЅРєС†РёСЋ РѕР±СЂР°Р±РѕС‚РєРё СЃС‚СЂРѕРє
    bool OnReceiveReadString();
 
-   //Функция TOnReceiveFunc, состояние RMReadRequestBody
-   //Передаёт принятые данные классу наследнику от ConnectionT
+   //Р¤СѓРЅРєС†РёСЏ TOnReceiveFunc, СЃРѕСЃС‚РѕСЏРЅРёРµ RMReadRequestBody
+   //РџРµСЂРµРґР°С‘С‚ РїСЂРёРЅСЏС‚С‹Рµ РґР°РЅРЅС‹Рµ РєР»Р°СЃСЃСѓ РЅР°СЃР»РµРґРЅРёРєСѓ РѕС‚ ConnectionT
    bool OnReceiveBody();
 
 protected:
@@ -205,29 +205,29 @@ protected:
 template<class ConnectionT, template<class> class TraitsT, class UserConnectionT, class FuncImplT>
 bool THTTPBasicConnection<ConnectionT, TraitsT, UserConnectionT, FuncImplT>::AddStringToHeader( const char *pBegin, const char *pEnd )
 {
-   const char *pBeginFieldName;     //Начало имени поля
-   const char *pEndFieldName;       //Конец имени поля
-   const char *pBeginFieldValue;    //Начало значения поля
-   const char *pEndFieldValue;      //Конец значения поля
+   const char *pBeginFieldName;     //РќР°С‡Р°Р»Рѕ РёРјРµРЅРё РїРѕР»СЏ
+   const char *pEndFieldName;       //РљРѕРЅРµС† РёРјРµРЅРё РїРѕР»СЏ
+   const char *pBeginFieldValue;    //РќР°С‡Р°Р»Рѕ Р·РЅР°С‡РµРЅРёСЏ РїРѕР»СЏ
+   const char *pEndFieldValue;      //РљРѕРЅРµС† Р·РЅР°С‡РµРЅРёСЏ РїРѕР»СЏ
 
-   //Находим имя поля
-   //Пропускаем пробелы
+   //РќР°С…РѕРґРёРј РёРјСЏ РїРѕР»СЏ
+   //РџСЂРѕРїСѓСЃРєР°РµРј РїСЂРѕР±РµР»С‹
    while( pBegin != pEnd && IsSpace(*pBegin) ) ++pBegin;
    if( pBegin == pEnd ) { return false; }
 
    pBeginFieldName = pBegin++;
 
-   //Ищем ':'
+   //РС‰РµРј ':'
    while( pBegin != pEnd && *pBegin != ':' ) ++pBegin;
    if( pBegin == pEnd ) { return false; }
 
    pEndFieldName = pBegin++;
 
-   //Пропускаем пробелы
+   //РџСЂРѕРїСѓСЃРєР°РµРј РїСЂРѕР±РµР»С‹
    while( pBegin != pEnd && IsSpace(*pBegin) ) ++pBegin;
    if( pBegin == pEnd ) { return false; }
 
-   //Пропустим так же пробелы с конца значения
+   //РџСЂРѕРїСѓСЃС‚РёРј С‚Р°Рє Р¶Рµ РїСЂРѕР±РµР»С‹ СЃ РєРѕРЅС†Р° Р·РЅР°С‡РµРЅРёСЏ
    while( pBegin != pEnd && IsSpace(*(pEnd - 1)) ) --pEnd;
 
    pBeginFieldValue = pBegin;
@@ -268,14 +268,14 @@ bool THTTPBasicConnection<ConnectionT, TraitsT, UserConnectionT, FuncImplT>::OnS
       return true;
    }
 
-   //Мы полностью ответили клиенту
+   //РњС‹ РїРѕР»РЅРѕСЃС‚СЊСЋ РѕС‚РІРµС‚РёР»Рё РєР»РёРµРЅС‚Сѓ
    if( !static_cast<ConnectionT *>(this)->IsDisconnecting() )
    {
-      //Вновь инициализируем приём даных
+      //Р’РЅРѕРІСЊ РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РїСЂРёС‘Рј РґР°РЅС‹С…
       m_CurReceiveMode = RMReadString;
       m_CurStringParseMode = SPMFirstLine;
 
-      //У нас в буффере чтения могли остаться данные
+      //РЈ РЅР°СЃ РІ Р±СѓС„С„РµСЂРµ С‡С‚РµРЅРёСЏ РјРѕРіР»Рё РѕСЃС‚Р°С‚СЊСЃСЏ РґР°РЅРЅС‹Рµ
       if( (static_cast<ConnectionT *>(this)->*OnReceiveFunc[m_CurReceiveMode])() )
       {
          char *pReceiveBuf;
@@ -330,22 +330,22 @@ bool THTTPBasicConnection<ConnectionT, TraitsT, UserConnectionT, FuncImplT>::OnR
 
    for(;;)
    {
-      //Ищем разделитель
+      //РС‰РµРј СЂР°Р·РґРµР»РёС‚РµР»СЊ
       pDelim = std::search( m_ReceiveBuf.Begin(), m_ReceiveBuf.End(), TSendBuf::szStringDelim, TSendBuf::szStringDelim + TSendBuf::StringDelimSize );
 
       if( pDelim == m_ReceiveBuf.End() ) 
       {
-         //Мы не нашли разделитель
+         //РњС‹ РЅРµ РЅР°С€Р»Рё СЂР°Р·РґРµР»РёС‚РµР»СЊ
          if( !m_ReceiveBuf.PrepareForReceiveOnlyEmpty() )
          {
-            TTraits::OnSendBufferToSmall(); //Буффер полностью заполнен 
+            TTraits::OnSendBufferToSmall(); //Р‘СѓС„С„РµСЂ РїРѕР»РЅРѕСЃС‚СЊСЋ Р·Р°РїРѕР»РЅРµРЅ 
             return false; 
          }
 
          return true;
       }
 
-      //Мы нашли разделитель
+      //РњС‹ РЅР°С€Р»Рё СЂР°Р·РґРµР»РёС‚РµР»СЊ
       pTmp = m_ReceiveBuf.Begin();
       m_ReceiveBuf.PopFront( static_cast<int>(pDelim - m_ReceiveBuf.Begin() + TSendBuf::StringDelimSize) );
 
@@ -365,7 +365,7 @@ bool THTTPBasicConnection<ConnectionT, TraitsT, UserConnectionT, FuncImplT>::OnR
 template<class ConnectionT, template<class> class TraitsT, class UserConnectionT, class FuncImplT>
 bool THTTPBasicConnection<ConnectionT, TraitsT, UserConnectionT, FuncImplT>::OnReceiveBody()
 {
-   //GetFromBuffer может быть равен 0
+   //GetFromBuffer РјРѕР¶РµС‚ Р±С‹С‚СЊ СЂР°РІРµРЅ 0
    size_t GetFromBuffer = std::min( m_NeadToReceive, static_cast<size_t>(m_ReceiveBuf.Size()) );
 
    static_cast<ConnectionT *>(this)->OnReceiveData( static_cast<const char *>(m_ReceiveBuf.Begin()), static_cast<int>(GetFromBuffer) );
@@ -373,13 +373,13 @@ bool THTTPBasicConnection<ConnectionT, TraitsT, UserConnectionT, FuncImplT>::OnR
 
    m_NeadToReceive -= GetFromBuffer;
 
-   if( m_NeadToReceive == 0 )  //Мы полностью прочитали тело запроса
+   if( m_NeadToReceive == 0 )  //РњС‹ РїРѕР»РЅРѕСЃС‚СЊСЋ РїСЂРѕС‡РёС‚Р°Р»Рё С‚РµР»Рѕ Р·Р°РїСЂРѕСЃР°
    {
       TTraits::OnCompleateReceive(); 
       return false;
    }
 
-   //Буффер пустой
+   //Р‘СѓС„С„РµСЂ РїСѓСЃС‚РѕР№
    m_ReceiveBuf.PrepareForReceiveFull();
 
    return true;

@@ -1,4 +1,4 @@
-//#define NWLIB_STOCONA_FRAMEWORK
+п»ї//#define NWLIB_STOCONA_FRAMEWORK
 #include "..\..\FirstHeader.h"
 #include "..\..\FileSystem.h"
 #include "..\..\TestHelper.h"
@@ -42,17 +42,17 @@ void Run()
    TResultIterator Iter(Storage.begin());
    TConstResultIterator ConstIter(Storage.begin());
    TConstResultIterator ConstIter2(Iter);
-   //TResultIterator Iter2(ConstIter); //Не должно компилится
+   //TResultIterator Iter2(ConstIter); //РќРµ РґРѕР»Р¶РЅРѕ РєРѕРјРїРёР»РёС‚СЃСЏ
    
    ConstIter = Iter;
-   //Iter = ConstIter; //Не должно компилится
+   //Iter = ConstIter; //РќРµ РґРѕР»Р¶РЅРѕ РєРѕРјРїРёР»РёС‚СЃСЏ
 
    Iter == Iter;
    Iter == ConstIter;
    ConstIter == Iter;
    ConstIter == ConstIter;
 
-   //*ConstIter = 3; //Не должно компилится
+   //*ConstIter = 3; //РќРµ РґРѕР»Р¶РЅРѕ РєРѕРјРїРёР»РёС‚СЃСЏ
    cout << *ConstIter << endl;
    
    *Iter = 25.5;
@@ -91,7 +91,7 @@ namespace TryConvertOrCreateTest
       B b( TryConvertOrCreate<A, B>::Get(a));
       C c( TryConvertOrCreate<A, C>::Get(a));
       B b2(a);
-      //C c2(a); //Не должен компилится
+      //C c2(a); //РќРµ РґРѕР»Р¶РµРЅ РєРѕРјРїРёР»РёС‚СЃСЏ
 
       cout << b.S_ << endl << c.S_ << endl;
    }
@@ -107,11 +107,11 @@ void TestIntegerToStringImpl( int N, int BufSize )
    std::vector<char> Buf( BufSize );
    std::vector<char>::iterator I = ConvertIntegerToString( N, Buf.begin(), Buf.end() - 1 );
 
-   cout << "Число: " << N  << " Размер буфера: " << BufSize << " Результат: '";
+   cout << "Р§РёСЃР»Рѕ: " << N  << " Р Р°Р·РјРµСЂ Р±СѓС„РµСЂР°: " << BufSize << " Р РµР·СѓР»СЊС‚Р°С‚: '";
 
 
    if( I == Buf.begin() )
-      cout << "ОШИБКА";
+      cout << "РћРЁРР‘РљРђ";
    else
    {
       *I = '\0';
