@@ -260,6 +260,8 @@ void TTCPBasicClientServerBase<TagT, ConnectionT, GlobalDataT>::TConnection::Pro
          {
             if( !TBase::OnReceive(Rezult, m_ReadBufPtr.pBuf, m_ReadBufPtr.Length) )
                m_ReadBufPtr.pBuf = 0;
+
+            APL_ASSERT( m_ReadBufPtr.pBuf == 0 || m_ReadBufPtr.Length > 0 );
          }
       }
 
@@ -279,6 +281,8 @@ void TTCPBasicClientServerBase<TagT, ConnectionT, GlobalDataT>::TConnection::Pro
 
             if( !TBase::OnSend(Rezult, m_WriteBufPtr.pBuf, m_WriteBufPtr.Length) )
                m_WriteBufPtr.pBuf = 0;
+
+            APL_ASSERT( m_WriteBufPtr.pBuf == 0 || m_WriteBufPtr.Length > 0 );
          }
       }
    }
