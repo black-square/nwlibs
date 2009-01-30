@@ -224,6 +224,12 @@ public:
    operator auto_ptr_ref_ex<Y, DeleteStrategy>() throw() {
       return auto_ptr_ref_ex<Y, DeleteStrategy>(release(), static_cast<TDeleteStrategy&>(*this));
    }
+   
+   //Этот метод нужен для того, что бы работал следующий код:
+   //    struct base{}; struct derived: base{};
+   //    void f( const std::auto_ptr<base> & );
+   //    void m(){ f( std::auto_ptr<derived>() ); }
+   //http://www.rsdn.ru/forum/message/3270892.all.aspx
    template<class Y>
    operator auto_ptr_ex<Y, DeleteStrategy>() throw() {
       return auto_ptr_ex<Y, DeleteStrategy>(release(), static_cast<TDeleteStrategy&>(*this));
