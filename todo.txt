@@ -2,3 +2,4 @@
 + Перенести tinyut в библиотеку 
 + boost::ref
 + Переписать всё с TUndefinedBoolPtr используя SafeBool c:\!MY_DOCS\MY_PROGS\C_Win\__Библиотека\Тонкие моменты\Реализация семантики указателя.cpp
++ Перенести TinyList, FixedPool
