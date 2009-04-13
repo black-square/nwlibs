@@ -14,6 +14,27 @@ namespace RegExp {
 
 ///////////////////////////////////////////////////////////////////////////////
 // Сохранияет состояния поиска и позволяет искать несколько вхождений шаблона
+// С помощью данного класса можно удобно производить замену в строке по шаблону
+// Например, для замены комбинации символов \n и пробелов на настоящий перевод 
+// строки можно воспользоваться след-им циклом:
+//     std::string splitStringToLines( const std::string &str )
+//     {
+//         namespace RE = NWLib::RegExp;
+// 
+//         static RE::TFinder<RE::TNoException> findLineBreak( "\\s*\\\\n\\s*" );
+//         RE::TFindState<> state( str );
+// 
+//         std::string ret;
+// 
+//         while( findLineBreak(state) )
+//         {
+//             ret.append( state.PrevBegin, findLineBreak[0].begin() );
+//             ret += '\n';
+//         }
+// 
+//         ret.append( state.PrevBegin, state.End );
+//         return ret;
+//     }
 ///////////////////////////////////////////////////////////////////////////////
 template<class CharT = TCHAR>
 struct TFindState
@@ -117,7 +138,7 @@ private:
 };
 
 
-//Вывод в поток значения в секундах
+//Вывод в поток найденных элементов
 template< class CharT, class CharTraitsT, class ExceptionT >
 inline std::basic_ostream<CharT, CharTraitsT> &operator<<( std::basic_ostream<CharT, CharTraitsT> &stream, const TFinder<ExceptionT, CharT> &Finder )
 {
