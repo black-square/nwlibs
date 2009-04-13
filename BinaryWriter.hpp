@@ -1,7 +1,6 @@
-#pragma once
+#ifndef BinaryWriter_HPP
+#define BinaryWriter_HPP
 
-#include "../libs/FirstHeader.h "
-#include <tchar.h>
 #include <hash_map>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -186,3 +185,5 @@ private:
    TDeferredPointers m_defPtrs;
    FILE *m_pFile;
 };
+
+#endif
