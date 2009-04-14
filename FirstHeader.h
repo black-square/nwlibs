@@ -122,13 +122,13 @@
 template< class T >
 bool TestPtr__( T *pT )
 {
-   return pT != NULL && !IsBadReadPtr(pT, sizeof(*pT)) && !IsBadWritePtr((LPVOID)pT, sizeof(*pT));
+   return pT != 0 && !IsBadReadPtr(pT, sizeof(*pT)) && !IsBadWritePtr((LPVOID)pT, sizeof(*pT));
 }
 
 template< class T >
 bool TestPtr__( const T *pT )
 {
-   return pT != NULL && !IsBadReadPtr(pT, sizeof(*pT));
+   return pT != 0 && !IsBadReadPtr(pT, sizeof(*pT));
 }
 
 template< class T >
@@ -150,10 +150,10 @@ inline bool TestPtr__( void *pSmartPointer )
 #endif
 
 #define APL_ASSERT_PTR( ptr ) \
-APL_ASSERT( TestPtr__(ptr) )
+    APL_ASSERT( TestPtr__(ptr) )
 
 #define APL_ASSERT_PTR_TYPE( ptr, type ) \
-APL_ASSERT( ptr != NULL && !IsBadReadPtr(ptr, sizeof(type)) && !IsBadWritePtr((LPVOID)ptr, sizeof(type)))
+    APL_ASSERT( ptr != 0 && !IsBadReadPtr(ptr, sizeof(type)) && !IsBadWritePtr((LPVOID)ptr, sizeof(type)))
 
 //APL_CHECK
 #ifndef NDEBUG
@@ -216,10 +216,10 @@ template <class T, class TArg>
 inline T AplTestCast__( TArg V, char *File, unsigned int Line )
 {
    T tmp = dynamic_cast<T>(V);
-   if( tmp == NULL )
+   if( tmp == 0 )
    {
       //_assert( "APL_DYNAMIC_CAST - See 'FirstHeader.h'", File, Line );
-	  _CrtDbgReportW(_CRT_ASSERT, _CRT_WIDE(__FILE__), __LINE__, NULL, _CRT_WIDE("APL_DYNAMIC_CAST - See 'FirstHeader.h'") );
+	  _CrtDbgReportW(_CRT_ASSERT, _CRT_WIDE(__FILE__), __LINE__, 0, _CRT_WIDE("APL_DYNAMIC_CAST - See 'FirstHeader.h'") );
    }
    return tmp;
 }
