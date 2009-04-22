@@ -95,7 +95,8 @@ public:
       TBackRef BR = m_Pattern.match(Begin, End, m_Results);
 
       if( ExceptionT::NeadThrow && !BR.matched )
-         APL_THROW( _T("Ошибка при поиске шаблона: ") << ConvertToTStr(m_PatternStr) );
+         APL_THROW( _T("Ошибка при поиске шаблона: \"") << ConvertToTStr(m_PatternStr) <<
+                    _T("\" в строке \"") << ConvertToTStr(TString(Begin, End) ) << _T("\"") );
 
       return BR.matched;
    }
@@ -116,7 +117,8 @@ public:
       TBackRef BR = m_Pattern.match(State.Begin, State.End, m_Results);
 
       if( ExceptionT::NeadThrow && !BR.matched && State.PrevBegin == State.Begin )
-         APL_THROW( _T("Ошибка при поиске шаблона: ") << ConvertToTStr(m_PatternStr) );
+         APL_THROW( _T("Ошибка при поиске шаблона: \"") << ConvertToTStr(m_PatternStr) <<
+                    _T("\" в строке \"") << ConvertToTStr(TString(State.Begin, State.End) ) << _T("\"") );
 
       State.PrevBegin = State.Begin;
       State.Begin = BR.end();
