@@ -275,6 +275,62 @@ struct Bar
 
 #endif
 
+///////////////////////////////////////////////////////////////////////////////
+// Замечание по поводу экспорта/импорта виртуальных класов:
+// Его можно реализовать через мультиметоды. Базовый класс 
+// опредиляет чисто виртуальную функцию void SerializeVirt( ArchiveBase & BaseA )
+// которую и вызывает метод Serialize. Наследник, опредиляет полноценную, 
+// шаблонную функцию Serialize и переопредиляет SerializeVirt в которой вызывает
+// глобальную шаблонную функцию DispatchArchive, которая по идентификатору в BaseA 
+// опредиляет реальный тип архиватора и вызывается Serialize у Наследника 
+// с правильным типом. 
+#if 0
+struct IBase
+{
+   template< class Archive >
+   void Serialize( Archive &A ) 
+   {
+        SerializeVirt( A );
+   }
+
+   virtual void SerializeVirt( ArchiveBase & BaseA ) = 0;
+};
+
+template<class T>
+void DispatchArchive( T &obj, ArchiveBase & BaseA )
+{
+    //Лучше в качестве глобальных идентификаторов типов, вместо enum, выбирать 
+    //указатель на статическую функцию
+    if( BaseA.GetID() == XML_WRITER ) 
+        NWLib::Serialize( static_cast<XMLWriteArchive &>(BaseA), obj );
+    else if( BaseA.GetID() == XML_READER )
+        NWLib::Serialize( static_cast<XMLReadArchive &>(BaseA), obj );
+    //...
+    else
+        APL_ASSERT(false);
+}
+
+class IDer: public IBase
+{
+   template< class Archive >
+   void Serialize( Archive &A ) 
+   {
+        A.Element( _T("a"), a );
+        A.Element( _T("b"), b );
+   }
+   
+   void SerializeVirt( ArchiveBase & BaseA )
+   {
+        DispatchArchive( *this, BaseA );
+   }
+
+private:
+    int a, b;
+};
+
+#endif
+///////////////////////////////////////////////////////////////////////////////
+
 namespace NWLib {
 
 ///////////////////////////////////////////////////////////////////////////////
