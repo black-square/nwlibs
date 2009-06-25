@@ -165,6 +165,8 @@
          ValueType &GetRefForSerialize( Object &Obj ) const;  
 
          //Установить у структуры данных занчение требуемого члена
+         //TODO: Разрешить передавать сюда ссылку на Val для того, чтобы вместо копирования можно 
+         //было сделать swap
          void Set( Object &Obj, ParamValue Val ) const;
       };
 
@@ -739,6 +741,8 @@ public:
       typename T::value_type TmpOb;
       TFindCursor FindCursor;
 
+      //TODO: Вместо этого создавать новый контейнер и в конце делать swap,
+      //      хотя так медленнее для вектора. Подумать.
       ob.clear();
 
       if( !TReader::BeginLevel(Name) )
