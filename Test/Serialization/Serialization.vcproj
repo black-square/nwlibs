@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="&quot;$(ProjectDir)\..\..\..\tinyxml\libs\$(IntDir)\tinyxml_STL.lib"
+				AdditionalDependencies="&quot;$(ProjectDir)\..\..\..\tinyxml\libs\$(IntDir)\tinyxml_STL.lib&quot;"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
