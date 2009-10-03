@@ -58,6 +58,22 @@ struct auto_ptr_ex_delete_strategy: public auto_ptr_ex_strategy_base<T>
 };
 ///////////////////////////////////////////////////////////////////////////////
 
+//Стратегия удаления при помощи оператора delete для массивов
+template< class T >
+struct auto_ptr_ex_delete_arr_strategy: public auto_ptr_ex_strategy_base<T> 
+{
+    auto_ptr_ex_delete_arr_strategy() {}
+
+    template< class Y >
+    auto_ptr_ex_delete_arr_strategy( const auto_ptr_ex_delete_arr_strategy<Y> & ) {}
+
+    template< class Y >
+    auto_ptr_ex_delete_arr_strategy &operator=( const auto_ptr_ex_delete_arr_strategy<Y> & ) { return *this; }
+
+    void operator()( pointer pT ) const { delete [] pT; }
+};
+
+
 //Стратегия удаления при помощи метода Release
 template< class T >
 struct auto_ptr_ex_release_strategy: public auto_ptr_ex_strategy_base<T>

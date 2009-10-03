@@ -1,6 +1,10 @@
 ﻿#ifndef FirstHeaderImplH
 #define FirstHeaderImplH
 
+#include <exception>
+#include <string>
+#include <sstream>
+
 namespace NWLib
 {
    class TAplThrowException: public std::exception

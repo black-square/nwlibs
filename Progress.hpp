@@ -10,16 +10,13 @@
 //  progress_display displays an appropriate indication of 
 //  progress at an appropriate place in an appropriate form.
 
-// NOTE: (Jan 12, 2001) Tried to change unsigned long to boost::uintmax_t, but
-// found some compilers couldn't handle the required conversion to double.
-// Reverted to unsigned long until the compilers catch up. 
-
 namespace NWLib {
 
-class progress_display : private NonCopyable
+template< class CountT >
+class progress_display_t : private NonCopyable
 {
 public:
-   explicit progress_display( unsigned long expected_count,
+   explicit progress_display_t( CountT expected_count,
       std::ostream & os = std::cout,
       const std::string & s1 = "\n", //leading strings
       const std::string & s2 = "",
@@ -27,7 +24,7 @@ public:
       // os is hint; implementation may ignore, particularly in embedded systems
       : m_os(os), m_s1(s1), m_s2(s2), m_s3(s3) { restart(expected_count); }
 
-      explicit progress_display( 
+      explicit progress_display_t( 
          std::ostream & os = std::cout,
          const std::string & s1 = "\n", //leading strings
          const std::string & s2 = "",
@@ -39,7 +36,7 @@ public:
          _expected_count = 2;   
       }
 
-      void restart( unsigned long expected_count )
+      void restart( CountT expected_count )
          //  Effects: display appropriate scale
          //  Postconditions: count()==0, expected_count()==expected_count
       {
@@ -53,7 +50,7 @@ public:
          if ( _expected_count < 2) _expected_count = 2;  // prevent divide by zero
       } // restart
 
-      unsigned long  operator+=( unsigned long increment )
+      CountT  operator+=( CountT increment )
          //  Effects: Display appropriate progress tic if needed.
          //  Postconditions: count()== original count() + increment
          //  Returns: count().
@@ -62,9 +59,22 @@ public:
          return _count;
       }
 
-      unsigned long  operator++()           { return operator+=( 1 ); }
-      unsigned long  count() const          { return _count; }
-      unsigned long  expected_count() const { return _expected_count; }
+      CountT  operator++()           { return operator+=( 1 ); }
+      CountT  count() const          { return _count; }
+      CountT  expected_count() const { return _expected_count; }
+
+      void set_count( CountT value )
+      {
+         APL_ASSERT( value >= count() );
+
+         if( value > count() )
+            operator+=( value - count() );
+      }
+
+      void finish()
+      {
+          operator+=( expected_count() - 1 - count() );  
+      }
 
 private:
    std::ostream &     m_os;  // may not be present in all imps
@@ -72,7 +82,7 @@ private:
    const std::string  m_s2;  //  const char *, and efficiency or size are
    const std::string  m_s3;  //  not issues
 
-   unsigned long _count, _expected_count, _next_tic_count;
+   CountT _count, _expected_count, _next_tic_count;
    unsigned int  _tic;
    void display_tic()
    {
@@ -85,15 +95,17 @@ private:
       for( ; _tic < tics_needed; ++_tic ) { m_os << '*' << std::flush; }
 
       _next_tic_count = 
-         static_cast<unsigned long>(((_tic + 1)/51.0)*(_expected_count - 1));
+         static_cast<CountT>(((_tic + 1)/51.0)*(_expected_count - 1));
       
-      if ( _count == _expected_count - 1 ) 
+      if ( _count >= _expected_count - 1 ) 
       {
          if( _tic < 51 ) { m_os << '*'; ++_tic; }
          m_os << std::endl;
       }
    } // display_tic
 };
+
+typedef progress_display_t<unsigned long> progress_display;
 
 //Моё дополнение позволяет контролировать позицию в некотором файле и выводить
 //индикатор процесса его считывания

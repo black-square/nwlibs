@@ -19,15 +19,18 @@ class NullType {};
 ///////////////////////////////////////////////////////////////////////////////
 // Запрещает копирование объекта
 ///////////////////////////////////////////////////////////////////////////////
-class NonCopyable
+template<class T>
+class NonCopyableT
 {
 protected:
-   NonCopyable() {}
-   ~NonCopyable() {}
+   NonCopyableT() {}
+   ~NonCopyableT() {}
 private:  
-   NonCopyable( const NonCopyable& );
-   NonCopyable& operator=( const NonCopyable& ); 
+   NonCopyableT( const NonCopyableT& );
+   NonCopyableT& operator=( const NonCopyableT& ); 
 };
+
+typedef NonCopyableT<NullType> NonCopyable;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Запрещает создавать класс любым методом который вызывает конструктор и 

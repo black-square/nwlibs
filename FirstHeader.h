@@ -346,9 +346,6 @@ inline T AplTestCast__( TArg V, char *File, unsigned int Line )
 #  define APL_TYPEID_NAME( arg ) "<Run-Time Type Information is not avalible>"
 #endif
 
-//VS опредиляляет эти макросы, а потом они мешают
-#undef min
-#undef max
 
 //Подключем файлы зависящие от текущего каркаса
 #ifdef NWLIB_STOCONA_FRAMEWORK
@@ -358,5 +355,9 @@ inline T AplTestCast__( TArg V, char *File, unsigned int Line )
 //Стандартные дополнительные определения
 #include "StandartFramework/FirstHeaderImpl.h"
 #endif
+
+//VS опредиляляет эти макросы, а потом они мешают
+#undef min
+#undef max
 
 #endif

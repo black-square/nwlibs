@@ -21,7 +21,7 @@ extern const BYTE g_UnicodeFilePrefix[2];
 ///////////////////////////////////////////////////////////////////////////////
 // Вспомогательные структуры
 ///////////////////////////////////////////////////////////////////////////////
-struct TAutoFindClose
+struct TAutoFindClose: NonCopyable
 {
    HANDLE hFind;
 
@@ -29,7 +29,7 @@ struct TAutoFindClose
    ~TAutoFindClose() { if(hFind != INVALID_HANDLE_VALUE) APL_CHECK(FindClose(hFind)); }
 };
 
-struct TAutoFileClose
+struct TAutoFileClose: NonCopyable
 {
    HANDLE hFile;
 
