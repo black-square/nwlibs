@@ -99,6 +99,9 @@ namespace Detail {
 // и записывает получившееся число в Val (если не встретилось ни одного числа
 // то 0). Если не встретилась ни одна цифра то возвращает Beg
 // Функция не проверяет число на переполнение
+//
+// ВНИМАНИЕ: Данный код не работет, если T знаковый тип и его значение 
+//           соотвествует минимальному значению даногого типа          
 ///////////////////////////////////////////////////////////////////////////////
 template<int RadixValue, class InputIterator, class T>
 InputIterator ConvertStringToIntegerRadix( InputIterator Beg, InputIterator End, T &Val )
@@ -171,6 +174,10 @@ inline InputIterator ConvertStringToInteger( InputIterator Beg, InputIterator En
 // ФУНКЦИЯ НЕ ЗАПИСЫВАЕТ В КОНЦЕ '\0' и поэтому при записи в массив символов
 // имеет смысл передавать End = Beg + RG_SIZE - 1, где RG_SIZE - размер массива 
 // для того чтобы оставить одну позицию для '\0'
+//
+// ВНИМАНИЕ: Данный код не работет, если T знаковый тип и его значение 
+//           соотвествует минимальному значению даногого типа
+//           http://codepad.org/OP4ZJIUY    
 ///////////////////////////////////////////////////////////////////////////////
 template<int RadixValue, class InputIterator, class T>
 InputIterator ConvertIntegerToStringRadix( T Val, InputIterator Beg, InputIterator End )
