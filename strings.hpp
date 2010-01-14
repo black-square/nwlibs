@@ -177,7 +177,7 @@ InputIterator ConvertIntegerToStringRadix( T Val, InputIterator Beg, InputIterat
 {
    Detail::TRadixAbstraction<T, RadixValue> RA;
 
-   typedef std::iterator_traits<InputIterator>::value_type TChar;
+   typedef typename std::iterator_traits<InputIterator>::value_type TChar;
 
    InputIterator Cur(Beg);        //Текущий символ
    InputIterator FirstDigit(Beg); //Первая записанная цифра
@@ -200,7 +200,7 @@ InputIterator ConvertIntegerToStringRadix( T Val, InputIterator Beg, InputIterat
    {
       if( Cur == End ) return Beg;
 
-      *Cur = RA.toChar<TChar>( Val % RA.radix() );   
+      *Cur = RA.template toChar<TChar>( Val % RA.radix() );   
       ++Cur;
 
       Val /= RA.radix();
