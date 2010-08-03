@@ -13,7 +13,7 @@ namespace NWLib {
 namespace RegExp {
 
 ///////////////////////////////////////////////////////////////////////////////
-// Сохранияет состояния поиска и позволяет искать несколько вхождений шаблона
+// Сохраняет состояния поиска и позволяет искать несколько вхождений шаблона
 // С помощью данного класса можно удобно производить замену в строке по шаблону
 // Например, для замены комбинации символов \n и пробелов на настоящий перевод 
 // строки можно воспользоваться след-им циклом:
@@ -66,7 +66,7 @@ struct TFindState
 //Не бросать исключения
 struct TNoException { enum {NeadThrow = 0}; };
 
-//Бросать исключения при невозможности найти подстроку соотвествующую шаблону
+//Бросать исключения при невозможности найти подстроку соответствующую шаблону
 struct TThrowException { enum {NeadThrow = 1}; };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -74,10 +74,11 @@ struct TThrowException { enum {NeadThrow = 1}; };
 ///////////////////////////////////////////////////////////////////////////////
 template< class ExceptionT = TThrowException, 
    class CharT = TCHAR //Если планируется использовать параметр отличный от
-                       //TCHAR, то нужно голобально определить REGEX_WIDE_AND_NARROW
+                       //TCHAR, то нужно глобально определить REGEX_WIDE_AND_NARROW
 >
 class TFinder
 {
+public:
    typedef CharT TChar;
    typedef std::basic_string<TChar> TString;
    typedef TFindState<TChar> TFindState;
@@ -139,7 +140,6 @@ private:
    TString m_PatternStr;            //Сохраняется только для того чтобы отображать значение в исключениях
 };
 
-
 //Вывод в поток найденных элементов
 template< class CharT, class CharTraitsT, class ExceptionT >
 inline std::basic_ostream<CharT, CharTraitsT> &operator<<( std::basic_ostream<CharT, CharTraitsT> &stream, const TFinder<ExceptionT, CharT> &Finder )
@@ -158,6 +158,50 @@ inline std::basic_ostream<CharT, CharTraitsT> &operator<<( std::basic_ostream<Ch
 
 }
 
+///////////////////////////////////////////////////////////////////////////////
+// Функции облегчающие работу с массивом объектов поиска как с единым целым.
+// Каждый следующий поиск стартует на том месте где остановился предыдущий.
+///////////////////////////////////////////////////////////////////////////////
+template<class FinderT, size_t ArrSize> 
+bool Cascade( FinderT (&Finders)[ArrSize], typename FinderT::TStringConstIterator Begin, typename FinderT::TStringConstIterator End )
+{
+    for(size_t i = 0; i < ArrSize; ++i)
+    {
+        if( !Finders[i](Begin, End) )
+            return false;
+
+        Begin = Finders[i][0].end();
+    }
+
+    return true;
+}
+///////////////////////////////////////////////////////////////////////////////
+
+template<class FinderT, size_t ArrSize> 
+bool Cascade( FinderT (&Finders)[ArrSize], typename const FinderT::TString &Str )
+{
+    return Cascade(Finders, Str.begin(), Str.end());
+}
+///////////////////////////////////////////////////////////////////////////////
+
+template<class FinderT, size_t ArrSize> 
+bool Cascade( FinderT (&Finders)[ArrSize], typename FinderT::TFindState &State )
+{
+    FinderT::TFindState::TStringConstIterator OldBegin(State.Begin);
+
+    for(size_t i = 0; i < ArrSize; ++i)
+    {
+        if( !Finders[i](State) )
+        {
+            State.PrevBegin = OldBegin;
+            return false;
+        }
+    }
+
+    //Сохраняем такое же поведение State, как если бы массив объектов поиска был одним поиском
+    State.PrevBegin = OldBegin;
+    return true;
+}
 
 } //namespace RegExp
 } //namespace NWLib
